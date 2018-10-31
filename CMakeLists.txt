@@ -13,7 +13,9 @@ add_subdirectory(src/Type)
 include_directories(${PROJECT_SOURCE_PATH}/src/Common)
 include_directories(${PROJECT_SOURCE_PATH}/src/Type)
 
-add_executable(GM src/main.cpp)
+aux_source_directory(./src SRC_FILES)
+
+add_executable(GM ${SRC_FILES})
 target_link_libraries(
     GM
     Common
