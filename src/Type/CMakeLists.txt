@@ -1,4 +1,3 @@
-add_library(
-    Type
-    gm_object.cpp
-)
+#add_library(
+#    Type
+#)

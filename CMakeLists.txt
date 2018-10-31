@@ -17,5 +17,5 @@ add_executable(GM src/main.cpp)
 target_link_libraries(
     GM
     Common
-    Type
+#    Type
 )
