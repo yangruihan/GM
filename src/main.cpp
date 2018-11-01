@@ -1,5 +1,6 @@
 #include <iostream>
 
+#include "GM.h"
 #include "gm_interpreter.h"
 
 #define MAX_COMMAND_CHAR 256
@@ -8,7 +9,7 @@ using namespace GM;
 
 int main()
 {
-    std::cout << "----- GM Interpreter -----" << std::endl;
+    DEBUG_LOG_F("----- GM Interpreter [Version %d.%d.%d]-----", 0, 0, 1);
 
     GM_Interpreter* interpreter = new GM_Interpreter();
 
