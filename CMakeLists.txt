@@ -19,5 +19,5 @@ add_executable(GM ${SRC_FILES})
 target_link_libraries(
     GM
     Common
-    AST
+    # AST
 )
