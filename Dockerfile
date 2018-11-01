@@ -24,4 +24,4 @@ RUN echo "*** Installing gcc (4.9->8) and clang (3.8->6) ***" \
   && echo "Setting g++ 8 as default compiler" \
   && update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-8 1
 
-CMD ["base"]
+CMD ["bash"]

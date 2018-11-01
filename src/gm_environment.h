@@ -5,7 +5,7 @@
 namespace GM
 {
 
-    class GM_Environment : GM_Object
+    class GM_Environment : extends(GM_Object)
     {
     public:
         GM_Environment ();

@@ -6,7 +6,7 @@
 namespace GM
 {
 
-    class GM_Interpreter : GM_Object
+    class GM_Interpreter : extends(GM_Object)
     {
     public:
         GM_Interpreter();
