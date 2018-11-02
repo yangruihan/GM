@@ -14,8 +14,6 @@ namespace GM
         ~GM_AST_TREE () override = 0;
 
     public:
-        virtual int parse(char* command, int& start_pos) = 0;
-
         GM_AST_TREE* get_child(int& index)
         {
             if (m_childs == nullptr)

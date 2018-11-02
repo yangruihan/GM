@@ -1,5 +1,7 @@
 #pragma once
 
+#include <string>
+
 #include "GM.h"
 #include "gm_environment.hpp"
 
@@ -12,7 +14,7 @@ namespace GM
         GM_Interpreter();
         ~GM_Interpreter() override;
 
-        int parse(char* command);
+        int parse(std::string* command) const;
     
     private:
         GM_Environment* m_environment;

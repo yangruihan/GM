@@ -10,10 +10,7 @@ namespace GM
     {
     public:
         GM_AST_INT_LITERAL_EXPR ();
-        ~GM_AST_INT_LITERAL_EXPR () override = 0;
-    
-    public:
-
+        ~GM_AST_INT_LITERAL_EXPR () override;
     };
 
 }

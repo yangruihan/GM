@@ -2,6 +2,7 @@
 
 #include <stdio.h>
 #include <iostream>
+#include <ctype.h>
 
 #define _PRINT(content) std::cout << (content)
 #define _PRINT_F(format, ...) printf((format), ##__VA_ARGS__)
@@ -17,3 +18,17 @@
 
 #define DEBUG_ERROR(content) PRINT("[ERROR]", content)
 #define DEBUG_ERROR_F(format, ...) PRINT_F("[ERROR]", format, ##__VA_ARGS__)
+
+namespace GM
+{
+    class GM_Utils
+    {
+
+    public:
+        static bool is_digit(char c)
+        {
+            return isdigit(c);
+        }
+
+    };
+}

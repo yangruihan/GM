@@ -1,9 +1,8 @@
 #include <iostream>
+#include <string>
 
 #include "GM.h"
 #include "gm_interpreter.hpp"
-
-#define MAX_COMMAND_CHAR 256
 
 using namespace GM;
 
@@ -13,11 +12,13 @@ int main()
 
     GM_Interpreter* interpreter = new GM_Interpreter();
 
-    char* command = new char[MAX_COMMAND_CHAR];
+    std::string* command = new std::string();
     int ret = 0;
     while (true)
     {
-        std::cin.getline(command, MAX_COMMAND_CHAR);
+        std::getline(std::cin, *command);
+        DEBUG_LOG_F("-- Input: %s", command->c_str());
+        
         ret = interpreter->parse(command);
 
         if (ret != 0)
