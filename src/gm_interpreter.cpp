@@ -57,12 +57,39 @@ namespace GM
     GM_AST_TREE* GM_Interpreter::_get_ast_tree_from_token(std::string& token) const
     {
         auto token_size = token.size();
-
+        if (token_size == 0)
+        {
+            PRINT_ERROR("Token Error: token is empty");
+            return nullptr;
+        }
+        
         if (token_size == 1)
         {
-            if (token[0] == '+')
+            if (GM_AST_PLUS_OPERATOR_EXPR::check_token_valid(token))
             {
-                return new GM_AST_PLUS_OPERATOR_EXPR();
+                return new GM_AST_PLUS_OPERATOR_EXPR(token);
+            }
+            else if (GM_AST_SUB_OPERATOR_EXPR::check_token_valid(token))
+            {
+                return new GM_AST_SUB_OPERATOR_EXPR(token);
+            }
+            else if (GM_AST_MUL_OPERATOR_EXPR::check_token_valid(token))
+            {
+                return new GM_AST_MUL_OPERATOR_EXPR(token);
+            }
+            else if (GM_AST_DIV_OPERATOR_EXPR::check_token_valid(token))
+            {
+                return new GM_AST_DIV_OPERATOR_EXPR(token);
+            }
+        }
+
+        // digit
+        if (GM_Utils::is_digit(token[0])
+            || (token_size > 1 && (token[0] == '+' || token[0] == '-')))
+        {
+            if (GM_AST_INT_LITERAL_EXPR::check_token_valid(token))
+            {
+                return new GM_AST_INT_LITERAL_EXPR(token);
             }
         }
 
