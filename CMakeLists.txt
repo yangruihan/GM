@@ -6,6 +6,12 @@ project(GM)
 set(CMAKE_C_STANDARD 99)
 set(CMAKE_CXX_STANDARD 11)
 
+option(DEBUG "Debug Version" on)
+
+if(DEBUG)
+    add_definitions(-DDEBUG)
+endif(DEBUG)
+
 add_subdirectory(src)
 add_subdirectory(src/Common)
 add_subdirectory(src/AST)

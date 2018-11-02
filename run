@@ -1,3 +1,3 @@
 #!/usr/bin/env bash
 
-cd build && cmake .. && make && ./GM
+cd build/Debug && cmake -DCMAKE_BUILD_TYPE=Debug -DDEBUG=ON ../.. && make && ./GM

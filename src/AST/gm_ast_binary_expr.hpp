@@ -10,7 +10,7 @@ namespace GM
     {
     public:
         GM_AST_BINARY_EXPR () {}
-        ~GM_AST_BINARY_EXPR () override = 0;
+        ~GM_AST_BINARY_EXPR () override {};
     };
 
 }

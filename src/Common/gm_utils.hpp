@@ -10,14 +10,50 @@
 #define PRINT(level, content) _PRINT(level); _PRINT(" "); _PRINT(content); _PRINT("\n")
 #define PRINT_F(level, format, ...) _PRINT(level); _PRINT(" "); _PRINT_F(format, ##__VA_ARGS__); _PRINT("\n")
 
-#define DEBUG_LOG(content) PRINT("[LOG]", content)
-#define DEBUG_LOG_F(format, ...) PRINT_F("[LOG]", format, ##__VA_ARGS__)
+#ifdef DEBUG
+    #define DEBUG_LOG(content) PRINT("[DEBUG LOG]", content)
+#else
+    #define DEBUG_LOG(content)
+#endif
 
-#define DEBUG_WARNING(content) PRINT("[WARNING]", content)
-#define DEBUG_WARNING_F(format, ...) PRINT_F("[WARNING]", format, ##__VA_ARGS__)
+#ifdef DEBUG
+    #define DEBUG_LOG_F(format, ...) PRINT_F("[DEBUG LOG]", format, ##__VA_ARGS__)
+#else
+    #define DEBUG_LOG_F(format, ...)
+#endif
 
-#define DEBUG_ERROR(content) PRINT("[ERROR]", content)
-#define DEBUG_ERROR_F(format, ...) PRINT_F("[ERROR]", format, ##__VA_ARGS__)
+#ifdef DEBUG
+    #define DEBUG_WARNING(content) PRINT("[DEBUG WARNING]", content)
+#else
+    #define DEBUG_WARNING(content)
+#endif
+
+#ifdef DEBUG
+    #define DEBUG_WARNING_F(format, ...) PRINT_F("[DEBUG WARNING]", format, ##__VA_ARGS__)
+#else
+    #define DEBUG_WARNING_F(format, ...)
+#endif
+
+#ifdef DEBUG
+    #define DEBUG_ERROR(content) PRINT("[DEBUG ERROR]", content)
+#else
+    #define DEBUG_ERROR(content)
+#endif
+
+#ifdef DEBUG
+    #define DEBUG_ERROR_F(format, ...) PRINT_F("[DEBUG ERROR]", format, ##__VA_ARGS__)
+#else
+    #define DEBUG_ERROR_F(format, ...)
+#endif
+
+#define PRINT_LOG(content) PRINT("[LOG]", content)
+#define PRINT_LOG_F(format, ...) PRINT_F("[LOG]", format, ##__VA_ARGS__)
+
+#define PRINT_WARNING(content) PRINT("[WARNING]", content)
+#define PRINT_WARNING_F(format, ...) PRINT_F("[WARNING]", format, ##__VA_ARGS__)
+
+#define PRINT_ERROR(content) PRINT("[ERROR]", content)
+#define PRINT_ERROR_F(format, ...) PRINT_F("[ERROR]", format, ##__VA_ARGS__)
 
 namespace GM
 {
@@ -30,5 +66,9 @@ namespace GM
             return isdigit(c);
         }
 
+        static bool is_space(char c)
+        {
+            return isspace(c);
+        }
     };
 }

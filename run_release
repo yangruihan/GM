@@ -1,0 +1,3 @@
+#!/usr/bin/env bash
+
+cd build/Release && cmake -DCMAKE_BUILD_TYPE=Release -DDEBUG=OFF ../.. && make && ./GM

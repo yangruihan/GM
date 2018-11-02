@@ -11,10 +11,12 @@ namespace GM
     {
     public:
         GM_AST_TREE () {}
-        ~GM_AST_TREE () override = 0;
+        ~GM_AST_TREE () override {};
 
     public:
-        GM_AST_TREE* get_child(int& index)
+        virtual size_t get_need_child_count() const = 0;
+
+        GM_AST_TREE* get_child(const int& index) const
         {
             if (m_childs == nullptr)
                 return nullptr;
@@ -22,7 +24,7 @@ namespace GM
             return m_childs->at(index);
         }
 
-        int get_child_count()
+        size_t get_child_count() const
         {
             if (m_childs == nullptr)
                 return 0;
@@ -30,7 +32,9 @@ namespace GM
             return m_childs->size();
         }
 
-        std::vector<GM_AST_TREE*>* get_childs() { return m_childs; }
+        std::vector<GM_AST_TREE*>* get_childs() const { return m_childs; }
+
+        void add_child(GM_AST_TREE* child) const { m_childs->push_back(child); }
 
     protected:
         std::vector<GM_AST_TREE*>* m_childs;

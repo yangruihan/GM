@@ -12,12 +12,12 @@ int main()
 
     GM_Interpreter* interpreter = new GM_Interpreter();
 
-    std::string* command = new std::string();
+    std::string command;
     int ret = 0;
     while (true)
     {
-        std::getline(std::cin, *command);
-        DEBUG_LOG_F("-- Input: %s", command->c_str());
+        std::getline(std::cin, command);
+        DEBUG_LOG_F("-- Input: %s", command.c_str());
         
         ret = interpreter->parse(command);
 
