@@ -9,7 +9,7 @@ namespace GM
     {
     public:
         GM_Environment ();
-        virtual ~GM_Environment ();
+        ~GM_Environment () override;
     };
 
 }

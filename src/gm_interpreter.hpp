@@ -1,7 +1,7 @@
 #pragma once
 
 #include "GM.h"
-#include "gm_environment.h"
+#include "gm_environment.hpp"
 
 namespace GM
 {
@@ -10,7 +10,7 @@ namespace GM
     {
     public:
         GM_Interpreter();
-        virtual ~GM_Interpreter();
+        ~GM_Interpreter() override;
 
         int parse(char* command);
     

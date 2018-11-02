@@ -11,7 +11,7 @@ namespace GM
     {
     public:
         GM_AST_TREE () {}
-        virtual ~GM_AST_TREE () = 0;
+        ~GM_AST_TREE () override = 0;
 
     public:
         virtual int parse(char* command, int& start_pos) = 0;

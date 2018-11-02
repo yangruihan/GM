@@ -18,6 +18,6 @@ aux_source_directory(./src SRC_FILES)
 add_executable(GM ${SRC_FILES})
 target_link_libraries(
     GM
-    Common
-    # AST
+    # Common
+    AST
 )

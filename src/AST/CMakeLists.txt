@@ -1,5 +1,4 @@
-# add_library(
-#    AST
-#    gm_ast_tree.hpp
-#    gm_ast_binary_expr.hpp
-# )
+add_library(
+   AST
+   gm_ast_int_literal_expr.cpp
+)

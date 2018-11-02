@@ -1,4 +1,4 @@
-#include "gm_interpreter.h"
+#include "gm_interpreter.hpp"
 
 #include <iostream>
 

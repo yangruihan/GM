@@ -1,7 +1,7 @@
 #include <iostream>
 
 #include "GM.h"
-#include "gm_interpreter.h"
+#include "gm_interpreter.hpp"
 
 #define MAX_COMMAND_CHAR 256
 

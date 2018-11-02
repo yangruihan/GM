@@ -1,4 +1,4 @@
-#include "gm_object.h"
+#include "gm_object.hpp"
 
 namespace GM
 {

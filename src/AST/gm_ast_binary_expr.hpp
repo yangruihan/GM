@@ -10,7 +10,7 @@ namespace GM
     {
     public:
         GM_AST_BINARY_EXPR () {}
-        virtual ~GM_AST_BINARY_EXPR () = 0;
+        ~GM_AST_BINARY_EXPR () override = 0;
     
     public:
         virtual int parse(char* command, int& start_pos) = 0;
