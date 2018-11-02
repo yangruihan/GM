@@ -15,9 +15,13 @@ namespace GM
         ~GM_AST_TREE () override {};
 
     public:
-        virtual size_t get_need_child_count() const = 0;
-
+        /* --- token --- */
         static bool check_token_valid(std::string& token) { return false; };
+
+        std::string get_token() const { return m_token; }
+
+        /* --- child --- */
+        virtual size_t get_need_child_count() const = 0;
 
         GM_AST_TREE* get_child(const int& index) const
         {
@@ -37,7 +41,13 @@ namespace GM
 
         std::vector<GM_AST_TREE*>* get_childs() const { return m_childs; }
 
-        void add_child(GM_AST_TREE* child) const { m_childs->push_back(child); }
+        void add_child(GM_AST_TREE* child) 
+        { 
+            if (m_childs == nullptr)
+                m_childs = new std::vector<GM_AST_TREE*>(get_need_child_count());
+
+            m_childs->push_back(child); 
+        }
 
     protected:
         std::vector<GM_AST_TREE*>* m_childs;

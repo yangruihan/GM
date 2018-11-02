@@ -36,12 +36,18 @@ namespace GM
         std::string token;
         if (_take_token(command, token))
         {
+            DEBUG_LOG_F("Get Token %s", token.c_str());
+            
             if (token != "")
             {
                 ret = _get_ast_tree_from_token(token);
 
                 if (ret != nullptr)
                 {
+                    DEBUG_LOG_F("Create AST Node %s, child count %d",
+                                ret->get_token().c_str(),
+                                ret->get_need_child_count());
+
                     auto child_count = ret->get_need_child_count();
                     for (size_t i = 0; i < child_count; i++)
                     {

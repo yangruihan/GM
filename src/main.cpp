@@ -16,13 +16,21 @@ int main()
     int ret = 0;
     while (true)
     {
+        std::cout << "> ";
+
         std::getline(std::cin, command);
         DEBUG_LOG_F("-- Input: %s", command.c_str());
         
         ret = interpreter->parse(command);
 
-        if (ret != 0)
+        if (ret == 0)
+        {
+            
+        }
+        else
+        {
             break;
+        }
     }
 
     return 0;
