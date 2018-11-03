@@ -16,15 +16,22 @@ namespace GM
     {
 
     public:
-        GM_Function ();
+        GM_Function (const std::string func_name, const GM_FUNCTION_PTR func);
         virtual ~GM_Function ();
+    
+    public:
+        static GM_Function* create_func(const std::string name, const GM_FUNCTION_PTR func);
+
+        std::string get_name() const { return m_name; }
+
+        GM_FUNCTION_PTR get_func() const { return m_function; }
 
     protected:
         // function name
         std::string m_name;
 
         // function pointer
-        GM_Value* (*m_function)(const GM_ListValue*);
+        GM_FUNCTION_PTR m_function;
     };
 
 }

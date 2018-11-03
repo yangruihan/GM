@@ -3,6 +3,7 @@
 #include <stdio.h>
 #include <iostream>
 #include <ctype.h>
+#include <string>
 
 #define _PRINT(content) std::cout << (content)
 #define _PRINT_F(format, ...) printf((format), ##__VA_ARGS__)
@@ -69,6 +70,16 @@ namespace GM
         static bool is_space(char c)
         {
             return isspace(c);
+        }
+
+        static void get_int_from_str(std::string& str, int& value)
+        {
+            value = std::stoi(str);
+        }
+
+        static void get_float_from_str(std::string& str, double& value)
+        {
+            value = std::stod(str);
         }
     };
 }

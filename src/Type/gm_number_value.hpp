@@ -2,6 +2,7 @@
 
 #include "../GM.h"
 #include "gm_value.hpp"
+#include "gm_types.h"
 
 namespace GM
 {
@@ -14,7 +15,12 @@ namespace GM
         virtual ~GM_NumberValue ();
 
     public:
-        virtual float get_value() = 0;
+        VALUE_TYPE get_type() const override
+        {
+            return T_GM_NUMBER_VALUE;
+        }
+
+        virtual double get_value() = 0;
 
     };
 
