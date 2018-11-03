@@ -13,17 +13,20 @@ if(DEBUG)
 endif(DEBUG)
 
 add_subdirectory(src)
-add_subdirectory(src/Common)
 add_subdirectory(src/AST)
+add_subdirectory(src/Common)
+add_subdirectory(src/Type)
 
 include_directories(${PROJECT_SOURCE_PATH}/src/Common)
 include_directories(${PROJECT_SOURCE_PATH}/src/AST)
+include_directories(${PROJECT_SOURCE_PATH}/src/Type)
 
 aux_source_directory(./src SRC_FILES)
 
 add_executable(GM ${SRC_FILES})
 target_link_libraries(
     GM
-    # Common
     AST
+    # Common
+    Type
 )

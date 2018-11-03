@@ -1,9 +1,10 @@
 #pragma once
 
-#include "../GM.h"
-
 #include <vector>
 #include <string>
+
+#include "../GM.h"
+#include "../Type/gm_value.hpp"
 
 namespace GM
 {
@@ -15,6 +16,9 @@ namespace GM
         ~GM_AST_TREE () override {};
 
     public:
+        /* --- eval --- */
+        virtual GM_Value* eval() { return nullptr; };
+
         /* --- token --- */
         static bool check_token_valid(std::string& token) { return false; };
 
