@@ -71,7 +71,10 @@ int main()
             auto result = interpreter->eval();
             if (result != nullptr)
             {
-                PRINT_LOG_F("Result: %s", result->str().c_str());
+                PRINT_LOG_F("--------------------");
+                PRINT_LOG_F("- Expr: %s", command.c_str());
+                PRINT_LOG_F("- Result: %s", result->str().c_str());
+                PRINT_LOG_F("--------------------");
             }
         }
         else

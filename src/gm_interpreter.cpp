@@ -106,9 +106,10 @@ namespace GM
         if (GM_Utils::is_digit(token[0])
             || (token_size > 1 && (token[0] == '+' || token[0] == '-')))
         {
-            if (GM_AST_INT_LITERAL_EXPR::check_token_valid(token))
+            bool is_float;
+            if (GM_AST_NUMBER_LITERAL_EXPR::check_token_valid(token, is_float))
             {
-                return new GM_AST_INT_LITERAL_EXPR(token);
+                return new GM_AST_NUMBER_LITERAL_EXPR(token, is_float);
             }
         }
 

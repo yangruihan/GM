@@ -10,12 +10,12 @@ namespace GM
 
     class GM_FloatValue : extends(GM_NumberValue)
     {
-    
+
     public:
         GM_FloatValue (std::string& token);
         GM_FloatValue (int value);
         GM_FloatValue (double value);
-        
+
         virtual ~GM_FloatValue () {};
 
     public:
@@ -27,13 +27,19 @@ namespace GM
         double get_value() override { return m_value; }
 
         std::string str() override;
-    
+
     protected:
         void _init_functions() override;
 
     protected:
         double m_value;
-    
+
+    private:
+        static GM_Value* __add(const GM_ListValue* args);
+        static GM_Value* __sub(const GM_ListValue* args);
+        static GM_Value* __mul(const GM_ListValue* args);
+        static GM_Value* __div(const GM_ListValue* args);
+
     };
 
 }

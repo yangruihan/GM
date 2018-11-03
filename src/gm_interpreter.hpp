@@ -4,8 +4,8 @@
 
 #include "GM.h"
 #include "gm_environment.hpp"
-#include "AST/gm_ast.h"
-#include "Type/gm_value.hpp"
+#include "AST/gm_ast_header.h"
+#include "Type/gm_types_header.h"
 
 namespace GM
 {
