@@ -1,3 +1,3 @@
 #!/usr/bin/env bash
 
-docker build -t linux-cpp .
+sudo docker build -t linux-cpp .

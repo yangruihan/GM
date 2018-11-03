@@ -1,3 +1,7 @@
 #!/usr/bin/env bash
 
+if [ ! -d "build/Release" ]; then
+    mkdir -p build/Release
+fi
+
 cd build/Release && cmake -DCMAKE_BUILD_TYPE=Release -DDEBUG=OFF ../.. && make && ./GM
