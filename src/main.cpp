@@ -67,6 +67,12 @@ int main()
             std::cout << std::endl;
     
             #endif // DEBUG
+
+            auto result = interpreter->eval();
+            if (result != nullptr)
+            {
+                PRINT_LOG_F("Result: %s", result->str().c_str());
+            }
         }
         else
         {

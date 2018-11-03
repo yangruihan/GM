@@ -27,6 +27,8 @@ namespace GM
         }
 
         double get_value() override { return m_value; }
+
+        std::string str() override;
     
     protected:
         int m_value;

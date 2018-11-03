@@ -5,6 +5,11 @@
 #define extends(class_name) public class_name
 #define implements(class_name) public class_name
 
+#define FUNC_ADD_OP_KEY "__add"
+#define FUNC_SUB_OP_KEY "__sub"
+#define FUNC_MUL_OP_KEY "__mul"
+#define FUNC_DIV_OP_KEY "__div"
+
 namespace GM
 {
 

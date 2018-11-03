@@ -1,4 +1,5 @@
 #include "gm_list_value.hpp"
+#include <sstream>
 
 namespace GM
 {
@@ -9,15 +10,36 @@ namespace GM
             delete[] m_items;
     }
 
-    void GM_ListValue::add_item(GM_Value* value)
+    void GM_ListValue::_init_functions()
+    {
+    }
+
+    std::string GM_ListValue::str()
+    {
+        std::ostringstream stream;
+        stream << "[";
+        
+        for (size_t i = 0; i < m_items->size() - 1; i++)
+        {
+            stream << m_items->at(i)->str() << ", ";
+        }
+
+        stream << m_items->at(m_items->size() - 1)->str() << "]";
+
+        return stream.str();
+    }
+
+    GM_ListValue* GM_ListValue::add_item(GM_Value* value)
     {
         if (value == nullptr)
         {
             PRINT_ERROR_F("Nullptr Error: list value add nullptr item");
-            return;
+            return nullptr;
         }
 
         m_items->push_back(value);
+
+        return this;
     }
 
     size_t GM_ListValue::get_item_count() const

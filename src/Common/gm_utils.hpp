@@ -4,6 +4,8 @@
 #include <iostream>
 #include <ctype.h>
 #include <string>
+#include <stdarg.h>
+#include <cstring>
 
 #define _PRINT(content) std::cout << (content)
 #define _PRINT_F(format, ...) printf((format), ##__VA_ARGS__)
@@ -60,6 +62,8 @@ namespace GM
 {
     class GM_Utils
     {
+    private:
+        static inline char m_str_buffer[256];
 
     public:
         static bool is_digit(char c)
@@ -81,5 +85,16 @@ namespace GM
         {
             value = std::stod(str);
         }
+
+        static std::string format_str(const char* format, ...)
+        {
+            va_list args;
+            va_start(args, format);
+            std::vsnprintf(m_str_buffer, 256, format, args);
+            va_end(args);
+            return std::string(m_str_buffer);
+        }
+
     };
+
 }

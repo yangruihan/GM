@@ -16,7 +16,7 @@ namespace GM
         GM_FloatValue (int value);
         GM_FloatValue (double value);
         
-        virtual ~GM_FloatValue ();
+        virtual ~GM_FloatValue () {};
 
     public:
         VALUE_TYPE get_type() const override
@@ -25,6 +25,8 @@ namespace GM
         }
 
         double get_value() override { return m_value; }
+
+        std::string str() override;
     
     protected:
         void _init_functions() override;

@@ -17,7 +17,7 @@ namespace GM
 
     public:
         /* --- eval --- */
-        virtual GM_Value* eval() { return nullptr; };
+        virtual GM_Value* eval() = 0;
 
         /* --- token --- */
         static bool check_token_valid(std::string& token) { return false; };
@@ -65,6 +65,9 @@ namespace GM
 
             m_childs->push_back(child); 
         }
+
+    protected:
+        virtual bool _check_childs_valid() const = 0;
 
     protected:
         std::vector<GM_AST_TREE*>* m_childs;

@@ -23,11 +23,16 @@ namespace GM
             return T_GM_LIST_VALUE;
         }
 
-        void add_item(GM_Value* value);
+        std::string str() override;
+
+        GM_ListValue* add_item(GM_Value* value);
 
         size_t get_item_count() const;
 
         GM_Value* operator[] (int index) const;
+
+    protected:
+        void _init_functions() override;
 
     protected:
         std::vector<GM_Value*>* m_items;

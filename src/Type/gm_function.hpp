@@ -26,6 +26,8 @@ namespace GM
 
         GM_FUNCTION_PTR get_func() const { return m_function; }
 
+        GM_Value* eval(GM_ListValue* parameters) const;
+
     protected:
         // function name
         std::string m_name;

@@ -15,8 +15,8 @@ namespace GM
     {
 
     public:
-        GM_Value ();
-        ~GM_Value () override = 0;
+        GM_Value () {}
+        virtual ~GM_Value () {};
 
     public:
         GM_Function* get_func(std::string func_name) const;
@@ -27,6 +27,8 @@ namespace GM
         { 
             return T_GM_VALUE; 
         }
+
+        virtual std::string str() = 0;
 
     protected:
         virtual void _init_functions() = 0;

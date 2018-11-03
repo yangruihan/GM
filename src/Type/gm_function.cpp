@@ -14,4 +14,9 @@ namespace GM
         return new GM_Function(name, func);
     }
 
+    GM_Value* GM_Function::eval(GM_ListValue* parameters) const
+    {
+        return (*get_func())(parameters);
+    }
+
 }

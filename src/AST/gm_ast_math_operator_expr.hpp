@@ -6,12 +6,12 @@
 namespace GM
 {
 
-    class GM_AST_PLUS_OPERATOR_EXPR : extends(GM_AST_BINARY_EXPR)
+    class GM_AST_ADD_OPERATOR_EXPR : extends(GM_AST_BINARY_EXPR)
     {
 
     public:
-        GM_AST_PLUS_OPERATOR_EXPR (std::string& token): GM_AST_BINARY_EXPR(token) {}
-        ~GM_AST_PLUS_OPERATOR_EXPR () override {}
+        GM_AST_ADD_OPERATOR_EXPR (std::string& token): GM_AST_BINARY_EXPR(token) {}
+        ~GM_AST_ADD_OPERATOR_EXPR () override {}
 
     public:
         size_t get_need_child_count() const override { return 2; };
@@ -21,6 +21,10 @@ namespace GM
             return token.size() == 1 && token[0] == '+';
         }
 
+        GM_Value* eval() override;
+
+    protected:
+        bool _check_childs_valid() const override;
     };
 
     class GM_AST_SUB_OPERATOR_EXPR : extends(GM_AST_BINARY_EXPR)
@@ -37,6 +41,11 @@ namespace GM
         {
             return token.size() == 1 && token[0] == '-';
         }
+
+        GM_Value* eval() override;
+
+    protected:
+        bool _check_childs_valid() const override;
 
     };
 
@@ -55,6 +64,11 @@ namespace GM
             return token.size() == 1 && token[0] == '*';
         }
 
+        GM_Value* eval() override;
+
+    protected:
+        bool _check_childs_valid() const override;
+
     };
 
     class GM_AST_DIV_OPERATOR_EXPR : extends(GM_AST_BINARY_EXPR)
@@ -72,5 +86,10 @@ namespace GM
             return token.size() == 1 && token[0] == '/';
         }
 
+        GM_Value* eval() override;
+
+    protected:
+        bool _check_childs_valid() const override;
+        
     };
 }

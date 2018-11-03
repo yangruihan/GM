@@ -5,6 +5,7 @@
 #include "GM.h"
 #include "gm_environment.hpp"
 #include "AST/gm_ast.h"
+#include "Type/gm_value.hpp"
 
 namespace GM
 {
@@ -19,6 +20,8 @@ namespace GM
     
     public:
         GM_AST_TREE* get_ast_root() const { return m_ast_root; }
+
+        GM_Value* eval() const;
 
     private:
         GM_AST_TREE* _parse(std::string& command);

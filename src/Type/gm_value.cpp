@@ -3,8 +3,6 @@
 
 namespace GM
 {
-
-    GM_Value::GM_Value () {}
     
     GM_Function* GM_Value::get_func(std::string func_name) const
     {

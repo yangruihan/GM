@@ -4,7 +4,7 @@ project(GM)
 
 
 set(CMAKE_C_STANDARD 99)
-set(CMAKE_CXX_STANDARD 11)
+set(CMAKE_CXX_STANDARD 17)
 
 option(DEBUG "Debug Version" on)
 
@@ -17,8 +17,8 @@ add_subdirectory(src/AST)
 add_subdirectory(src/Common)
 add_subdirectory(src/Type)
 
-include_directories(${PROJECT_SOURCE_PATH}/src/Common)
 include_directories(${PROJECT_SOURCE_PATH}/src/AST)
+include_directories(${PROJECT_SOURCE_PATH}/src/Common)
 include_directories(${PROJECT_SOURCE_PATH}/src/Type)
 
 aux_source_directory(./src SRC_FILES)

@@ -14,6 +14,19 @@ namespace GM
         delete[] m_environment;
     }
 
+    GM_Value* GM_Interpreter::eval() const
+    {
+        auto root = get_ast_root();
+        
+        if (root != nullptr)
+        {
+            return root->eval();
+        }
+
+        PRINT_ERROR("NullptrError: ast root is nullptr");
+        return nullptr;
+    }
+
     int GM_Interpreter::parse(std::string command)
     {
         m_start_pos = 0;
@@ -71,9 +84,9 @@ namespace GM
         
         if (token_size == 1)
         {
-            if (GM_AST_PLUS_OPERATOR_EXPR::check_token_valid(token))
+            if (GM_AST_ADD_OPERATOR_EXPR::check_token_valid(token))
             {
-                return new GM_AST_PLUS_OPERATOR_EXPR(token);
+                return new GM_AST_ADD_OPERATOR_EXPR(token);
             }
             else if (GM_AST_SUB_OPERATOR_EXPR::check_token_valid(token))
             {

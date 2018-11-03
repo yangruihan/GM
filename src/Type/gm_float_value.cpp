@@ -1,4 +1,5 @@
 #include "gm_float_value.hpp"
+#include "../Common/gm_utils.hpp"
 
 namespace GM
 {
@@ -22,6 +23,11 @@ namespace GM
 
     void GM_FloatValue::_init_functions()
     {
+    }
+
+    std::string GM_FloatValue::str()
+    {
+        return GM_Utils::format_str("%lf", m_value);
     }
 
 }

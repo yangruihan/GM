@@ -11,8 +11,8 @@ namespace GM
     {
 
     public:
-        GM_NumberValue ();
-        virtual ~GM_NumberValue ();
+        GM_NumberValue () {}
+        virtual ~GM_NumberValue () {}
 
     public:
         VALUE_TYPE get_type() const override
