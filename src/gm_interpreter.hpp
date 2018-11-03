@@ -16,6 +16,9 @@ namespace GM
         ~GM_Interpreter() override;
 
         int parse(std::string command);
+    
+    public:
+        GM_AST_TREE* get_ast_root() const { return m_ast_root; }
 
     private:
         GM_AST_TREE* _parse(std::string& command);

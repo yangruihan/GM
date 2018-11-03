@@ -26,7 +26,16 @@ namespace GM
         GM_AST_TREE* get_child(const int& index) const
         {
             if (m_childs == nullptr)
+            {
+                PRINT_ERROR("NullptrError: childs is nullptr");
                 return nullptr;
+            }
+
+            if (index < 0 || index > m_childs->size())
+            {
+                PRINT_ERROR_F("IndexError: out of range(%d)", m_childs->size());
+                return nullptr;
+            }
 
             return m_childs->at(index);
         }
@@ -44,7 +53,11 @@ namespace GM
         void add_child(GM_AST_TREE* child) 
         { 
             if (m_childs == nullptr)
-                m_childs = new std::vector<GM_AST_TREE*>(get_need_child_count());
+                m_childs = new std::vector<GM_AST_TREE*>();
+
+            DEBUG_ERROR_F("--- %s add child %s", 
+                                m_token.c_str(),
+                                child->get_token().c_str());
 
             m_childs->push_back(child); 
         }
