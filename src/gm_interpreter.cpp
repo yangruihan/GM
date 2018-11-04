@@ -1,5 +1,5 @@
 #include "gm_interpreter.hpp"
-#include "Common/gm_utils.hpp"
+#include "GM.h"
 
 namespace GM
 {
@@ -82,36 +82,26 @@ namespace GM
             return nullptr;
         }
         
+        GM_AST_TREE* ret;
+        
         if (token_size == 1)
         {
-            if (GM_AST_ADD_OPERATOR_EXPR::check_token_valid(token))
-            {
-                return new GM_AST_ADD_OPERATOR_EXPR(token);
-            }
-            else if (GM_AST_SUB_OPERATOR_EXPR::check_token_valid(token))
-            {
-                return new GM_AST_SUB_OPERATOR_EXPR(token);
-            }
-            else if (GM_AST_MUL_OPERATOR_EXPR::check_token_valid(token))
-            {
-                return new GM_AST_MUL_OPERATOR_EXPR(token);
-            }
-            else if (GM_AST_DIV_OPERATOR_EXPR::check_token_valid(token))
-            {
-                return new GM_AST_DIV_OPERATOR_EXPR(token);
-            }
+            ret = GM_InterpreterUtils::check_token_is_operator(token);
+            if (ret != nullptr)
+                return ret;
+            
+            // TODO check is variable
         }
 
         // digit
-        if (GM_Utils::is_digit(token[0])
-            || (token_size > 1 && (token[0] == '+' || token[0] == '-')))
-        {
-            bool is_float;
-            if (GM_AST_NUMBER_LITERAL_EXPR::check_token_valid(token, is_float))
-            {
-                return new GM_AST_NUMBER_LITERAL_EXPR(token, is_float);
-            }
-        }
+        ret = GM_InterpreterUtils::check_token_is_number_literal(token);
+        if (ret != nullptr)
+            return ret;
+        
+        // str
+        ret = GM_InterpreterUtils::check_token_is_str_literal(token);
+        if (ret != nullptr)
+            return ret;
 
         PRINT_ERROR_F("SyntaxError: token(%s) is error", token.c_str());
         return nullptr;

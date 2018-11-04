@@ -6,7 +6,7 @@ namespace GM
 {
 
     GM_AST_NUMBER_LITERAL_EXPR::GM_AST_NUMBER_LITERAL_EXPR(std::string& token,
-                                                           const bool& is_float)
+                                                             const bool& is_float)
                                                            : GM_AST_LITERAL_EXPR(token),
                                                              m_is_float(is_float)
     {}
@@ -44,10 +44,15 @@ namespace GM
 
     GM_Value* GM_AST_NUMBER_LITERAL_EXPR::eval()
     {
-        if (m_is_float)
-            return new GM_FloatValue(m_token);
-        else
-            return new GM_IntValue(m_token);
+        if (_check_childs_valid())
+        {
+            if (m_is_float)
+                return new GM_FloatValue(m_token);
+            else
+                return new GM_IntValue(m_token);
+        }
+        
+        return nullptr;
     }
 
     bool GM_AST_NUMBER_LITERAL_EXPR::_check_childs_valid() const

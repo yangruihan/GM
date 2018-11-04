@@ -28,13 +28,13 @@ namespace GM
     void GM_IntValue::_init_functions()
     {
         GM_Value::set_func(GM_Function::create_func(FUNC_ADD_OP_KEY,
-                                                    GM_IntValue::__add));
+                                                       GM_IntValue::__add));
         GM_Value::set_func(GM_Function::create_func(FUNC_SUB_OP_KEY,
-                                                    GM_IntValue::__sub));
+                                                       GM_IntValue::__sub));
         GM_Value::set_func(GM_Function::create_func(FUNC_MUL_OP_KEY,
-                                                    GM_IntValue::__mul));
+                                                       GM_IntValue::__mul));
         GM_Value::set_func(GM_Function::create_func(FUNC_DIV_OP_KEY,
-                                                    GM_IntValue::__div));
+                                                       GM_IntValue::__div));
     }
 
     std::string GM_IntValue::str() const

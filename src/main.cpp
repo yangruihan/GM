@@ -79,6 +79,8 @@ int main()
         {
         }
     }
+    
+    delete interpreter;
 
     return 0;
 }

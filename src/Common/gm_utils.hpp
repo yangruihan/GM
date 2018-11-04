@@ -60,6 +60,7 @@
 
 namespace GM
 {
+    
     class GM_Utils
     {
     private:
