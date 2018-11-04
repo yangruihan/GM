@@ -10,6 +10,9 @@ namespace GM
  
     GM_Parameter::GM_Parameter(const size_t count, ...)
     {
+        m_list_params = new std::vector<GM_Value*>();
+        m_dict_params = new std::map<std::string, GM_Value*>();
+        
         va_list args;
         va_start(args, count);
         for (size_t i = 0; i < count; i++)
@@ -18,15 +21,14 @@ namespace GM
             auto dict_key = _handle_param_item(value);
             if (dict_key == nullptr)
             {
-                if (m_list_params == nullptr)
-                    m_list_params = new std::vector<GM_Value*>();
-                
                 m_list_params->push_back(value);
             }
             else
             {
+                (*m_dict_params)[*dict_key] = value;
             }
         }
+        va_end(args);
     }
     
     GM_Parameter::~GM_Parameter() {}
