@@ -64,8 +64,11 @@ namespace GM
         }
 
         /* --- environment --- */
-        void set_environment(GM_Environment* environment)
-        { m_environment = before_set_environment(environment); }
+        GM_Environment* set_environment(GM_Environment* environment)
+        {
+            m_environment = before_set_environment(environment);
+            return m_environment;
+        }
         
         GM_Environment* get_environment()
         { return before_get_environment(); }

@@ -16,7 +16,7 @@ namespace GM
 
     bool GM_Interpreter::init()
     {
-        m_environment->set_var(GM_INTERPRETER_RUN_FLAG, GM_IntValue::create(1));
+        m_environment->set_var(GM_INTERPRETER_RUN_FLAG, GM_Value::int_value(1));
 
         auto ret = GM_BuiltinFunc::init(m_environment);
         return ret;
@@ -46,7 +46,7 @@ namespace GM
         m_start_pos = 0;
         m_left_parentheses_count = 0;
 
-        m_ast_root = _parse(command);
+        m_ast_root = _parse(command, m_environment);
 
         if (m_ast_root == nullptr)
             return -1;
@@ -54,7 +54,8 @@ namespace GM
         return 0;
     }
 
-    GM_AST_TREE* GM_Interpreter::_parse(std::string& command)
+    GM_AST_TREE* GM_Interpreter::_parse(std::string& command,
+                                        GM_Environment* env)
     {
         if (m_start_pos >= command.size())
             return nullptr;
@@ -71,7 +72,7 @@ namespace GM
 
                 if (ret != nullptr)
                 {
-                    ret->set_environment(m_environment);
+                    auto new_env = ret->set_environment(env);
                     
                     DEBUG_LOG_F("Create AST Node %s, child count %ld",
                                 ret->get_token().c_str(),
@@ -80,7 +81,7 @@ namespace GM
                     auto child_count = ret->get_need_child_count();
                     for (size_t i = 0; i < child_count; i++)
                     {
-                        ret->add_child(_parse(command));
+                        ret->add_child(_parse(command, new_env));
                     }
                 }
             }
@@ -105,8 +106,6 @@ namespace GM
             ret = GM_InterpreterUtils::check_token_is_operator(token);
             if (ret != nullptr)
                 return ret;
-            
-            // TODO check is variable
         }
 
         // digit

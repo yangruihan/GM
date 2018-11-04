@@ -11,3 +11,5 @@
 #include "Value/gm_list_value.hpp"
 #include "Value/gm_number_value.hpp"
 #include "Value/gm_str_value.hpp"
+#include "Value/gm_bool_value.hpp"
+#include "Value/gm_null_value.hpp"

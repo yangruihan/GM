@@ -22,6 +22,7 @@ namespace GM
 
         static GM_Value* __exit(const GM_Parameter* param);
 
+
     };
 
 }

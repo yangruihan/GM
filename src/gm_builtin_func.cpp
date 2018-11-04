@@ -36,7 +36,7 @@ namespace GM
     
     GM_Value *GM_BuiltinFunc::__exit(const GM::GM_Parameter *param)
     {
-        auto ret = GM_IntValue::create(0);
+        auto ret = GM_Value::int_value(0);
         param->get_environment()->set_var(GM_INTERPRETER_RUN_FLAG,
                                           ret);
         return ret;

@@ -23,15 +23,6 @@ namespace GM
         _init_functions();
     }
 
-    GM_IntValue* GM_IntValue::create (const std::string& token)
-    { return new GM_IntValue(token); }
-
-    GM_IntValue* GM_IntValue::create (int value)
-    { return new GM_IntValue(value); }
-
-    GM_IntValue* GM_IntValue::create (double value)
-    { return new GM_IntValue(value); }
-
     GM_IntValue::~GM_IntValue () {}
 
     void GM_IntValue::_init_functions()

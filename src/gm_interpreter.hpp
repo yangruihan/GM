@@ -34,7 +34,7 @@ namespace GM
         int get_running_flag() const;
 
     private:
-        GM_AST_TREE* _parse(std::string& command);
+        GM_AST_TREE* _parse(std::string& command, GM_Environment* env);
 
         GM_AST_TREE* _get_ast_tree_from_token(std::string& token) const;
 

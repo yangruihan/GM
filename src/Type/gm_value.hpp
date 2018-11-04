@@ -10,6 +10,10 @@ namespace GM
 {
     class GM_Function;
 
+    class GM_NullValue;
+    class GM_IntValue;
+    class GM_FloatValue;
+
     class GM_Value : extends(GM_Object)
     {
 
@@ -28,6 +32,17 @@ namespace GM
         }
 
         virtual std::string str() const = 0;
+    public:
+        /* --- get value --- */
+        static GM_NullValue* null_value ();
+
+        static GM_IntValue* int_value (const std::string& token);
+        static GM_IntValue* int_value (int value);
+        static GM_IntValue* int_value (double value);
+
+        static GM_FloatValue* float_value (const std::string& token);
+        static GM_FloatValue* float_value (int value);
+        static GM_FloatValue* float_value (double value);
 
     protected:
         virtual void _init_functions() = 0;
