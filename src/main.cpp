@@ -25,7 +25,7 @@ void print_ast(GM_AST_TREE* node, int indent)
         std::cout << "\t";
     }
 
-    printf("(Token: %s, child count: %d)", 
+    printf("(Token: %s, child count: %ld)", 
                         node->get_token().c_str(),
                         node->get_child_count());
 

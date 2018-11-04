@@ -37,7 +37,7 @@ namespace GM
 
             if (index < 0 || index > m_childs->size())
             {
-                PRINT_ERROR_F("IndexError: out of range(%d)", m_childs->size());
+                PRINT_ERROR_F("IndexError: out of range(%ld)", m_childs->size());
                 return nullptr;
             }
 

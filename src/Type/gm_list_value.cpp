@@ -51,7 +51,7 @@ namespace GM
     {
         if (index < 0 || index >= get_item_count())
         {
-            PRINT_ERROR_F("IndexError: index(%d) out of range(%d)", index, get_item_count());
+            PRINT_ERROR_F("IndexError: index(%d) out of range(%ld)", index, get_item_count());
             return nullptr;
         }
 

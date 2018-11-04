@@ -57,7 +57,7 @@ namespace GM
 
                 if (ret != nullptr)
                 {
-                    DEBUG_LOG_F("Create AST Node %s, child count %d",
+                    DEBUG_LOG_F("Create AST Node %s, child count %ld",
                                 ret->get_token().c_str(),
                                 ret->get_need_child_count());
 
