@@ -6,8 +6,7 @@
 
 namespace GM
 {
-    class GM_Value;
-    class GM_Function;
+    class GM_Object;
 
     class GM_Environment : extends(GM_Object)
     {
@@ -18,18 +17,14 @@ namespace GM
         
         GM_Environment& operator=(const GM_Environment& other) = delete;
         
-        void set_value(std::string& var_name, GM_Value* value);
-        GM_Value* get_value(std::string& var_name) const;
-        
-        void set_func(std::string& func_name, GM_Function* func);
-        GM_Function* get_func(std::string& func_name) const;
+        void set_var(std::string& var_name, GM_Object* var);
+        GM_Object* get_var(std::string& var_name) const;
         
         void set_parent(const GM_Environment* env) { m_parent = env; }
         const GM_Environment* get_parent() const { return m_parent; }
         
     protected:
-        std::map<std::string, GM_Value*>* m_var_map;
-        std::map<std::string, GM_Function*>* m_func_map;
+        std::map<std::string, GM_Object*>* m_var_map;
         
         const GM_Environment* m_parent;
     };
