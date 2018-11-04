@@ -27,11 +27,11 @@ namespace GM
     protected:
         bool _check_childs_valid() const override;
 
-        GM_Environment* on_set_environment(GM_Environment* env) override;
+        GM_Environment* before_set_environment(GM_Environment* env) override;
 
     protected:
         size_t m_var_type;
-        
+
     };
 
 }

@@ -65,19 +65,19 @@ namespace GM
 
         /* --- environment --- */
         void set_environment(GM_Environment* environment)
-        { m_environment = on_set_environment(environment); }
+        { m_environment = before_set_environment(environment); }
         
         GM_Environment* get_environment()
-        { return on_get_environment(); }
+        { return before_get_environment(); }
     
     protected:
         virtual bool _check_childs_valid() const = 0;
         
         /* --- environment --- */
-        virtual GM_Environment* on_set_environment(GM_Environment* env)
+        virtual GM_Environment* before_set_environment(GM_Environment* env)
         { return env; }
         
-        virtual GM_Environment* on_get_environment()
+        virtual GM_Environment* before_get_environment()
         { return m_environment; }
 
     protected:

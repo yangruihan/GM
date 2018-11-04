@@ -14,6 +14,12 @@ namespace GM
         delete[] m_environment;
     }
 
+    bool GM_Interpreter::init()
+    {
+        auto ret = GM_BuiltinFunc::init(m_environment);
+        return ret;
+    }
+
     GM_Value* GM_Interpreter::eval() const
     {
         auto root = get_ast_root();

@@ -76,9 +76,9 @@ namespace GM
         return true;
     }
     
-    GM_Environment *GM_AST_VAR_EXPR::on_set_environment(GM_Environment *env)
+    GM_Environment *GM_AST_VAR_EXPR::before_set_environment(GM_Environment *env)
     {
-        auto object = m_environment->get_var(m_token);
+        auto object = env->get_var(m_token);
         if (object == nullptr)
         {
             PRINT_ERROR_F("UndefinedError: cannot find symbol '%s'", m_token.c_str());

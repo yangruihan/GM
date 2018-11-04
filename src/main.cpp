@@ -41,6 +41,7 @@ int main()
     DEBUG_LOG_F("----- GM Interpreter [Version %d.%d.%d]-----", 0, 0, 1);
 
     GM_Interpreter* interpreter = new GM_Interpreter();
+    interpreter->init();
 
     std::string command;
     int ret = 0;

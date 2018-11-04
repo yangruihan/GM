@@ -22,6 +22,8 @@ namespace GM
         GM_Interpreter();
         ~GM_Interpreter() override;
 
+        bool init();
+
         int parse(std::string command);
     
     public:

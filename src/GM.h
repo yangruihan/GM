@@ -2,6 +2,7 @@
 
 #include "gm_common_header.h"
 
+#include "gm_builtin_func.hpp"
 #include "gm_environment.hpp"
 #include "gm_interpreter.hpp"
 #include "gm_interpreter_utils.hpp"

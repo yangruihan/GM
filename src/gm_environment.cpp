@@ -19,7 +19,7 @@ namespace GM
         delete m_var_map;
     }
     
-    void GM_Environment::set_var(std::string &var_name, GM_Object *var)
+    void GM_Environment::set_var(const std::string& var_name, GM_Object *var)
     {
         if (var == nullptr)
         {
@@ -30,7 +30,7 @@ namespace GM
         (*m_var_map)[var_name] = var;
     }
     
-    GM_Object *GM_Environment::get_var(const std::string &var_name) const
+    GM_Object *GM_Environment::get_var(const std::string& var_name) const
     {
         auto it = m_var_map->find(var_name);
         if (it != m_var_map->end())
