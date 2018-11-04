@@ -39,6 +39,7 @@ namespace GM
     private:
         GM_Environment* m_environment;
         GM_AST_TREE* m_ast_root;
+        
         size_t m_start_pos;
         size_t m_left_parentheses_count;
     };

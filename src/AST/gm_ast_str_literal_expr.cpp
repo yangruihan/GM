@@ -44,7 +44,6 @@ namespace GM
         return nullptr;
     }
     
-
     bool GM_AST_STR_LITERAL_EXPR::_check_childs_valid() const
     {
         return true;

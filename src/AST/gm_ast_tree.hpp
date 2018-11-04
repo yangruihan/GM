@@ -5,6 +5,7 @@
 
 #include "../gm_common_header.h"
 #include "../Type/gm_value.hpp"
+#include "../gm_environment.hpp"
 
 namespace GM
 {
@@ -62,12 +63,28 @@ namespace GM
             m_childs->push_back(child); 
         }
 
+        /* --- environment --- */
+        void set_environment(GM_Environment* environment)
+        { m_environment = on_set_environment(environment); }
+        
+        GM_Environment* get_environment()
+        { return on_get_environment(); }
+    
     protected:
         virtual bool _check_childs_valid() const = 0;
+        
+        /* --- environment --- */
+        virtual GM_Environment* on_set_environment(GM_Environment* env)
+        { return env; }
+        
+        virtual GM_Environment* on_get_environment()
+        { return m_environment; }
 
     protected:
         std::vector<GM_AST_TREE*>* m_childs;
         std::string m_token;
+        
+        GM_Environment* m_environment;
     };
 
 }

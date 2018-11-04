@@ -67,14 +67,31 @@ namespace GM
         static inline char m_str_buffer[256];
 
     public:
+        /**
+         * This function checks whether the passed
+         * character is alphabetic.
+         */
         static bool is_digit(char c)
         {
             return isdigit(c);
         }
-
+        
+        /**
+         * This function checks whether the passed
+         * character is white-space.
+         */
         static bool is_space(char c)
         {
             return isspace(c);
+        }
+        
+        /**
+         * This function checks whether the passed
+         * character is alphabetic.
+         */
+        static bool is_alpha(char c)
+        {
+            return isalpha(c);
         }
 
         static void get_int_from_str(std::string& str, int& value)
