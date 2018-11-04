@@ -30,8 +30,21 @@ namespace GM
         }
         va_end(args);
     }
+
+    GM_Parameter::GM_Parameter(std::vector<GM_Value*>* list_param,
+                               std::map<std::string, GM_Value*>* dict_param)
+                               : m_list_params(list_param),
+                                 m_dict_params(dict_param)
+    {}
     
-    GM_Parameter::~GM_Parameter() {}
+    GM_Parameter::~GM_Parameter()
+    {
+        if (m_list_params != nullptr)
+            delete m_list_params;
+
+        if (m_dict_params != nullptr)
+            delete m_dict_params;
+    }
     
     std::string* GM_Parameter::_handle_param_item(GM::GM_Value *value) const
     {

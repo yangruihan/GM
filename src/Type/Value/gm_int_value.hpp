@@ -14,7 +14,7 @@ namespace GM
     {
 
     public:
-        GM_IntValue (std::string& token);
+        GM_IntValue (const std::string& token);
         GM_IntValue (int value);
         GM_IntValue (double value);
         virtual ~GM_IntValue ();

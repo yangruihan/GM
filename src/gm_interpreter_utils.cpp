@@ -43,7 +43,7 @@ namespace GM
         return nullptr;
     }
     
-    GM::GM_AST_TREE *GM_InterpreterUtils::check_token_is_str_literal(std::string &token)
+    GM_AST_TREE *GM_InterpreterUtils::check_token_is_str_literal(std::string &token)
     {
         if (GM_AST_STR_LITERAL_EXPR::check_token_valid(token))
         {
@@ -53,5 +53,14 @@ namespace GM
         return nullptr;
     }
     
+    GM_AST_TREE *GM_InterpreterUtils::check_token_is_variable(std::string &token)
+    {
+        if (GM_AST_VAR_EXPR::check_token_valid(token))
+        {
+            return new GM_AST_VAR_EXPR(token);
+        }
+
+        return nullptr;
+    }
     
 }

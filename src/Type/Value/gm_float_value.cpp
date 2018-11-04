@@ -4,7 +4,7 @@
 namespace GM
 {
 
-    GM_FloatValue::GM_FloatValue(std::string& token)
+    GM_FloatValue::GM_FloatValue(const std::string& token)
     {
         GM_Utils::get_float_from_str(token, m_value);
 
@@ -24,12 +24,16 @@ namespace GM
     void GM_FloatValue::_init_functions()
     {
         GM_Value::set_func(GM_Function::create_func(FUNC_ADD_OP_KEY,
+                                                    2,
                                                     GM_FloatValue::__add));
         GM_Value::set_func(GM_Function::create_func(FUNC_SUB_OP_KEY,
+                                                    2,
                                                     GM_FloatValue::__sub));
         GM_Value::set_func(GM_Function::create_func(FUNC_MUL_OP_KEY,
+                                                    2,
                                                     GM_FloatValue::__mul));
         GM_Value::set_func(GM_Function::create_func(FUNC_DIV_OP_KEY,
+                                                    2,
                                                     GM_FloatValue::__div));
     }
 

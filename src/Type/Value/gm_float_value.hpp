@@ -12,7 +12,7 @@ namespace GM
     {
 
     public:
-        GM_FloatValue (std::string& token);
+        GM_FloatValue (const std::string& token);
         GM_FloatValue (int value);
         GM_FloatValue (double value);
 

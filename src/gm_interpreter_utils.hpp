@@ -15,6 +15,8 @@ namespace GM
         static GM_AST_TREE* check_token_is_number_literal(std::string& token);
         
         static GM_AST_TREE* check_token_is_str_literal(std::string& token);
+
+        static GM_AST_TREE* check_token_is_variable(std::string& token);
         
     };
     

@@ -30,7 +30,7 @@ namespace GM
         (*m_var_map)[var_name] = var;
     }
     
-    GM_Object *GM_Environment::get_var(std::string &var_name) const
+    GM_Object *GM_Environment::get_var(const std::string &var_name) const
     {
         auto it = m_var_map->find(var_name);
         if (it != m_var_map->end())

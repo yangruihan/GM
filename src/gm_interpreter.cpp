@@ -105,6 +105,11 @@ namespace GM
         if (ret != nullptr)
             return ret;
 
+        // variable
+        ret = GM_InterpreterUtils::check_token_is_variable(token);
+        if (ret != nullptr)
+            return ret;
+
         PRINT_ERROR_F("SyntaxError: token(%s) is error", token.c_str());
         return nullptr;
     }

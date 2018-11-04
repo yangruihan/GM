@@ -18,7 +18,7 @@ namespace GM
         GM_Environment& operator=(const GM_Environment& other) = delete;
         
         void set_var(std::string& var_name, GM_Object* var);
-        GM_Object* get_var(std::string& var_name) const;
+        GM_Object* get_var(const std::string& var_name) const;
         
         void set_parent(const GM_Environment* env) { m_parent = env; }
         const GM_Environment* get_parent() const { return m_parent; }

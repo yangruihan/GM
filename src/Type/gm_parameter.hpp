@@ -14,6 +14,8 @@ namespace GM
     {
     public:
         GM_Parameter(const size_t count, ...);
+        GM_Parameter(std::vector<GM_Value*>* list_param,
+                     std::map<std::string, GM_Value*>* dict_param);
         virtual ~GM_Parameter();
     
     public:

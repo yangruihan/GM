@@ -6,7 +6,7 @@
 namespace GM
 {
 
-    GM_IntValue::GM_IntValue (std::string& token)
+    GM_IntValue::GM_IntValue (const std::string& token)
     {
         GM_Utils::get_int_from_str(token, m_value);
 
@@ -28,13 +28,17 @@ namespace GM
     void GM_IntValue::_init_functions()
     {
         GM_Value::set_func(GM_Function::create_func(FUNC_ADD_OP_KEY,
-                                                       GM_IntValue::__add));
+                                                    2,
+                                                    GM_IntValue::__add));
         GM_Value::set_func(GM_Function::create_func(FUNC_SUB_OP_KEY,
-                                                       GM_IntValue::__sub));
+                                                    2,
+                                                    GM_IntValue::__sub));
         GM_Value::set_func(GM_Function::create_func(FUNC_MUL_OP_KEY,
-                                                       GM_IntValue::__mul));
+                                                    2,
+                                                    GM_IntValue::__mul));
         GM_Value::set_func(GM_Function::create_func(FUNC_DIV_OP_KEY,
-                                                       GM_IntValue::__div));
+                                                    2,
+                                                    GM_IntValue::__div));
     }
 
     std::string GM_IntValue::str() const

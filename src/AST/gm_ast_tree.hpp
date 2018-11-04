@@ -82,7 +82,7 @@ namespace GM
 
     protected:
         std::vector<GM_AST_TREE*>* m_childs;
-        std::string m_token;
+        const std::string m_token;
         
         GM_Environment* m_environment;
     };

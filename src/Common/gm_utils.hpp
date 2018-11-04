@@ -71,7 +71,7 @@ namespace GM
          * This function checks whether the passed
          * character is alphabetic.
          */
-        static bool is_digit(char c)
+        static bool is_digit(const char& c)
         {
             return isdigit(c);
         }
@@ -80,7 +80,7 @@ namespace GM
          * This function checks whether the passed
          * character is white-space.
          */
-        static bool is_space(char c)
+        static bool is_space(const char& c)
         {
             return isspace(c);
         }
@@ -89,17 +89,26 @@ namespace GM
          * This function checks whether the passed
          * character is alphabetic.
          */
-        static bool is_alpha(char c)
+        static bool is_alpha(const char& c)
         {
             return isalpha(c);
         }
 
-        static void get_int_from_str(std::string& str, int& value)
+        /**
+         * This function checks whether the passed
+         * character is alphanumeric.
+         */
+        static bool is_alpha_or_num(const char& c)
+        {
+            return isalnum(c);
+        }
+
+        static void get_int_from_str(const std::string& str, int& value)
         {
             value = std::stoi(str);
         }
 
-        static void get_float_from_str(std::string& str, double& value)
+        static void get_float_from_str(const std::string& str, double& value)
         {
             value = std::stod(str);
         }
