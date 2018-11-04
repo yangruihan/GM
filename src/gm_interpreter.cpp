@@ -11,13 +11,21 @@ namespace GM
     
     GM_Interpreter::~GM_Interpreter() 
     {
-        delete[] m_environment;
+        delete m_environment;
     }
 
     bool GM_Interpreter::init()
     {
+        m_environment->set_var(GM_INTERPRETER_RUN_FLAG, GM_IntValue::create(1));
+
         auto ret = GM_BuiltinFunc::init(m_environment);
         return ret;
+    }
+
+    int GM_Interpreter::get_running_flag() const
+    {
+        auto flag = m_environment->get_var(GM_INTERPRETER_RUN_FLAG);
+        return (int) (dynamic_cast<GM_IntValue*>(flag)->get_value());
     }
 
     GM_Value* GM_Interpreter::eval() const

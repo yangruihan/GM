@@ -7,6 +7,8 @@
 #define extends(class_name) public class_name
 #define implements(class_name) public class_name
 
+#define GM_INTERPRETER_RUN_FLAG "__GM__INTERPRETER_RUN_FLAG__"
+
 #define FUNC_ADD_OP_KEY "__add"
 #define FUNC_SUB_OP_KEY "__sub"
 #define FUNC_MUL_OP_KEY "__mul"

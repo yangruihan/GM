@@ -19,6 +19,9 @@ namespace GM
         GM_IntValue (double value);
         virtual ~GM_IntValue ();
 
+        static GM_IntValue* create (const std::string& token);
+        static GM_IntValue* create (int value);
+        static GM_IntValue* create (double value);
     public:
         VALUE_TYPE get_type() const override
         {

@@ -62,7 +62,8 @@ namespace GM
             {
                 list_param->push_back(get_child(i)->eval());
             }
-            auto parameter = new GM_Parameter(list_param, nullptr);
+            auto parameter = new GM_Parameter(get_environment(),
+                                              list_param, nullptr);
             return func->eval(parameter);
         }
         else

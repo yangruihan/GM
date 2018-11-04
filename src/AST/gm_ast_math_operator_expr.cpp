@@ -23,7 +23,8 @@ namespace GM
                 return nullptr;
             }
             
-            auto parameter = new GM_Parameter(2, left_value, right_value);
+            auto parameter = new GM_Parameter(get_environment(),
+                                              2, left_value, right_value);
             return func->eval(parameter);
         }
 
@@ -63,7 +64,8 @@ namespace GM
                 return nullptr;
             }
             
-            auto parameter = new GM_Parameter(2, left_value, right_value);
+            auto parameter = new GM_Parameter(get_environment(),
+                                              2, left_value, right_value);
             return func->eval(parameter);
         }
 
@@ -103,7 +105,8 @@ namespace GM
                 return nullptr;
             }
             
-            auto parameter = new GM_Parameter(2, left_value, right_value);
+            auto parameter = new GM_Parameter(get_environment(),
+                                              2, left_value, right_value);
             return func->eval(parameter);
         }
 
@@ -143,7 +146,8 @@ namespace GM
                 return nullptr;
             }
             
-            auto parameter = new GM_Parameter(2, left_value, right_value);
+            auto parameter = new GM_Parameter(get_environment(),
+                                              2, left_value, right_value);
             return func->eval(parameter);
         }
 

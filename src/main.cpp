@@ -45,7 +45,8 @@ int main()
 
     std::string command;
     int ret = 0;
-    while (true)
+    int running_flag = 1;
+    while (running_flag == 1)
     {
         std::cout << "> ";
 
@@ -79,6 +80,8 @@ int main()
         else
         {
         }
+
+        running_flag = interpreter->get_running_flag();
     }
     
     delete interpreter;

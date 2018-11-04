@@ -2,7 +2,8 @@
 
 #include "gm_common_header.h"
 
-#define BUILTIN_FUNC_PRINT "print"
+#define BUILTIN_FUNC_PRINT  "print"
+#define BUILTIN_FUNC_EXIT   "exit"
 
 namespace GM
 {
@@ -18,6 +19,8 @@ namespace GM
 
     private:
         static GM_Value* __print(const GM_Parameter* param);
+
+        static GM_Value* __exit(const GM_Parameter* param);
 
     };
 

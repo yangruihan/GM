@@ -10,8 +10,7 @@ namespace GM
     
     GM_ListValue::~GM_ListValue ()
     {
-        if (m_items != nullptr)
-            delete[] m_items;
+        delete m_items;
     }
 
     void GM_ListValue::_init_functions()

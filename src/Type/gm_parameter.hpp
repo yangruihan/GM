@@ -9,12 +9,15 @@
 namespace GM
 {
     class GM_Value;
+    class GM_Environment;
     
     class GM_Parameter : extends(GM_Object)
     {
     public:
-        GM_Parameter(const size_t count, ...);
-        GM_Parameter(std::vector<GM_Value*>* list_param,
+        GM_Parameter(GM_Environment* env,
+                     const size_t count, ...);
+        GM_Parameter(GM_Environment* env,
+                     std::vector<GM_Value*>* list_param,
                      std::map<std::string, GM_Value*>* dict_param);
         virtual ~GM_Parameter();
     
@@ -73,7 +76,9 @@ namespace GM
             
             return ret;
         }
-        
+
+        GM_Environment* get_environment() const { return m_environment; }
+
     private:
         std::string* _handle_param_item(GM_Value* value) const;
         
@@ -81,6 +86,7 @@ namespace GM
         std::vector<GM_Value*>* m_list_params;
         std::map<std::string, GM_Value*>* m_dict_params;
 
+        GM_Environment* m_environment;
     };
  
 }

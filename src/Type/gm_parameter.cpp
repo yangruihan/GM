@@ -2,13 +2,13 @@
 
 #include <cstdarg>
 
-#include "../Common/gm_utils.hpp"
-#include "gm_types_header.h"
+#include "../GM.h"
 
 namespace GM
 {
  
-    GM_Parameter::GM_Parameter(const size_t count, ...)
+    GM_Parameter::GM_Parameter(GM_Environment* env,
+                               const size_t count, ...): m_environment(env)
     {
         m_list_params = new std::vector<GM_Value*>();
         m_dict_params = new std::map<std::string, GM_Value*>();
@@ -31,9 +31,11 @@ namespace GM
         va_end(args);
     }
 
-    GM_Parameter::GM_Parameter(std::vector<GM_Value*>* list_param,
+    GM_Parameter::GM_Parameter(GM_Environment* env,
+                               std::vector<GM_Value*>* list_param,
                                std::map<std::string, GM_Value*>* dict_param)
-                               : m_list_params(list_param),
+                               : m_environment(env),
+                                 m_list_params(list_param),
                                  m_dict_params(dict_param)
     {}
     
