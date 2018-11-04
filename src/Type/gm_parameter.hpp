@@ -18,7 +18,7 @@ namespace GM
     
     public:
         template<typename T>
-        T* get_param(const size_t index)
+        T* get_param(const size_t index) const
         {
             if (m_list_params == nullptr)
             {
@@ -45,7 +45,7 @@ namespace GM
         }
         
         template<typename T>
-        T* get_param(const std::string key)
+        T* get_param(const std::string key) const
         {
             return nullptr;
         }

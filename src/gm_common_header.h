@@ -18,6 +18,6 @@ namespace GM
     class GM_Value;
     class GM_Parameter;
     
-    typedef GM_Value* (*GM_FUNCTION_PTR)(GM_Parameter*);
+    typedef GM_Value* (*GM_FUNCTION_PTR)(const GM_Parameter*);
     
 }

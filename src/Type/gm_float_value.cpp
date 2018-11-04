@@ -38,7 +38,7 @@ namespace GM
         return GM_Utils::format_str("%lf", m_value);
     }
 
-    GM_Value* GM_FloatValue::__add(GM_Parameter* param)
+    GM_Value* GM_FloatValue::__add(const GM_Parameter* param)
     {
         auto float_arg1 = param->get_param<GM_FloatValue>(0);
         auto arg2 = param->get_param<GM_NumberValue>(1);
@@ -49,7 +49,7 @@ namespace GM
         return new GM_FloatValue(float_arg1->get_value() + arg2->get_value());
     }
 
-    GM_Value* GM_FloatValue::__sub(GM_Parameter* param)
+    GM_Value* GM_FloatValue::__sub(const GM_Parameter* param)
     {
         auto float_arg1 = param->get_param<GM_FloatValue>(0);
         auto arg2 = param->get_param<GM_NumberValue>(1);
@@ -60,7 +60,7 @@ namespace GM
         return new GM_FloatValue(float_arg1->get_value() - arg2->get_value());
     }
 
-    GM_Value* GM_FloatValue::__mul(GM_Parameter* param)
+    GM_Value* GM_FloatValue::__mul(const GM_Parameter* param)
     {
         auto float_arg1 = param->get_param<GM_FloatValue>(0);
         auto arg2 = param->get_param<GM_NumberValue>(1);
@@ -71,7 +71,7 @@ namespace GM
         return new GM_FloatValue(float_arg1->get_value() * arg2->get_value());
     }
 
-    GM_Value* GM_FloatValue::__div(GM_Parameter* param)
+    GM_Value* GM_FloatValue::__div(const GM_Parameter* param)
     {
         auto float_arg1 = param->get_param<GM_FloatValue>(0);
         auto arg2 = param->get_param<GM_NumberValue>(1);

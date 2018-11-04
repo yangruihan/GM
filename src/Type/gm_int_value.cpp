@@ -42,7 +42,7 @@ namespace GM
         return GM_Utils::format_str("%d", m_value);
     }
 
-    GM_Value* GM_IntValue::__add(GM_Parameter* param)
+    GM_Value* GM_IntValue::__add(const GM_Parameter* param)
     {
         auto int_arg1 = param->get_param<GM_IntValue>(0);
         auto arg2 = param->get_param<GM_NumberValue>(1);
@@ -67,7 +67,7 @@ namespace GM
         return nullptr;
     }
 
-    GM_Value* GM_IntValue::__sub(GM_Parameter* param)
+    GM_Value* GM_IntValue::__sub(const GM_Parameter* param)
     {
         auto int_arg1 = param->get_param<GM_IntValue>(0);
         auto arg2 = param->get_param<GM_NumberValue>(1);
@@ -92,7 +92,7 @@ namespace GM
         return nullptr;
     }
 
-    GM_Value* GM_IntValue::__mul(GM_Parameter* param)
+    GM_Value* GM_IntValue::__mul(const GM_Parameter* param)
     {
         auto int_arg1 = param->get_param<GM_IntValue>(0);
         auto arg2 = param->get_param<GM_NumberValue>(1);
@@ -117,7 +117,7 @@ namespace GM
         return nullptr;
     }
 
-    GM_Value* GM_IntValue::__div(GM_Parameter* param)
+    GM_Value* GM_IntValue::__div(const GM_Parameter* param)
     {
         auto int_arg1 = param->get_param<GM_IntValue>(0);
         auto arg2 = param->get_param<GM_NumberValue>(1);

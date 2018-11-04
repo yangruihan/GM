@@ -35,9 +35,9 @@ namespace GM
         void _init_functions() override;
 
     private:
-        static GM_Value* __add(GM_Parameter* args);
-        static GM_Value* __sub(GM_Parameter* args);
-        static GM_Value* __mul(GM_Parameter* args);
-        static GM_Value* __div(GM_Parameter* args);
+        static GM_Value* __add(const GM_Parameter* args);
+        static GM_Value* __sub(const GM_Parameter* args);
+        static GM_Value* __mul(const GM_Parameter* args);
+        static GM_Value* __div(const GM_Parameter* args);
     };
 }
