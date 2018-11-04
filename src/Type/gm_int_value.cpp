@@ -1,8 +1,5 @@
-#include "gm_int_value.hpp"
-#include "gm_float_value.hpp"
-#include "gm_function.hpp"
-#include "gm_list_value.hpp"
 #include "../Common/gm_utils.hpp"
+#include "gm_types_header.h"
 
 #include <sstream>
 
@@ -49,7 +46,7 @@ namespace GM
     {
         if (args->get_item_count() != 2)
         {
-            PRINT_ERROR_F("ArgumentsError: Argument count is not match, need %d, %d given", 2, args->get_item_count());
+            PRINT_ERROR_F("ArgumentsError: Argument count is not match, need %d, %ld given", 2, args->get_item_count());
             return nullptr;
         }
 
@@ -80,7 +77,7 @@ namespace GM
     {
         if (args->get_item_count() != 2)
         {
-            PRINT_ERROR_F("ArgumentsError: Argument count is not match, need %d, %d given", 2, args->get_item_count());
+            PRINT_ERROR_F("ArgumentsError: Argument count is not match, need %d, %ld given", 2, args->get_item_count());
             return nullptr;
         }
 
@@ -111,7 +108,7 @@ namespace GM
     {
         if (args->get_item_count() != 2)
         {
-            PRINT_ERROR_F("ArgumentsError: Argument count is not match, need %d, %d given", 2, args->get_item_count());
+            PRINT_ERROR_F("ArgumentsError: Argument count is not match, need %d, %ld given", 2, args->get_item_count());
             return nullptr;
         }
 
@@ -142,7 +139,7 @@ namespace GM
     {
         if (args->get_item_count() != 2)
         {
-            PRINT_ERROR_F("ArgumentsError: Argument count is not match, need %d, %d given", 2, args->get_item_count());
+            PRINT_ERROR_F("ArgumentsError: Argument count is not match, need %d, %ld given", 2, args->get_item_count());
             return nullptr;
         }
 

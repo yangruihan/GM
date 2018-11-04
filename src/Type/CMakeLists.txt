@@ -1,8 +1,14 @@
+aux_source_directory(. SRC_FILES)
+
+file(GLOB GM_HEADERS_PLUS ./*.hpp)
+file(GLOB GM_HEADERS ./*.h)
+
+source_group("Headers" FILES ${GM_HEADERS_PLUS})
+source_group("Headers" FILES ${GM_HEADERS})
+
 add_library(
     Type
-    gm_float_value.cpp
-    gm_function.cpp
-    gm_int_value.cpp
-    gm_list_value.cpp
-    gm_value.cpp
+    ${SRC_FILES}
+    ${GM_HEADERS_PLUS}
+    ${GM_HEADERS}
 )

@@ -45,7 +45,7 @@ namespace GM
     {
         if (args->get_item_count() != 2)
         {
-            PRINT_ERROR_F("ArgumentsError: Argument count is not match, need %d, %d given", 2, args->get_item_count());
+            PRINT_ERROR_F("ArgumentsError: Argument count is not match, need %d, %ld given", 2, args->get_item_count());
             return nullptr;
         }
 
@@ -76,7 +76,7 @@ namespace GM
     {
         if (args->get_item_count() != 2)
         {
-            PRINT_ERROR_F("ArgumentsError: Argument count is not match, need %d, %d given", 2, args->get_item_count());
+            PRINT_ERROR_F("ArgumentsError: Argument count is not match, need %d, %ld given", 2, args->get_item_count());
             return nullptr;
         }
 
@@ -107,7 +107,7 @@ namespace GM
     {
         if (args->get_item_count() != 2)
         {
-            PRINT_ERROR_F("ArgumentsError: Argument count is not match, need %d, %d given", 2, args->get_item_count());
+            PRINT_ERROR_F("ArgumentsError: Argument count is not match, need %d, %ld given", 2, args->get_item_count());
             return nullptr;
         }
 
@@ -138,7 +138,7 @@ namespace GM
     {
         if (args->get_item_count() != 2)
         {
-            PRINT_ERROR_F("ArgumentsError: Argument count is not match, need %d, %d given", 2, args->get_item_count());
+            PRINT_ERROR_F("ArgumentsError: Argument count is not match, need %d, %ld given", 2, args->get_item_count());
             return nullptr;
         }
 
