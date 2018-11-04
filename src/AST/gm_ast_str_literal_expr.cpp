@@ -27,6 +27,12 @@ namespace GM
         if (token[0] != '"' || token[token_len - 1] != '"')
             return false;
         
+        for (size_t i = 1; i < token_len - 1; i++)
+        {
+            if (token[i] == '"')
+                return false;
+        }
+        
         return true;
     }
     

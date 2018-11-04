@@ -7,6 +7,12 @@
 #include "AST/gm_ast_header.h"
 #include "Type/gm_types_header.h"
 
+//#define GM_TOKEN_C_ENDLINE  100     // \0
+//#define GM_TOKEN_C_LEFT_P   101     // (
+//#define GM_TOKEN_C_RIGHT_P  102     // )
+//#define GM_TOKEN_C_SPACE    103     // \t \n ...
+//#define GM_TOKEN_C_QUOT     104     // "
+
 namespace GM
 {
 

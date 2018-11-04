@@ -118,9 +118,11 @@ namespace GM
 
         auto start_pos = m_start_pos;
         auto end_pos = m_start_pos;
-        char c;
-        auto left_parentheses = false;
         
+        auto left_parentheses = false;
+        auto quotation_mark = false;
+        
+        char c;
         while (end_pos < command_len)
         {
             c = command[end_pos];
@@ -140,7 +142,7 @@ namespace GM
                     return true;
                 }
             }
-            if (c == '(')
+            else if (c == '(')
             {
                 if (left_parentheses)
                 {
@@ -157,9 +159,9 @@ namespace GM
                     continue;
                 }
             }
-            else if (c == ')' || GM_Utils::is_space(c))
+            else if (c == ')')
             {
-                if (c == ')' && m_left_parentheses_count == 0)
+                if (m_left_parentheses_count == 0)
                 {
                     PRINT_ERROR("Syntax Error: no matching left parenthesis");
                     m_start_pos = command_len;
@@ -171,6 +173,20 @@ namespace GM
                 DEBUG_LOG_F("%s sub (%ld, %ld)", command.c_str(), start_pos, start_pos);
                 m_start_pos = end_pos + 1;
                 return true;
+            }
+            else if (GM_Utils::is_space(c))
+            {
+                if (!quotation_mark)
+                {
+                    token = command.substr(start_pos, end_pos - start_pos);
+                    DEBUG_LOG_F("%s sub (%ld, %ld)", command.c_str(), start_pos, start_pos);
+                    m_start_pos = end_pos + 1;
+                    return true;
+                }
+            }
+            else if (c == '"')
+            {
+                quotation_mark = !quotation_mark;
             }
 
             end_pos++;
