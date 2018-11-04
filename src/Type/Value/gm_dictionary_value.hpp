@@ -1,7 +1,7 @@
 #pragma once
 
-#include "../gm_common_header.h"
-#include "gm_value.hpp"
+#include "../../gm_common_header.h"
+#include "../gm_value.hpp"
 
 namespace GM
 {

@@ -1,7 +1,5 @@
 #include "gm_ast_math_operator_expr.hpp"
-#include "../Type/gm_list_value.hpp"
-#include "../Type/gm_function.hpp"
-#include "../Type/gm_parameter.hpp"
+#include "../GM.h"
 
 namespace GM
 {

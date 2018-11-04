@@ -2,9 +2,9 @@
 
 #include <vector>
 
-#include "../gm_common_header.h"
-#include "gm_value.hpp"
-#include "gm_types.h"
+#include "../../gm_common_header.h"
+#include "../gm_value.hpp"
+#include "../gm_types.h"
 
 namespace GM
 {
@@ -14,7 +14,7 @@ namespace GM
     {
 
     public:
-        GM_ListValue () { m_items = new std::vector<GM_Value*>(); }
+        GM_ListValue ();
         virtual ~GM_ListValue ();
 
     public:

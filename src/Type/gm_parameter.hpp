@@ -1,14 +1,14 @@
 #pragma once
 
 #include <string>
+#include <vector>
+#include <map>
 
 #include "../gm_common_header.h"
-#include "gm_list_value.hpp"
 
 namespace GM
 {
     class GM_Value;
-    class GM_DictionaryValue;
     
     class GM_Parameter : extends(GM_Object)
     {
@@ -26,36 +26,58 @@ namespace GM
                 return nullptr;
             }
             
-            if (index >= m_list_params->get_item_count())
+            if (index >= m_list_params->size())
             {
                 PRINT_ERROR_F("GetparamError: index(%ld) out of range(%ld)",
                               index,
-                              m_list_params->get_item_count());
+                              m_list_params->size());
                 return nullptr;
             }
             
-            auto param = (*m_list_params)[index];
+            auto ret = GM_Utils::is_instance_of<GM_Value, T>((*m_list_params)[index]);
             
-            if (!GM_Utils::is_instance_of<GM_Value, T>(param))
+            if (ret == nullptr)
             {
                 PRINT_ERROR("GetparamError: param type is not match");
             }
             
-            return dynamic_cast<T*>(param);
+            return ret;
         }
         
         template<typename T>
         T* get_param(const std::string key) const
         {
-            return nullptr;
+            if (m_dict_params == nullptr)
+            {
+                PRINT_ERROR("GetparamError: no param in param dict");
+                return nullptr;
+            }
+            
+            auto it = m_dict_params->find(key);
+            if (it == m_dict_params->end())
+            {
+                PRINT_ERROR_F("GetparamError: index(%ld) out of range(%ld)",
+                              index,
+                              m_list_params->size());
+                return nullptr;
+            }
+            
+            auto ret = GM_Utils::is_instance_of<GM_Value, T>(it->second);
+            
+            if (ret == nullptr)
+            {
+                PRINT_ERROR("GetparamError: param type is not match");
+            }
+            
+            return ret;
         }
         
     private:
         std::string* _handle_param_item(GM_Value* value) const;
         
     protected:
-        GM_ListValue* m_list_params;
-        GM_DictionaryValue* m_dict_params;
+        std::vector<GM_Value*>* m_list_params;
+        std::map<std::string, GM_Value*>* m_dict_params;
 
     };
  

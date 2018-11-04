@@ -6,17 +6,9 @@ file(GLOB GM_HEADERS ./*.h)
 source_group("Headers" FILES ${GM_HEADERS_PLUS})
 source_group("Headers" FILES ${GM_HEADERS})
 
-add_executable(
-    GM
+add_library(
+    Type_Value
     ${SRC_FILES}
     ${GM_HEADERS_PLUS}
     ${GM_HEADERS}
-)
-
-target_link_libraries(
-    GM
-    AST
-    Common
-    Type
-    Type_Value
 )

@@ -3,7 +3,11 @@
 
 namespace GM
 {
-
+    GM_ListValue::GM_ListValue()
+    {
+        m_items = new std::vector<GM_Value*>();
+    }
+    
     GM_ListValue::~GM_ListValue ()
     {
         if (m_items != nullptr)

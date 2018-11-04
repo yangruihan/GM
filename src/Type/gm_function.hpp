@@ -3,10 +3,8 @@
 #include <string>
 
 #include "../gm_common_header.h"
-#include "gm_list_value.hpp"
 #include "gm_value.hpp"
-
-class GM_Value;
+#include "gm_parameter.hpp"
 
 namespace GM
 {

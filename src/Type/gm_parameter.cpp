@@ -2,7 +2,6 @@
 
 #include <cstdarg>
 
-#include "gm_list_value.hpp"
 #include "../Common/gm_utils.hpp"
 #include "gm_types_header.h"
 
@@ -20,9 +19,9 @@ namespace GM
             if (dict_key == nullptr)
             {
                 if (m_list_params == nullptr)
-                    m_list_params = new GM_ListValue();
+                    m_list_params = new std::vector<GM_Value*>();
                 
-                m_list_params->add_item(value);
+                m_list_params->push_back(value);
             }
             else
             {

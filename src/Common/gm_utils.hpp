@@ -96,18 +96,18 @@ namespace GM
         }
         
         template<typename InstanceType, typename CheckType>
-        static bool is_instance_of(InstanceType* instance)
+        static CheckType* is_instance_of(InstanceType* instance)
         {
             if (instance == nullptr)
-                return false;
+                return nullptr;
             
-            return (dynamic_cast<CheckType*>(instance) != nullptr);
+            return dynamic_cast<CheckType*>(instance);
         }
         
         template<typename InstanceType, typename CheckType>
-        static bool is_instance_of(InstanceType& instance)
+        static CheckType* is_instance_of(InstanceType& instance)
         {
-            return (dynamic_cast<CheckType*>(&instance) != nullptr);
+            return dynamic_cast<CheckType*>(&instance);
         }
 
     };
