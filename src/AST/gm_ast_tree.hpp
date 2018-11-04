@@ -3,7 +3,7 @@
 #include <vector>
 #include <string>
 
-#include "../GM.h"
+#include "../gm_common_header.h"
 #include "../Type/gm_value.hpp"
 
 namespace GM
@@ -58,10 +58,6 @@ namespace GM
         { 
             if (m_childs == nullptr)
                 m_childs = new std::vector<GM_AST_TREE*>();
-
-            DEBUG_ERROR_F("--- %s add child %s", 
-                                m_token.c_str(),
-                                child->get_token().c_str());
 
             m_childs->push_back(child); 
         }

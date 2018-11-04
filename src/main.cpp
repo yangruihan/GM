@@ -3,8 +3,6 @@
 #include <string>
 
 #include "GM.h"
-#include "gm_interpreter.hpp"
-#include "AST/gm_ast_tree.hpp"
 
 using namespace GM;
 

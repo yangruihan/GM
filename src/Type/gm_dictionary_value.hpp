@@ -1,7 +1,7 @@
 #pragma once
 
+#include "../gm_common_header.h"
 #include "gm_value.hpp"
-#include "gm_types.h"
 
 namespace GM
 {
@@ -11,14 +11,19 @@ namespace GM
 
     public:
         GM_DictionaryValue ();
-        virtual ~GM_DictionaryValue ();
+        ~GM_DictionaryValue() override;
 
     public:
         VALUE_TYPE get_type() const override
         {
             return T_GM_DICTIONARY_VALUE;
         }
-
+        
+        std::string str() const override;
+        
+    protected:
+        void _init_functions() override;
+        
     };
 
 }

@@ -1,21 +1,11 @@
-#include "gm_object.hpp"
-#include "Common/gm_errors.hpp"
-#include "Common/gm_utils.hpp"
+#pragma once
 
-#define extends(class_name) public class_name
-#define implements(class_name) public class_name
+#include "gm_common_header.h"
 
-#define FUNC_ADD_OP_KEY "__add"
-#define FUNC_SUB_OP_KEY "__sub"
-#define FUNC_MUL_OP_KEY "__mul"
-#define FUNC_DIV_OP_KEY "__div"
+#include "gm_environment.hpp"
+#include "gm_interpreter.hpp"
 
-namespace GM
-{
+#include "Type/gm_types.h"
+#include "Type/gm_types_header.h"
 
-    class GM_Value;
-    class GM_ListValue;
-
-    typedef GM_Value* (*GM_FUNCTION_PTR)(const GM_ListValue*);
-
-}
+#include "AST/gm_ast_header.h"

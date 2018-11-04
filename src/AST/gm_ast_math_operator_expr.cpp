@@ -1,6 +1,7 @@
 #include "gm_ast_math_operator_expr.hpp"
 #include "../Type/gm_list_value.hpp"
 #include "../Type/gm_function.hpp"
+#include "../Type/gm_parameter.hpp"
 
 namespace GM
 {
@@ -24,10 +25,8 @@ namespace GM
                 return nullptr;
             }
             
-            auto parameters = new GM_ListValue();
-            parameters->add_item(left_value)->add_item(right_value);
-            
-            return func->eval(parameters);
+            auto parameter = new GM_Parameter(2, left_value, right_value);
+            return func->eval(parameter);
         }
 
         return nullptr;
@@ -66,10 +65,8 @@ namespace GM
                 return nullptr;
             }
             
-            auto parameters = new GM_ListValue();
-            parameters->add_item(left_value)->add_item(right_value);
-            
-            return func->eval(parameters);
+            auto parameter = new GM_Parameter(2, left_value, right_value);
+            return func->eval(parameter);
         }
 
         return nullptr;
@@ -108,10 +105,8 @@ namespace GM
                 return nullptr;
             }
             
-            auto parameters = new GM_ListValue();
-            parameters->add_item(left_value)->add_item(right_value);
-            
-            return func->eval(parameters);
+            auto parameter = new GM_Parameter(2, left_value, right_value);
+            return func->eval(parameter);
         }
 
         return nullptr;
@@ -150,10 +145,8 @@ namespace GM
                 return nullptr;
             }
             
-            auto parameters = new GM_ListValue();
-            parameters->add_item(left_value)->add_item(right_value);
-            
-            return func->eval(parameters);
+            auto parameter = new GM_Parameter(2, left_value, right_value);
+            return func->eval(parameter);
         }
 
         return nullptr;

@@ -1,6 +1,6 @@
 #pragma once
 
-#include "../GM.h"
+#include "../gm_common_header.h"
 #include "gm_ast_tree.hpp"
 
 namespace GM

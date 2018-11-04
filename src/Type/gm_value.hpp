@@ -3,8 +3,7 @@
 #include <string>
 #include <map>
 
-#include "../GM.h"
-#include "../gm_object.hpp"
+#include "../gm_common_header.h"
 #include "gm_types.h"
 
 namespace GM
@@ -28,7 +27,7 @@ namespace GM
             return T_GM_VALUE; 
         }
 
-        virtual std::string str() = 0;
+        virtual std::string str() const = 0;
 
     protected:
         virtual void _init_functions() = 0;

@@ -7,4 +7,6 @@
 #include "gm_int_value.hpp"
 #include "gm_list_value.hpp"
 #include "gm_number_value.hpp"
+#include "gm_parameter.hpp"
+#include "gm_str_value.hpp"
 #include "gm_value.hpp"

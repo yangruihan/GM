@@ -2,7 +2,7 @@
 
 #include <string>
 
-#include "GM.h"
+#include "gm_common_header.h"
 #include "gm_environment.hpp"
 #include "AST/gm_ast_header.h"
 #include "Type/gm_types_header.h"

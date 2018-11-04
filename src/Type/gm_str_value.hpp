@@ -2,9 +2,10 @@
 
 #include <string>
 
-#include "../GM.h"
+#include "../gm_common_header.h"
 #include "gm_value.hpp"
 #include "gm_types.h"
+#include "gm_parameter.hpp"
 
 namespace GM
 {
@@ -23,7 +24,7 @@ namespace GM
         
         std::string get_value() { return m_value; }
         
-        std::string str() override;
+        std::string str() const override;
     
     protected:
         std::string m_value;
@@ -32,6 +33,6 @@ namespace GM
         
     private:
         
-        static GM_Value* __add(const GM_ListValue* args);
+        static GM_Value* __add(const GM_Parameter* param);
     };
 }

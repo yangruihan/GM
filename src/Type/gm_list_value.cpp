@@ -14,7 +14,7 @@ namespace GM
     {
     }
 
-    std::string GM_ListValue::str()
+    std::string GM_ListValue::str() const
     {
         std::ostringstream stream;
         stream << "[";

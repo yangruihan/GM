@@ -2,8 +2,7 @@
 
 #include <string>
 
-#include "../GM.h"
-#include "../gm_object.hpp"
+#include "../gm_common_header.h"
 #include "gm_list_value.hpp"
 #include "gm_value.hpp"
 
@@ -26,7 +25,7 @@ namespace GM
 
         GM_FUNCTION_PTR get_func() const { return m_function; }
 
-        GM_Value* eval(GM_ListValue* parameters) const;
+        GM_Value* eval(GM_Parameter* parameter) const;
 
     protected:
         // function name

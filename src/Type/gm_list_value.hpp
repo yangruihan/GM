@@ -2,7 +2,7 @@
 
 #include <vector>
 
-#include "../GM.h"
+#include "../gm_common_header.h"
 #include "gm_value.hpp"
 #include "gm_types.h"
 
@@ -23,7 +23,7 @@ namespace GM
             return T_GM_LIST_VALUE;
         }
 
-        std::string str() override;
+        std::string str() const override;
 
         GM_ListValue* add_item(GM_Value* value);
 

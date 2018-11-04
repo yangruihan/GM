@@ -1,5 +1,5 @@
 #include "gm_str_value.hpp"
-#include "../Common/gm_utils.hpp"
+#include "../GM.h"
 
 namespace GM
 {
@@ -14,14 +14,14 @@ namespace GM
 
     }
     
-    std::string GM_StrValue::str()
+    std::string GM_StrValue::str() const
     {
         return GM_Utils::format_str("%s", m_value.c_str());
     }
     
-    GM_Value *GM_StrValue::__add(const GM_ListValue *args)
+    GM_Value *GM_StrValue::__add(const GM_Parameter *param)
     {
-        
+        return nullptr;
     }
 
 }

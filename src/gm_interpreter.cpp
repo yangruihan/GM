@@ -144,7 +144,7 @@ namespace GM
                 else
                 {
                     token = command.substr(start_pos, end_pos - start_pos);
-                    DEBUG_LOG_F("%s sub (%d, %d)", command.c_str(), start_pos, end_pos);
+                    DEBUG_LOG_F("%s sub (%ld, %ld)", command.c_str(), start_pos, end_pos);
                     m_start_pos = end_pos + 1;
                     return true;
                 }
@@ -177,7 +177,7 @@ namespace GM
 
                 m_left_parentheses_count--;
                 token = command.substr(start_pos, end_pos - start_pos);
-                DEBUG_LOG_F("%s sub (%d, %d)", command.c_str(), start_pos, start_pos);
+                DEBUG_LOG_F("%s sub (%ld, %ld)", command.c_str(), start_pos, start_pos);
                 m_start_pos = end_pos + 1;
                 return true;
             }

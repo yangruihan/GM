@@ -1,6 +1,6 @@
 #pragma once
 
-#include "../GM.h"
+#include "../gm_common_header.h"
 #include "gm_value.hpp"
 #include "gm_types.h"
 

@@ -94,6 +94,21 @@ namespace GM
             va_end(args);
             return std::string(m_str_buffer);
         }
+        
+        template<typename InstanceType, typename CheckType>
+        static bool is_instance_of(InstanceType* instance)
+        {
+            if (instance == nullptr)
+                return false;
+            
+            return (dynamic_cast<CheckType*>(instance) != nullptr);
+        }
+        
+        template<typename InstanceType, typename CheckType>
+        static bool is_instance_of(InstanceType& instance)
+        {
+            return (dynamic_cast<CheckType*>(&instance) != nullptr);
+        }
 
     };
 
