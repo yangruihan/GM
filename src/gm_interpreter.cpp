@@ -113,6 +113,7 @@ namespace GM
             }
         }
 
+        PRINT_ERROR_F("SyntaxError: token(%s) is error", token.c_str());
         return nullptr;
     }
 

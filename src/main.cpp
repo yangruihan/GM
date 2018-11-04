@@ -77,7 +77,6 @@ int main()
         }
         else
         {
-            break;
         }
     }
 
