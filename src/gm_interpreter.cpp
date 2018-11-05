@@ -75,14 +75,28 @@ namespace GM
                 {
                     auto new_env = ret->set_environment(env);
                     
-                    DEBUG_LOG_F("Create AST Node %s, child count %ld",
+                    DEBUG_LOG_F("Create AST Node %s, child count %zu",
                                 ret->get_token().c_str(),
                                 ret->get_need_child_count());
 
                     auto child_count = ret->get_need_child_count();
-                    for (size_t i = 0; i < child_count; i++)
+
+                    // variadic parameter
+                    if (child_count == GM_AST_VARIADIC_PARAMS_FLAG)
                     {
-                        ret->add_child(_parse(command, new_env));
+                        auto parentheses_count = m_left_parentheses_count;
+                        while (m_left_parentheses_count >= parentheses_count)
+                        {
+                            ret->add_child(_parse(command, new_env));
+                        }
+                    }
+                    // fixed parameter
+                    else
+                    {
+                        for (size_t i = 0; i < child_count; i++)
+                        {
+                            ret->add_child(_parse(command, new_env));
+                        }
                     }
                 }
             }
@@ -116,6 +130,11 @@ namespace GM
         
         // str
         ret = GM_InterpreterUtils::check_token_is_str_literal(token);
+        if (ret != nullptr)
+            return ret;
+
+        // list
+        ret = GM_InterpreterUtils::check_token_is_list(token);
         if (ret != nullptr)
             return ret;
 

@@ -13,7 +13,7 @@ namespace GM
     class GM_AST_TREE : extends(GM_Object)
     {
     public:
-        GM_AST_TREE (std::string& token): m_token(token)
+        GM_AST_TREE (const std::string& token): m_token(token)
         {
             m_childs = new std::vector<GM_AST_TREE*>();
         }
@@ -89,6 +89,7 @@ namespace GM
 
     protected:
         std::vector<GM_AST_TREE*>* m_childs;
+
         const std::string m_token;
         
         GM_Environment* m_environment;

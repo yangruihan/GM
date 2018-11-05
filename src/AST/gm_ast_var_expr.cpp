@@ -5,7 +5,7 @@
 
 namespace GM
 {
-    GM_AST_VAR_EXPR::GM_AST_VAR_EXPR(std::string& token)
+    GM_AST_VAR_EXPR::GM_AST_VAR_EXPR(const std::string& token)
                                     : GM_AST_TREE(token)
     {}
 
@@ -30,7 +30,7 @@ namespace GM
         }
     }
 
-    bool GM_AST_VAR_EXPR::check_token_valid(std::string &token)
+    bool GM_AST_VAR_EXPR::check_token_valid(const std::string &token)
     {
         if (GM_Utils::is_digit(token[0]))
             return false;
@@ -89,7 +89,7 @@ namespace GM
     
     GM_Environment *GM_AST_VAR_EXPR::before_set_environment(GM_Environment *env)
     {
-        auto object = env->get_var(m_token);
+        auto object = env->get_current_env_var(m_token);
         if (object == nullptr)
         {
 //            PRINT_ERROR_F("UndefinedError: cannot find symbol '%s'", m_token.c_str());

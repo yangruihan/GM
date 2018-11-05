@@ -16,6 +16,7 @@ namespace GM
     class GM_StrValue;
     class GM_IntValue;
     class GM_FloatValue;
+    class GM_ListValue;
 
     class GM_Value : extends(GM_Object)
     {
@@ -69,6 +70,8 @@ namespace GM
                                            int value);
         static GM_FloatValue* float_value (GM_Environment* env,
                                            double value);
+
+        static GM_ListValue* list_value (GM_Environment* env);
 
     };
 

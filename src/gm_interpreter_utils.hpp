@@ -10,13 +10,15 @@ namespace GM
     {
         
     public:
-        static GM_AST_TREE* check_token_is_operator(std::string& token);
+        static GM_AST_TREE* check_token_is_operator(const std::string& token);
         
-        static GM_AST_TREE* check_token_is_number_literal(std::string& token);
+        static GM_AST_TREE* check_token_is_number_literal(const std::string& token);
         
-        static GM_AST_TREE* check_token_is_str_literal(std::string& token);
+        static GM_AST_TREE* check_token_is_str_literal(const std::string& token);
 
-        static GM_AST_TREE* check_token_is_variable(std::string& token);
+        static GM_AST_TREE* check_token_is_variable(const std::string& token);
+
+        static GM_AST_TREE* check_token_is_list(const std::string& token);
         
     };
     

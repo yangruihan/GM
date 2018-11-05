@@ -4,7 +4,7 @@
 namespace GM
 {
     
-    GM_AST_TREE* GM_InterpreterUtils::check_token_is_operator(std::string& token)
+    GM_AST_TREE* GM_InterpreterUtils::check_token_is_operator(const std::string& token)
     {
         if (GM_AST_ADD_OPERATOR_EXPR::check_token_valid(token))
         {
@@ -26,7 +26,7 @@ namespace GM
         return nullptr;
     }
     
-    GM_AST_TREE* GM_InterpreterUtils::check_token_is_number_literal(std::string& token)
+    GM_AST_TREE* GM_InterpreterUtils::check_token_is_number_literal(const std::string& token)
     {
         auto token_size = token.size();
         
@@ -43,7 +43,7 @@ namespace GM
         return nullptr;
     }
     
-    GM_AST_TREE *GM_InterpreterUtils::check_token_is_str_literal(std::string &token)
+    GM_AST_TREE* GM_InterpreterUtils::check_token_is_str_literal(const std::string &token)
     {
         if (GM_AST_STR_LITERAL_EXPR::check_token_valid(token))
         {
@@ -53,7 +53,7 @@ namespace GM
         return nullptr;
     }
     
-    GM_AST_TREE *GM_InterpreterUtils::check_token_is_variable(std::string &token)
+    GM_AST_TREE* GM_InterpreterUtils::check_token_is_variable(const std::string &token)
     {
         if (GM_AST_VAR_EXPR::check_token_valid(token))
         {
@@ -62,5 +62,14 @@ namespace GM
 
         return nullptr;
     }
-    
+
+    GM_AST_TREE* GM_InterpreterUtils::check_token_is_list(const std::string &token)
+    {
+        if (GM_AST_LIST_EXPR::check_token_valid(token))
+        {
+            return new GM_AST_LIST_EXPR(token);
+        }
+
+        return nullptr;
+    }
 }

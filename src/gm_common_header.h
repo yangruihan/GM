@@ -4,8 +4,12 @@
 #include "Common/gm_errors.hpp"
 #include "Common/gm_utils.hpp"
 
+#include <cstdint>
+
 #define extends(class_name) public class_name
 #define implements(class_name) public class_name
+
+#define GM_AST_VARIADIC_PARAMS_FLAG SIZE_MAX
 
 #define GM_INTERPRETER_RUN_FLAG "__GM__INTERPRETER_RUN_FLAG__"
 

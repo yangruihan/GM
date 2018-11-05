@@ -15,13 +15,13 @@ namespace GM
     {
 
     public:
-        GM_AST_VAR_EXPR (std::string& token);
+        GM_AST_VAR_EXPR (const std::string& token);
         ~GM_AST_VAR_EXPR () override;
 
     public:
         size_t get_need_child_count() const override;
 
-        static bool check_token_valid(std::string& token);
+        static bool check_token_valid(const std::string& token);
 
         GM_Value* eval() override;
 

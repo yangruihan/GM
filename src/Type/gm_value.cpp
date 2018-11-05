@@ -69,4 +69,7 @@ namespace GM
                                           double value)
     { return new GM_FloatValue(env, value); }
 
+    GM_ListValue* GM_Value::list_value(GM_Environment *env)
+    { return new GM_ListValue(env); }
+
 }

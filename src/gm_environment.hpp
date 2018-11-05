@@ -19,6 +19,7 @@ namespace GM
         
         void set_var(const std::string& var_name, GM_Object* var);
         GM_Object* get_var(const std::string& var_name) const;
+        GM_Object* get_current_env_var(const std::string& var_name) const;
         
         void set_parent(const GM_Environment* env) { m_parent = env; }
         const GM_Environment* get_parent() const { return m_parent; }

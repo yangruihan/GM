@@ -5,7 +5,7 @@
 namespace GM
 {
 
-    GM_AST_NUMBER_LITERAL_EXPR::GM_AST_NUMBER_LITERAL_EXPR(std::string& token,
+    GM_AST_NUMBER_LITERAL_EXPR::GM_AST_NUMBER_LITERAL_EXPR(const std::string& token,
                                                              const bool& is_float)
                                                            : GM_AST_LITERAL_EXPR(token),
                                                              m_is_float(is_float)
@@ -18,7 +18,7 @@ namespace GM
         return 0;
     }
 
-    bool GM_AST_NUMBER_LITERAL_EXPR::check_token_valid(std::string& token, bool& is_float)
+    bool GM_AST_NUMBER_LITERAL_EXPR::check_token_valid(const std::string& token, bool& is_float)
     {
         auto token_len = token.size();
         auto start_pos = token[0] == '+' || token[0] == '-' ? 1 : 0;

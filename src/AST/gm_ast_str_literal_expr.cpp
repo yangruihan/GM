@@ -5,7 +5,7 @@ namespace GM
 {
     
 
-    GM_AST_STR_LITERAL_EXPR::GM_AST_STR_LITERAL_EXPR (std::string& token)
+    GM_AST_STR_LITERAL_EXPR::GM_AST_STR_LITERAL_EXPR (const std::string& token)
                                                 : GM_AST_LITERAL_EXPR(token)
     {
     }
@@ -18,7 +18,7 @@ namespace GM
         return 0;
     }
     
-    bool GM_AST_STR_LITERAL_EXPR::check_token_valid(std::string& token)
+    bool GM_AST_STR_LITERAL_EXPR::check_token_valid(const std::string& token)
     {
         auto token_len = token.size();
         if (token_len < 2)
