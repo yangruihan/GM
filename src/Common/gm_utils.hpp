@@ -60,7 +60,9 @@
 
 namespace GM
 {
-    
+    class GM_AST_TREE;
+    class GM_Environment;
+
     class GM_Utils
     {
     private:
@@ -136,6 +138,8 @@ namespace GM
         {
             return dynamic_cast<CheckType*>(&instance);
         }
+
+        static GM_Environment* set_env_for_childs(GM_AST_TREE* tree, GM_Environment* new_env);
 
     };
 

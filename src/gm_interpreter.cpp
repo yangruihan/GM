@@ -64,7 +64,8 @@ namespace GM
 
         GM_AST_TREE* ret = nullptr;
         std::string token;
-        if (_take_token(command, token))
+        bool is_func;
+        if (_take_token(command, token, is_func))
         {
             DEBUG_LOG_F("Get Token %s", token.c_str());
             
@@ -85,16 +86,19 @@ namespace GM
                     // variadic parameter
                     if (child_count == GM_AST_VARIADIC_PARAMS_FLAG)
                     {
-                        auto parentheses_count = m_left_parentheses_count;
-                        auto command_len = command.size();
-                        while (m_start_pos < command_len && m_left_parentheses_count >= parentheses_count)
+                        if (is_func)
                         {
-                            ret->add_child(_parse(command, new_env));
-
-                            while (command[m_start_pos] == ')')
+                            auto parentheses_count = m_left_parentheses_count;
+                            auto command_len = command.size();
+                            while (m_start_pos < command_len && m_left_parentheses_count >= parentheses_count)
                             {
-                                m_left_parentheses_count--;
-                                m_start_pos++;
+                                ret->add_child(_parse(command, new_env));
+
+                                while (command[m_start_pos] == ')')
+                                {
+                                    m_left_parentheses_count--;
+                                    m_start_pos++;
+                                }
                             }
                         }
                     }
@@ -155,7 +159,7 @@ namespace GM
         return nullptr;
     }
 
-    bool GM_Interpreter::_take_token(std::string command, std::string& token)
+    bool GM_Interpreter::_take_token(std::string command, std::string& token, bool& is_func)
     {
         auto command_len = command.size();
         if (command_len == 0)
@@ -202,6 +206,7 @@ namespace GM
                 {
                     m_left_parentheses_count++;
                     left_parentheses = true;
+                    is_func = true;
                     start_pos++;
                     end_pos++;
                     continue;

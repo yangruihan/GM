@@ -10,15 +10,20 @@ namespace GM
         set_parent(nullptr);
     }
     
-    GM_Environment::GM_Environment (const GM_Environment& parent)
+    GM_Environment::GM_Environment (GM_Environment* parent)
     {
         m_var_map = new std::map<std::string, GM_Object*>();
-        set_parent(&parent);
+        set_parent(parent);
     }
         
     GM_Environment::~GM_Environment ()
     {
         delete m_var_map;
+    }
+
+    GM_Environment* GM_Environment::create(GM_Environment *parent)
+    {
+        return new GM_Environment(parent);
     }
     
     void GM_Environment::set_var(const std::string& var_name, GM_Object *var)

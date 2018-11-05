@@ -40,7 +40,7 @@ namespace GM
 
         GM_AST_TREE* _get_ast_tree_from_token(std::string& token) const;
 
-        bool _take_token(std::string command, std::string& token);
+        bool _take_token(std::string command, std::string& token, bool& is_func);
     
     private:
         GM_Environment* m_environment;

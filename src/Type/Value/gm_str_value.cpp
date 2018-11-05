@@ -27,14 +27,14 @@ namespace GM
     
     GM_Value *GM_StrValue::__add(const GM_Parameter *param)
     {
-        auto str_arg1 = param->get_param<GM_StrValue>(0);
-        auto str_arg2 = param->get_param<GM_StrValue>(1);
+        auto str_arg1 = param->get_param<GM_Value>(0);
+        auto str_arg2 = param->get_param<GM_Value>(1);
         
         if (str_arg1 == nullptr || str_arg2 == nullptr)
             return nullptr;
 
         return GM_Value::str_value(str_arg1->get_environment(),
-                                   str_arg1->get_value() + str_arg2->get_value());
+                                   str_arg1->str() + str_arg2->str());
     }
 
 }

@@ -20,7 +20,7 @@ namespace GM
     class GM_ListValue;
     class GM_VarNameValue;
     class GM_CustomFuncValue;
-    class GM_AST_LIST_EXPR;
+    class GM_AST_TREE;
 
     class GM_Value : extends(GM_Object)
     {
@@ -86,7 +86,7 @@ namespace GM
                                                     const std::string& func_name,
                                                     const size_t& param_count,
                                                     const std::vector<std::string>* param_list,
-                                                    GM_AST_LIST_EXPR* func_body);
+                                                    GM_AST_TREE* func_body);
 
     };
 

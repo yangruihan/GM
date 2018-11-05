@@ -91,6 +91,6 @@ namespace GM
                                                   const std::string& func_name,
                                                   const size_t& param_count,
                                                   const std::vector<std::string>* param_list,
-                                                  GM_AST_LIST_EXPR *func_body)
+                                                  GM_AST_TREE *func_body)
     { return new GM_CustomFuncValue(env, func_name, param_count, param_list, func_body); }
 }

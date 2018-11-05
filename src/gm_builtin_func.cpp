@@ -107,7 +107,11 @@ namespace GM
             condition_result = dynamic_cast<GM_BoolValue*>(ast_condition_part->eval());
         }
 
-        return ret;
+        auto list_value = dynamic_cast<GM_ListValue*>(ret);
+        if (list_value == nullptr)
+            return ret;
+
+      return (*list_value)[list_value->get_item_count() - 1];
     }
 
     GM_FUNCTION_I(GM_BuiltinFunc, __ls)
@@ -198,7 +202,7 @@ namespace GM
     {
         get_param(func_name_part, GM_AST_VAR_EXPR,   0);
         get_param(param_list_part, GM_AST_LIST_EXPR, 1);
-        get_param(func_body_part, GM_AST_LIST_EXPR,  2);
+        get_ast_tree(func_body_part, 2);
 
         auto func_name = func_name_part->get_token();
         if (!GM_CustomFuncValue::check_func_name_valid(func_name))
@@ -220,7 +224,9 @@ namespace GM
             param_names->push_back(child->get_token());
         }
 
-        auto cust_func_value = GM_Value::cust_func_value(param->get_environment(),
+        auto new_env = GM_Utils::set_env_for_childs(func_body_part, param->get_environment());
+
+        auto cust_func_value = GM_Value::cust_func_value(new_env,
                                                          func_name,
                                                          param_list_part->get_child_count(),
                                                          param_names,

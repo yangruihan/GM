@@ -14,26 +14,26 @@ namespace GM
 
     size_t GM_AST_VAR_EXPR::get_need_child_count() const
     {
-        auto object = m_environment->get_current_env_var(m_token);
-        if (object == nullptr)
-            return 0;
+//        auto object = m_environment->get_current_env_var(m_token);
+//        if (object == nullptr)
+//            return 0;
+//
+//        if (GM_Utils::is_instance_of<GM_Object, GM_Function>(object))
+//        {
+//            auto func = dynamic_cast<GM_Function*>(object);
+//            return func->get_param_count();
+//        }
+//        else if (GM_Utils::is_instance_of<GM_Object, GM_CustomFuncValue>(object))
+//        {
+//            auto func = dynamic_cast<GM_CustomFuncValue*>(object);
+//            return func->get_param_count();
+//        }
+//        else if (GM_Utils::is_instance_of<GM_Object, GM_Value>(object))
+//        {
+//            return 0;
+//        }
 
-        if (GM_Utils::is_instance_of<GM_Object, GM_Function>(object))
-        {
-            auto func = dynamic_cast<GM_Function*>(object);
-            return func->get_param_count();
-        }
-        else if (GM_Utils::is_instance_of<GM_Object, GM_CustomFuncValue>(object))
-        {
-            auto func = dynamic_cast<GM_CustomFuncValue*>(object);
-            return func->get_param_count();
-        }
-        else if (GM_Utils::is_instance_of<GM_Object, GM_Value>(object))
-        {
-            return 0;
-        }
-
-        return 0;
+        return GM_AST_VARIADIC_PARAMS_FLAG;
     }
 
     bool GM_AST_VAR_EXPR::check_token_valid(const std::string &token)

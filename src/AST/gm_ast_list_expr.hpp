@@ -23,6 +23,8 @@ namespace GM
         std::string token_list_str() const;
 
     protected:
+        GM_Environment* before_set_environment(GM_Environment* env) override;
+
         bool _check_childs_valid() const override;
 
     };

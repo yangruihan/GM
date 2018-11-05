@@ -12,10 +12,12 @@ namespace GM
     {
     public:
         GM_Environment ();
-        GM_Environment (const GM_Environment& parent);
+        GM_Environment (GM_Environment* parent);
         ~GM_Environment () override;
         
         GM_Environment& operator=(const GM_Environment& other) = delete;
+
+        static GM_Environment* create(GM_Environment* parent);
 
         std::string str() const override { return "environment"; }
         

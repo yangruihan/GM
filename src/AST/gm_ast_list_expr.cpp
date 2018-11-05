@@ -45,6 +45,11 @@ namespace GM
         return stream.str();
     }
 
+    GM_Environment* GM_AST_LIST_EXPR::before_set_environment(GM_Environment* env)
+    {
+        return GM_Environment::create(env);
+    }
+
     bool GM_AST_LIST_EXPR::_check_childs_valid() const
     {
         return true;
