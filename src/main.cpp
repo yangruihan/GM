@@ -61,20 +61,26 @@ int main()
             DEBUG_LOG_F("--- Show AST structure ---");
             auto root = interpreter->get_ast_root();
                         
-            #ifdef DEBUG
+#ifdef DEBUG
             
             print_ast(root, 0);
             std::cout << std::endl;
     
-            #endif // DEBUG
+#endif // DEBUG
 
             auto result = interpreter->eval();
             if (result != nullptr)
             {
+#ifdef DEBUG
                 PRINT_LOG_F("--------------------");
                 PRINT_LOG_F("- Expr: %s", command.c_str());
                 PRINT_LOG_F("- Result: %s", result->str().c_str());
                 PRINT_LOG_F("--------------------");
+#else
+
+                std::cout << result->str().c_str() << std::endl;
+
+#endif
             }
         }
         else
