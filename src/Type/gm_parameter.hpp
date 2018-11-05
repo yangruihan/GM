@@ -8,7 +8,7 @@
 
 namespace GM
 {
-    class GM_Value;
+    class GM_Object;
     class GM_Environment;
     
     class GM_Parameter : extends(GM_Object)
@@ -17,8 +17,8 @@ namespace GM
         GM_Parameter(GM_Environment* env,
                      const size_t count, ...);
         GM_Parameter(GM_Environment* env,
-                     std::vector<GM_Value*>* list_param,
-                     std::map<std::string, GM_Value*>* dict_param);
+                     std::vector<GM_Object*>* list_param,
+                     std::map<std::string, GM_Object*>* dict_param);
         virtual ~GM_Parameter();
     
     public:
@@ -39,7 +39,7 @@ namespace GM
                 return nullptr;
             }
             
-            auto ret = GM_Utils::is_instance_of<GM_Value, T>((*m_list_params)[index]);
+            auto ret = GM_Utils::is_instance_of<GM_Object, T>((*m_list_params)[index]);
             
             if (ret == nullptr)
             {
@@ -67,7 +67,7 @@ namespace GM
                 return nullptr;
             }
             
-            auto ret = GM_Utils::is_instance_of<GM_Value, T>(it->second);
+            auto ret = GM_Utils::is_instance_of<GM_Object, T>(it->second);
             
             if (ret == nullptr)
             {
@@ -80,13 +80,13 @@ namespace GM
         GM_Environment* get_environment() const { return m_environment; }
 
     private:
-        std::string* _handle_param_item(GM_Value* value) const;
+        std::string* _handle_param_item(GM_Object* value) const;
         
     protected:
         GM_Environment* m_environment;
 
-        std::vector<GM_Value*>* m_list_params;
-        std::map<std::string, GM_Value*>* m_dict_params;
+        std::vector<GM_Object*>* m_list_params;
+        std::map<std::string, GM_Object*>* m_dict_params;
     };
  
 }

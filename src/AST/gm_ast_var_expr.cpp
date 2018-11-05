@@ -67,10 +67,10 @@ namespace GM
         else if (m_var_type == VAR_TYPE_FUNC)
         {
             auto func = dynamic_cast<GM_Function*>(object);
-            auto list_param = new std::vector<GM_Value*>();
+            auto list_param = new std::vector<GM_Object*>();
             for (size_t i = 0, count = get_child_count(); i < count; i++)
             {
-                list_param->push_back(get_child(i)->eval());
+                list_param->push_back(get_child(i));
             }
             auto parameter = new GM_Parameter(get_environment(),
                                               list_param, nullptr);

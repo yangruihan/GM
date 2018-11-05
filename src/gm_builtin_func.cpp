@@ -25,14 +25,21 @@ namespace GM
 
     GM_Value* GM_BuiltinFunc::__print(const GM_Parameter* param)
     {
-        auto value = param->get_param<GM_Value>(0);
-        if (value == nullptr)
+        auto ast_tree = param->get_param<GM_AST_TREE>(0);
+        if (ast_tree == nullptr)
         {
             std::cout << "nullptr" << std::endl;
             return GM_Value::null_value();
         }
         else
         {
+            auto value = ast_tree->eval();
+            if (value == nullptr)
+            {
+                std::cout << "nullptr" << std::endl;
+                return GM_Value::null_value();
+            }
+
             auto str = value->str();
             std::cout << str << std::endl;
             return GM_Value::str_value(param->get_environment(), str);
@@ -49,8 +56,17 @@ namespace GM
     
     GM_Value *GM_BuiltinFunc::__let(const GM_Parameter *param)
     {
-        auto var_key = param->get_param<GM_StrValue>(0);
-        auto var_value = param->get_param<GM_Value>(1);
+        auto ast_tree1 = param->get_param<GM_AST_VAR_EXPR>(0);
+        auto ast_tree2 = param->get_param<GM_AST_TREE>(1);
+
+        if (ast_tree1 == nullptr || ast_tree2 == nullptr)
+        {
+            PRINT_ERROR("ArgumentsError: type not match");
+            return GM_Value::null_value();
+        }
+
+        auto var_key = dynamic_cast<GM_StrValue*>(ast_tree1->eval());
+        auto var_value = ast_tree2->eval();
 
         if (var_key != nullptr && var_value != nullptr)
         {
