@@ -15,7 +15,7 @@ namespace GM
     {
     public:
         GM_StrValue (GM_Environment* env,
-                     const std::string token);
+                     const std::string& token);
         virtual ~GM_StrValue ();
 
     public:

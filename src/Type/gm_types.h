@@ -11,6 +11,7 @@
 #define T_GM_DICTIONARY_VALUE   106
 #define T_GM_BOOL_VALUE         107
 #define T_GM_NULL_VALUE         108
+#define T_GM_VAR_NAME_VALUE     109
 
 namespace GM
 {

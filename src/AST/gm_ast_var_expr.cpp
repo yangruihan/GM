@@ -48,8 +48,7 @@ namespace GM
     {
         if (m_var_type == VAR_TYPE_VAR_NAME)
         {
-            return GM_Value::str_value(get_environment(),
-                                       m_token);
+            return GM_Value::var_name_value(get_environment(), m_token);
         }
         else if (m_var_type == VAR_TYPE_OTHER)
         {

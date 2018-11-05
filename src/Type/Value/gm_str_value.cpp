@@ -5,7 +5,7 @@ namespace GM
 {
     
     GM_StrValue::GM_StrValue(GM_Environment* env,
-                             const std::string token)
+                             const std::string& token)
                              : GM_Value(env), m_value(token)
     {
         _init_functions();

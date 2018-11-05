@@ -65,12 +65,12 @@ namespace GM
             return GM_Value::null_value();
         }
 
-        auto var_key = dynamic_cast<GM_StrValue*>(ast_tree1->eval());
+        auto var_key = dynamic_cast<GM_VarNameValue*>(ast_tree1->eval());
         auto var_value = ast_tree2->eval();
 
         if (var_key != nullptr && var_value != nullptr)
         {
-            param->get_environment()->set_var(var_key->str(),
+            param->get_environment()->set_var(var_key->get_var_name(),
                                               var_value);
         }
         return var_value;
