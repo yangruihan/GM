@@ -85,12 +85,16 @@ namespace GM
                     if (child_count == GM_AST_VARIADIC_PARAMS_FLAG)
                     {
                         auto parentheses_count = m_left_parentheses_count;
-                        while (m_left_parentheses_count >= parentheses_count)
+                        auto command_len = command.size();
+                        while (m_start_pos < command_len && m_left_parentheses_count >= parentheses_count)
                         {
                             ret->add_child(_parse(command, new_env));
 
-                            if (m_left_parentheses_count == 1 && command[m_start_pos] == ')')
-                                break;
+                            while (command[m_start_pos] == ')')
+                            {
+                                m_left_parentheses_count--;
+                                m_start_pos++;
+                            }
                         }
                     }
                     // fixed parameter
