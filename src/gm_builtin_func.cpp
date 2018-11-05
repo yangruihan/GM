@@ -24,19 +24,19 @@ namespace GM
         if (value == nullptr)
         {
             std::cout << "nullptr" << std::endl;
-            return new GM_StrValue("nullptr");
+            return GM_Value::null_value();
         }
         else
         {
             auto str = value->str();
             std::cout << str << std::endl;
-            return new GM_StrValue(str);
+            return GM_Value::str_value(param->get_environment(), str);
         }
     }
     
     GM_Value *GM_BuiltinFunc::__exit(const GM::GM_Parameter *param)
     {
-        auto ret = GM_Value::int_value(0);
+        auto ret = GM_Value::bool_value(param->get_environment(), false);
         param->get_environment()->set_var(GM_INTERPRETER_RUN_FLAG,
                                           ret);
         return ret;

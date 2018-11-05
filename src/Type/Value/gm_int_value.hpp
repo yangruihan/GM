@@ -9,14 +9,18 @@
 
 namespace GM
 {
+    class GM_Environment;
 
     class GM_IntValue : extends(GM_NumberValue)
     {
 
     public:
-        GM_IntValue (const std::string& token);
-        GM_IntValue (int value);
-        GM_IntValue (double value);
+        GM_IntValue (GM_Environment* env,
+                     const std::string& token);
+        GM_IntValue (GM_Environment* env,
+                     int value);
+        GM_IntValue (GM_Environment* env,
+                     double value);
         virtual ~GM_IntValue ();
 
     public:

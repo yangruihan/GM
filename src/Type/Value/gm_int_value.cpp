@@ -6,19 +6,22 @@
 namespace GM
 {
 
-    GM_IntValue::GM_IntValue (const std::string& token)
+    GM_IntValue::GM_IntValue (GM_Environment* env,
+                              const std::string& token): GM_NumberValue(env)
     {
         GM_Utils::get_int_from_str(token, m_value);
 
         _init_functions();
     }
 
-    GM_IntValue::GM_IntValue(int value): m_value(value)
+    GM_IntValue::GM_IntValue(GM_Environment* env,
+                             int value): GM_NumberValue(env), m_value(value)
     {
         _init_functions();
     }
 
-    GM_IntValue::GM_IntValue(double value): m_value(static_cast<int>(value))
+    GM_IntValue::GM_IntValue(GM_Environment* env,
+                             double value): GM_NumberValue(env), m_value(static_cast<int>(value))
     {
         _init_functions();
     }
@@ -59,12 +62,14 @@ namespace GM
         if (type2 == T_GM_INT_VALUE)
         {
             auto int_arg2 = dynamic_cast<GM_IntValue*>(arg2);
-            return new GM_IntValue(int_arg1->get_value() + int_arg2->get_value());
+            return GM_Value::int_value(int_arg1->get_environment(),
+                                       int_arg1->get_value() + int_arg2->get_value());
         }
         else
         {
             auto float_arg2 = dynamic_cast<GM_FloatValue*>(arg2);
-            return new GM_FloatValue(int_arg1->get_value() + float_arg2->get_value());
+            return GM_Value::float_value(int_arg1->get_environment(),
+                                         int_arg1->get_value() + float_arg2->get_value());
         }
 
         PRINT_ERROR("TypeError: unsupported operand type(s) for +");
@@ -84,12 +89,14 @@ namespace GM
         if (type2 == T_GM_INT_VALUE)
         {
             auto int_arg2 = dynamic_cast<GM_IntValue*>(arg2);
-            return new GM_IntValue(int_arg1->get_value() - int_arg2->get_value());
+            return GM_Value::int_value(int_arg1->get_environment(),
+                                       int_arg1->get_value() - int_arg2->get_value());
         }
         else
         {
             auto float_arg2 = dynamic_cast<GM_FloatValue*>(arg2);
-            return new GM_FloatValue(int_arg1->get_value() - float_arg2->get_value());
+            return GM_Value::float_value(int_arg1->get_environment(),
+                                       int_arg1->get_value() - float_arg2->get_value());
         }
 
         PRINT_ERROR("TypeError: unsupported operand type(s) for +");
@@ -109,12 +116,14 @@ namespace GM
         if (type2 == T_GM_INT_VALUE)
         {
             auto int_arg2 = dynamic_cast<GM_IntValue*>(arg2);
-            return new GM_IntValue(int_arg1->get_value() * int_arg2->get_value());
+            return GM_Value::int_value(int_arg1->get_environment(),
+                                       int_arg1->get_value() * int_arg2->get_value());
         }
         else
         {
             auto float_arg2 = dynamic_cast<GM_FloatValue*>(arg2);
-            return new GM_FloatValue(int_arg1->get_value() * float_arg2->get_value());
+            return GM_Value::float_value(int_arg1->get_environment(),
+                                       int_arg1->get_value() * float_arg2->get_value());
         }
 
         PRINT_ERROR("TypeError: unsupported operand type(s) for +");
@@ -139,7 +148,8 @@ namespace GM
                 PRINT_ERROR("ZeroDivisionError: integer division or modulo by zero");
                 return nullptr;
             }
-            return new GM_IntValue(int_arg1->get_value() / int_arg2->get_value());
+            return GM_Value::int_value(int_arg1->get_environment(),
+                                       int_arg1->get_value() / int_arg2->get_value());
         }
         else
         {
@@ -149,7 +159,8 @@ namespace GM
                 PRINT_ERROR("ZeroDivisionError: float division or modulo by zero");
                 return nullptr;
             }
-            return new GM_FloatValue(int_arg1->get_value() / float_arg2->get_value());
+            return GM_Value::float_value(int_arg1->get_environment(),
+                                       int_arg1->get_value() / float_arg2->get_value());
         }
 
         PRINT_ERROR("TypeError: unsupported operand type(s) for +");

@@ -45,8 +45,8 @@ int main()
 
     std::string command;
     int ret = 0;
-    int running_flag = 1;
-    while (running_flag == 1)
+    bool running_flag = true;
+    while (running_flag)
     {
         std::cout << "> ";
 

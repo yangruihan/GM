@@ -47,9 +47,9 @@ namespace GM
         if (_check_childs_valid())
         {
             if (m_is_float)
-                return new GM_FloatValue(m_token);
+                return GM_Value::float_value(get_environment(), m_token);
             else
-                return new GM_IntValue(m_token);
+                return GM_Value::int_value(get_environment(), m_token);
         }
         
         return nullptr;

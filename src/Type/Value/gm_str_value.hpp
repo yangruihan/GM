@@ -9,11 +9,13 @@
 
 namespace GM
 {
+    class GM_Environment;
 
     class GM_StrValue : extends(GM_Value)
     {
     public:
-        GM_StrValue (const std::string token);
+        GM_StrValue (GM_Environment* env,
+                     const std::string token);
         virtual ~GM_StrValue ();
 
     public:

@@ -6,12 +6,16 @@
 
 namespace GM
 {
+    class GM_Environment;
 
     class GM_BoolValue : extends(GM_Value)
     {
 
     public:
-        GM_BoolValue (const std::string& token);
+        GM_BoolValue (GM_Environment* env,
+                      const std::string& token);
+        GM_BoolValue (GM_Environment* env,
+                      const bool& value);
         ~GM_BoolValue() override {}
 
     public:
@@ -21,6 +25,8 @@ namespace GM
         }
 
         std::string str() const override;
+
+        bool get_value() const { return m_value; }
 
     protected:
         void _init_functions() override;

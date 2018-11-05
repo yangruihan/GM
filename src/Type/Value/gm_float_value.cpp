@@ -4,19 +4,22 @@
 namespace GM
 {
 
-    GM_FloatValue::GM_FloatValue(const std::string& token)
+    GM_FloatValue::GM_FloatValue(GM_Environment* env,
+                                 const std::string& token): GM_NumberValue(env)
     {
         GM_Utils::get_float_from_str(token, m_value);
 
         _init_functions();
     }
 
-    GM_FloatValue::GM_FloatValue(int value): m_value(value)
+    GM_FloatValue::GM_FloatValue(GM_Environment* env,
+                                 int value): GM_NumberValue(env), m_value(value)
     {
         _init_functions();
     }
 
-    GM_FloatValue::GM_FloatValue(double value): m_value(value)
+    GM_FloatValue::GM_FloatValue(GM_Environment* env,
+                                 double value): GM_NumberValue(env), m_value(value)
     {
         _init_functions();
     }
@@ -49,8 +52,9 @@ namespace GM
         
         if (float_arg1 == nullptr || arg2 == nullptr)
             return nullptr;
-        
-        return new GM_FloatValue(float_arg1->get_value() + arg2->get_value());
+
+        return GM_Value::float_value(float_arg1->get_environment(),
+                                     float_arg1->get_value() + arg2->get_value());
     }
 
     GM_Value* GM_FloatValue::__sub(const GM_Parameter* param)
@@ -60,8 +64,9 @@ namespace GM
         
         if (float_arg1 == nullptr || arg2 == nullptr)
             return nullptr;
-        
-        return new GM_FloatValue(float_arg1->get_value() - arg2->get_value());
+
+        return GM_Value::float_value(float_arg1->get_environment(),
+                                     float_arg1->get_value() - arg2->get_value());
     }
 
     GM_Value* GM_FloatValue::__mul(const GM_Parameter* param)
@@ -72,7 +77,8 @@ namespace GM
         if (float_arg1 == nullptr || arg2 == nullptr)
             return nullptr;
         
-        return new GM_FloatValue(float_arg1->get_value() * arg2->get_value());
+        return GM_Value::float_value(float_arg1->get_environment(),
+                                     float_arg1->get_value() * arg2->get_value());
     }
 
     GM_Value* GM_FloatValue::__div(const GM_Parameter* param)
@@ -89,6 +95,7 @@ namespace GM
             return nullptr;
         }
         
-        return new GM_FloatValue(float_arg1->get_value() / arg2->get_value());
+        return GM_Value::float_value(float_arg1->get_environment(),
+                                     float_arg1->get_value() / arg2->get_value());
     }
 }

@@ -5,7 +5,8 @@
 namespace GM
 {
 
-    GM_BoolValue::GM_BoolValue(const std::string& token)
+    GM_BoolValue::GM_BoolValue(GM_Environment* env,
+                               const std::string& token): GM_Value(env)
     {
         if (token == "true")
             m_value = true;
@@ -14,6 +15,11 @@ namespace GM
 
         _init_functions();
     }
+
+    GM_BoolValue::GM_BoolValue(GM_Environment* env,
+                               const bool& value)
+                               : GM_Value(env), m_value(value)
+    {}
     
     std::string GM_BoolValue::str() const
     {

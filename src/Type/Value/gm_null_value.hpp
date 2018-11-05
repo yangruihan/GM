@@ -6,12 +6,13 @@
 
 namespace GM
 {
+    class GM_Environment;
 
     class GM_NullValue : extends(GM_Value)
     {
 
     private:
-        GM_NullValue ();
+        GM_NullValue (GM_Environment* env);
         ~GM_NullValue() override;
 
     public:

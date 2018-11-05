@@ -9,12 +9,13 @@
 namespace GM
 {
     class GM_Value;
+    class GM_Environment;
 
     class GM_ListValue : extends(GM_Value)
     {
 
     public:
-        GM_ListValue ();
+        GM_ListValue (GM_Environment* env);
         virtual ~GM_ListValue ();
 
     public:

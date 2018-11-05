@@ -31,7 +31,7 @@ namespace GM
 
         GM_Value* eval() const;
 
-        int get_running_flag() const;
+        bool get_running_flag() const;
 
     private:
         GM_AST_TREE* _parse(std::string& command, GM_Environment* env);

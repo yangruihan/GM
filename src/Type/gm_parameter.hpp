@@ -83,10 +83,10 @@ namespace GM
         std::string* _handle_param_item(GM_Value* value) const;
         
     protected:
+        GM_Environment* m_environment;
+
         std::vector<GM_Value*>* m_list_params;
         std::map<std::string, GM_Value*>* m_dict_params;
-
-        GM_Environment* m_environment;
     };
  
 }

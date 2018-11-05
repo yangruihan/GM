@@ -5,11 +5,11 @@
 namespace GM
 {
 
-    GM_NullValue::GM_NullValue() {}
+    GM_NullValue::GM_NullValue(GM_Environment* env): GM_Value(env) {}
 
     GM_NullValue::~GM_NullValue() {}
 
     void GM_NullValue::_init_functions() {}
 
-    GM_NullValue* GM_NullValue::instance = new GM_NullValue();
+    GM_NullValue* GM_NullValue::instance = new GM_NullValue(nullptr);
 }

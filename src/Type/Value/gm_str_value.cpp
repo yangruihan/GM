@@ -4,7 +4,9 @@
 namespace GM
 {
     
-    GM_StrValue::GM_StrValue(const std::string token): m_value(token)
+    GM_StrValue::GM_StrValue(GM_Environment* env,
+                             const std::string token)
+                             : GM_Value(env), m_value(token)
     {
         _init_functions();
     }
@@ -30,8 +32,9 @@ namespace GM
         
         if (str_arg1 == nullptr || str_arg2 == nullptr)
             return nullptr;
-        
-        return new GM_StrValue(str_arg1->get_value() + str_arg2->get_value());
+
+        return GM_Value::str_value(str_arg1->get_environment(),
+                                   str_arg1->get_value() + str_arg2->get_value());
     }
 
 }

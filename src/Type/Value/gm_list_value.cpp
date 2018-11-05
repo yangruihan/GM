@@ -3,7 +3,7 @@
 
 namespace GM
 {
-    GM_ListValue::GM_ListValue()
+    GM_ListValue::GM_ListValue(GM_Environment* env): GM_Value(env)
     {
         m_items = new std::vector<GM_Value*>();
     }

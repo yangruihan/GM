@@ -7,14 +7,18 @@
 
 namespace GM
 {
+    class GM_Environment;
 
     class GM_FloatValue : extends(GM_NumberValue)
     {
 
     public:
-        GM_FloatValue (const std::string& token);
-        GM_FloatValue (int value);
-        GM_FloatValue (double value);
+        GM_FloatValue (GM_Environment* env,
+                       const std::string& token);
+        GM_FloatValue (GM_Environment* env,
+                       int value);
+        GM_FloatValue (GM_Environment* env,
+                       double value);
 
         virtual ~GM_FloatValue () {};
 

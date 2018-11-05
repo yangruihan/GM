@@ -39,7 +39,8 @@ namespace GM
     GM_Value* GM_AST_STR_LITERAL_EXPR::eval()
     {
         if (_check_childs_valid())
-            return new GM_StrValue(m_token.substr(1, m_token.size() - 2));
+            return GM_Value::str_value(get_environment(),
+                                       m_token.substr(1, m_token.size() - 2));
         
         return nullptr;
     }

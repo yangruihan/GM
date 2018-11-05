@@ -6,12 +6,13 @@
 
 namespace GM
 {
+    class GM_Environment;
 
     class GM_NumberValue : extends(GM_Value)
     {
 
     public:
-        GM_NumberValue () {}
+        GM_NumberValue (GM_Environment* env): GM_Value(env) {}
         virtual ~GM_NumberValue () {}
 
     public:

@@ -8,9 +8,12 @@
 
 namespace GM
 {
+    class GM_Environment;
     class GM_Function;
 
     class GM_NullValue;
+    class GM_BoolValue;
+    class GM_StrValue;
     class GM_IntValue;
     class GM_FloatValue;
 
@@ -18,10 +21,12 @@ namespace GM
     {
 
     public:
-        GM_Value () {}
-        virtual ~GM_Value () {};
+        GM_Value (GM_Environment* env);
+        virtual ~GM_Value ();
 
     public:
+        GM_Environment* get_environment() const { return m_environment; }
+
         GM_Function* get_func(std::string func_name) const;
 
         void set_func(GM_Function* func);
@@ -32,26 +37,38 @@ namespace GM
         }
 
         virtual std::string str() const = 0;
-    public:
-        /* --- get value --- */
-        static GM_NullValue* null_value ();
-
-        static GM_IntValue* int_value (const std::string& token);
-        static GM_IntValue* int_value (int value);
-        static GM_IntValue* int_value (double value);
-
-        static GM_FloatValue* float_value (const std::string& token);
-        static GM_FloatValue* float_value (int value);
-        static GM_FloatValue* float_value (double value);
 
     protected:
         virtual void _init_functions() = 0;
 
     protected:
-        VALUE_TYPE value_type;
+        GM_Environment* m_environment;
 
-    protected:
-        std::map<std::string, GM_Function*> m_func_dic;
+    public:
+        /* --- get value --- */
+        static GM_NullValue* null_value ();
+
+        static GM_BoolValue* bool_value (GM_Environment* env,
+                                         const std::string& token);
+        static GM_BoolValue* bool_value (GM_Environment* env,
+                                         const bool& value);
+
+        static GM_StrValue* str_value (GM_Environment* env,
+                                       const std::string& token);
+
+        static GM_IntValue* int_value (GM_Environment* env,
+                                       const std::string& token);
+        static GM_IntValue* int_value (GM_Environment* env,
+                                       int value);
+        static GM_IntValue* int_value (GM_Environment* env,
+                                       double value);
+
+        static GM_FloatValue* float_value (GM_Environment* env,
+                                           const std::string& token);
+        static GM_FloatValue* float_value (GM_Environment* env,
+                                           int value);
+        static GM_FloatValue* float_value (GM_Environment* env,
+                                           double value);
 
     };
 
