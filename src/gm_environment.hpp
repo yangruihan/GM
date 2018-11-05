@@ -16,6 +16,8 @@ namespace GM
         ~GM_Environment () override;
         
         GM_Environment& operator=(const GM_Environment& other) = delete;
+
+        std::string str() const override { return "environment"; }
         
         void set_var(const std::string& var_name, GM_Object* var);
         GM_Object* get_var(const std::string& var_name) const;

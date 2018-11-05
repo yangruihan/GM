@@ -27,6 +27,8 @@ namespace GM
         int parse(std::string command);
     
     public:
+        std::string str() const override { return "interpreter"; }
+
         GM_AST_TREE* get_ast_root() const { return m_ast_root; }
 
         GM_Value* eval() const;
