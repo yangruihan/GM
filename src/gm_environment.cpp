@@ -7,11 +7,13 @@ namespace GM
     GM_Environment::GM_Environment ()
     {
         m_var_map = new std::map<std::string, GM_Object*>();
+        set_parent(nullptr);
     }
     
-    GM_Environment::GM_Environment (const GM_Environment& other)
+    GM_Environment::GM_Environment (const GM_Environment& parent)
     {
-        set_parent(&other);
+        m_var_map = new std::map<std::string, GM_Object*>();
+        set_parent(&parent);
     }
         
     GM_Environment::~GM_Environment ()

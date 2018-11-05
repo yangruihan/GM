@@ -3,9 +3,10 @@
 #include "../gm_common_header.h"
 #include "gm_ast_tree.hpp"
 
-#define VAR_TYPE_VALUE  0
-#define VAR_TYPE_FUNC   1
-#define VAR_TYPE_OTHER  2
+#define VAR_TYPE_VALUE      0
+#define VAR_TYPE_FUNC       1
+#define VAR_TYPE_OTHER      2
+#define VAR_TYPE_VAR_NAME   3
 
 namespace GM
 {

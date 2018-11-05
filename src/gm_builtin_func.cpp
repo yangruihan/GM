@@ -11,9 +11,14 @@ namespace GM
         env->set_var(BUILTIN_FUNC_PRINT, GM_Function::create_func(BUILTIN_FUNC_PRINT,
                                                                   1,
                                                                   GM_BuiltinFunc::__print));
+
         env->set_var(BUILTIN_FUNC_EXIT, GM_Function::create_func(BUILTIN_FUNC_EXIT,
-                                                                  0,
-                                                                  GM_BuiltinFunc::__exit));
+                                                                 0,
+                                                                 GM_BuiltinFunc::__exit));
+
+        env->set_var(BUILTIN_FUNC_LET, GM_Function::create_func(BUILTIN_FUNC_LET,
+                                                                2,
+                                                                GM_BuiltinFunc::__let));
 
         return true;
     }
@@ -40,6 +45,19 @@ namespace GM
         param->get_environment()->set_var(GM_INTERPRETER_RUN_FLAG,
                                           ret);
         return ret;
+    }
+    
+    GM_Value *GM_BuiltinFunc::__let(const GM_Parameter *param)
+    {
+        auto var_key = param->get_param<GM_StrValue>(0);
+        auto var_value = param->get_param<GM_Value>(1);
+
+        if (var_key != nullptr && var_value != nullptr)
+        {
+            param->get_environment()->set_var(var_key->str(),
+                                              var_value);
+        }
+        return var_value;
     }
 
 }

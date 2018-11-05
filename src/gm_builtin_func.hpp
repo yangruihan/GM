@@ -4,6 +4,7 @@
 
 #define BUILTIN_FUNC_PRINT  "print"
 #define BUILTIN_FUNC_EXIT   "exit"
+#define BUILTIN_FUNC_LET   "let"
 
 namespace GM
 {
@@ -22,7 +23,7 @@ namespace GM
 
         static GM_Value* __exit(const GM_Parameter* param);
 
-
+        static GM_Value* __let(const GM_Parameter* param);
     };
 
 }

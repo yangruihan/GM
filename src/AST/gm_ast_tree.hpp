@@ -13,8 +13,15 @@ namespace GM
     class GM_AST_TREE : extends(GM_Object)
     {
     public:
-        GM_AST_TREE (std::string& token): m_token(token) {}
-        ~GM_AST_TREE () override {};
+        GM_AST_TREE (std::string& token): m_token(token)
+        {
+            m_childs = new std::vector<GM_AST_TREE*>();
+        }
+
+        ~GM_AST_TREE () override
+        {
+            delete m_childs;
+        }
 
     public:
         /* --- eval --- */
@@ -30,9 +37,9 @@ namespace GM
 
         GM_AST_TREE* get_child(const int& index) const
         {
-            if (m_childs == nullptr)
+            if (m_childs->size() == 0)
             {
-                PRINT_ERROR("NullptrError: childs is nullptr");
+                PRINT_ERROR("NullptrError: childs is empty");
                 return nullptr;
             }
 
@@ -56,10 +63,7 @@ namespace GM
         std::vector<GM_AST_TREE*>* get_childs() const { return m_childs; }
 
         void add_child(GM_AST_TREE* child) 
-        { 
-            if (m_childs == nullptr)
-                m_childs = new std::vector<GM_AST_TREE*>();
-
+        {
             m_childs->push_back(child); 
         }
 

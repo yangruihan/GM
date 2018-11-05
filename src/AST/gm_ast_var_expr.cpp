@@ -46,6 +46,16 @@ namespace GM
 
     GM_Value *GM_AST_VAR_EXPR::eval()
     {
+        if (m_var_type == VAR_TYPE_VAR_NAME)
+        {
+            return GM_Value::str_value(get_environment(),
+                                       m_token);
+        }
+        else if (m_var_type == VAR_TYPE_OTHER)
+        {
+            return nullptr;
+        }
+
         auto object = m_environment->get_var(m_token);
         if (object == nullptr)
             return nullptr;
@@ -82,7 +92,8 @@ namespace GM
         auto object = env->get_var(m_token);
         if (object == nullptr)
         {
-            PRINT_ERROR_F("UndefinedError: cannot find symbol '%s'", m_token.c_str());
+//            PRINT_ERROR_F("UndefinedError: cannot find symbol '%s'", m_token.c_str());
+            m_var_type = VAR_TYPE_VAR_NAME;
             return env;
         }
 
