@@ -6,6 +6,7 @@
 #define BUILTIN_FUNC_EXIT   "exit"
 #define BUILTIN_FUNC_LET    "let"
 #define BUILTIN_FUNC_FOR    "for"
+#define BUILTIN_FUNC_DEF    "def"
 #define BUILTIN_FUNC_LS     "<"
 #define BUILTIN_FUNC_EQ     "="
 #define BUILTIN_FUNC_GT     ">"
@@ -40,6 +41,8 @@ namespace GM
         GM_STATIC_FUNCTION_D(__le);     // <=
         GM_STATIC_FUNCTION_D(__ge);     // >=
         GM_STATIC_FUNCTION_D(__ne);     // !=
+
+        GM_STATIC_FUNCTION_D(__def);
 
     };
 

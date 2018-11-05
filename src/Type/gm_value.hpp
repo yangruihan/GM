@@ -2,6 +2,7 @@
 
 #include <string>
 #include <map>
+#include <vector>
 
 #include "../gm_common_header.h"
 #include "gm_types.h"
@@ -82,8 +83,9 @@ namespace GM
                                                 const std::string& var_name);
 
         static GM_CustomFuncValue* cust_func_value (GM_Environment* env,
-                                                    const std::string func_name,
-                                                    GM_AST_LIST_EXPR* param_list,
+                                                    const std::string& func_name,
+                                                    const size_t& param_count,
+                                                    const std::vector<std::string>* param_list,
                                                     GM_AST_LIST_EXPR* func_body);
 
     };

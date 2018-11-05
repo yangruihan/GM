@@ -12,6 +12,7 @@ namespace GM
     GM_Interpreter::~GM_Interpreter() 
     {
         delete m_environment;
+        delete m_ast_root;
     }
 
     bool GM_Interpreter::init()

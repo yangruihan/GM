@@ -18,14 +18,19 @@ namespace GM
         if (object == nullptr)
             return 0;
 
-        if (GM_Utils::is_instance_of<GM_Object, GM_Value>(object))
-        {
-            return 0;
-        }
-        else if (GM_Utils::is_instance_of<GM_Object, GM_Function>(object))
+        if (GM_Utils::is_instance_of<GM_Object, GM_Function>(object))
         {
             auto func = dynamic_cast<GM_Function*>(object);
             return func->get_param_count();
+        }
+        else if (GM_Utils::is_instance_of<GM_Object, GM_CustomFuncValue>(object))
+        {
+            auto func = dynamic_cast<GM_CustomFuncValue*>(object);
+            return func->get_param_count();
+        }
+        else if (GM_Utils::is_instance_of<GM_Object, GM_Value>(object))
+        {
+            return 0;
         }
 
         return 0;
@@ -45,10 +50,6 @@ namespace GM
         if (object == nullptr)
             return GM_Value::var_name_value(get_environment(), m_token);
 
-        auto value = GM_Value::convert_to_value(object);
-        if (value != nullptr)
-            return value;
-
         auto func = dynamic_cast<GM_Function*>(object);
         if (func != nullptr)
         {
@@ -61,6 +62,25 @@ namespace GM
                                               list_param, nullptr);
             return func->eval(parameter);
         }
+
+        auto cust_func = dynamic_cast<GM_CustomFuncValue*>(object);
+        if (cust_func != nullptr)
+        {
+            auto env = cust_func->get_environment();
+
+            // prepare parameters
+            for (size_t i = 0, count = cust_func->get_param_count(); i < count; i++)
+            {
+                auto value = get_child(i)->eval();
+                env->set_var(cust_func->get_param_name(i), value);
+            }
+
+            return cust_func->eval();
+        }
+
+        auto value = GM_Value::convert_to_value(object);
+        if (value != nullptr)
+            return value;
 
         return nullptr;
     }

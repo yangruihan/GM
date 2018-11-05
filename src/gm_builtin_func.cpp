@@ -36,6 +36,7 @@ namespace GM
         GM_ENV_SET_FUNCTION(BUILTIN_FUNC_LE,    2, GM_BuiltinFunc::__le);
         GM_ENV_SET_FUNCTION(BUILTIN_FUNC_GE,    2, GM_BuiltinFunc::__ge);
         GM_ENV_SET_FUNCTION(BUILTIN_FUNC_NE,    2, GM_BuiltinFunc::__ne);
+        GM_ENV_SET_FUNCTION(BUILTIN_FUNC_DEF,   3, GM_BuiltinFunc::__def);
 
         return true;
     }
@@ -191,6 +192,41 @@ namespace GM
 
         return func->eval(new GM_Parameter(param->get_environment(),
                                            2, arg1, arg2));
+    }
+
+    GM_FUNCTION_I(GM_BuiltinFunc, __def)
+    {
+        get_param(func_name_part, GM_AST_VAR_EXPR,   0);
+        get_param(param_list_part, GM_AST_LIST_EXPR, 1);
+        get_param(func_body_part, GM_AST_LIST_EXPR,  2);
+
+        auto func_name = func_name_part->get_token();
+        if (!GM_CustomFuncValue::check_func_name_valid(func_name))
+        {
+            PRINT_ERROR_F("SyntaxError: function name(%s) is invalid", func_name.c_str());
+            return GM_Value::null_value();
+        }
+
+        std::vector<std::string>* param_names = new std::vector<std::string>();
+        for (size_t i = 0, count = param_list_part->get_child_count(); i < count; i++)
+        {
+            auto child = param_list_part->get_child(i);
+            if (!GM_Utils::is_instance_of<GM_AST_TREE, GM_AST_VAR_EXPR>(child))
+            {
+                PRINT_ERROR("SyntaxError: function parameter part error");
+                return GM_Value::null_value();
+            }
+
+            param_names->push_back(child->get_token());
+        }
+
+        auto cust_func_value = GM_Value::cust_func_value(param->get_environment(),
+                                                         func_name,
+                                                         param_list_part->get_child_count(),
+                                                         param_names,
+                                                         func_body_part);
+        param->get_environment()->set_var(func_name, cust_func_value);
+        return cust_func_value;
     }
 
 }

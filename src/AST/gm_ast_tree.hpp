@@ -20,6 +20,9 @@ namespace GM
 
         ~GM_AST_TREE () override
         {
+            for (size_t i = 0, count = get_child_count(); i < count; i++)
+                delete (*m_childs)[i];
+
             delete m_childs;
         }
 
