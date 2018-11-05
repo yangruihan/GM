@@ -212,6 +212,14 @@ namespace GM
                 }
 
                 m_left_parentheses_count--;
+
+                if (end_pos == start_pos)
+                {
+                    start_pos++;
+                    end_pos++;
+                    continue;
+                }
+
                 token = command.substr(start_pos, end_pos - start_pos);
                 DEBUG_LOG_F("%s sub (%ld, %ld)", command.c_str(), start_pos, end_pos);
                 m_start_pos = end_pos + 1;

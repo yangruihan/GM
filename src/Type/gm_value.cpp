@@ -10,6 +10,18 @@ namespace GM
 
     GM_Value::~GM_Value() {}
 
+    GM_Value* GM_Value::convert_to_value(GM_Object* obj)
+    {
+        auto var_name_value = dynamic_cast<GM_VarNameValue*>(obj);
+        if (var_name_value == nullptr)
+        {
+            return dynamic_cast<GM_Value*>(obj);
+        }
+
+        auto var_obj = var_name_value->get_environment()->get_var(var_name_value->get_var_name());
+        return dynamic_cast<GM_Value*>(var_obj);
+    }
+
     GM_Function* GM_Value::get_func(std::string func_name) const
     {
         auto func = m_environment->get_var(func_name);

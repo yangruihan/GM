@@ -26,18 +26,16 @@ namespace GM
 
     void GM_FloatValue::_init_functions()
     {
-        GM_Value::set_func(GM_Function::create_func(FUNC_ADD_OP_KEY,
-                                                    2,
-                                                    GM_FloatValue::__add));
-        GM_Value::set_func(GM_Function::create_func(FUNC_SUB_OP_KEY,
-                                                    2,
-                                                    GM_FloatValue::__sub));
-        GM_Value::set_func(GM_Function::create_func(FUNC_MUL_OP_KEY,
-                                                    2,
-                                                    GM_FloatValue::__mul));
-        GM_Value::set_func(GM_Function::create_func(FUNC_DIV_OP_KEY,
-                                                    2,
-                                                    GM_FloatValue::__div));
+        GM_VALUE_SET_FUNCTION(FUNC_ADD_OP_KEY, 2, GM_FloatValue::__add);
+        GM_VALUE_SET_FUNCTION(FUNC_SUB_OP_KEY, 2, GM_FloatValue::__sub);
+        GM_VALUE_SET_FUNCTION(FUNC_MUL_OP_KEY, 2, GM_FloatValue::__mul);
+        GM_VALUE_SET_FUNCTION(FUNC_DIV_OP_KEY, 2, GM_FloatValue::__div);
+        GM_VALUE_SET_FUNCTION(FUNC_LS_OP_KEY,  2, GM_FloatValue::__ls);
+        GM_VALUE_SET_FUNCTION(FUNC_EQ_OP_KEY,  2, GM_FloatValue::__eq);
+        GM_VALUE_SET_FUNCTION(FUNC_GT_OP_KEY,  2, GM_FloatValue::__gt);
+        GM_VALUE_SET_FUNCTION(FUNC_LE_OP_KEY,  2, GM_FloatValue::__le);
+        GM_VALUE_SET_FUNCTION(FUNC_GE_OP_KEY,  2, GM_FloatValue::__ge);
+        GM_VALUE_SET_FUNCTION(FUNC_NE_OP_KEY,  2, GM_FloatValue::__ne);
     }
 
     std::string GM_FloatValue::str() const
@@ -45,7 +43,7 @@ namespace GM
         return GM_Utils::format_str("%lf", m_value);
     }
 
-    GM_Value* GM_FloatValue::__add(const GM_Parameter* param)
+    GM_FUNCTION_I(GM_FloatValue, __add)
     {
         auto float_arg1 = param->get_param<GM_FloatValue>(0);
         auto arg2 = param->get_param<GM_NumberValue>(1);
@@ -57,7 +55,7 @@ namespace GM
                                      float_arg1->get_value() + arg2->get_value());
     }
 
-    GM_Value* GM_FloatValue::__sub(const GM_Parameter* param)
+    GM_FUNCTION_I(GM_FloatValue, __sub)
     {
         auto float_arg1 = param->get_param<GM_FloatValue>(0);
         auto arg2 = param->get_param<GM_NumberValue>(1);
@@ -69,7 +67,7 @@ namespace GM
                                      float_arg1->get_value() - arg2->get_value());
     }
 
-    GM_Value* GM_FloatValue::__mul(const GM_Parameter* param)
+    GM_FUNCTION_I(GM_FloatValue, __mul)
     {
         auto float_arg1 = param->get_param<GM_FloatValue>(0);
         auto arg2 = param->get_param<GM_NumberValue>(1);
@@ -81,7 +79,7 @@ namespace GM
                                      float_arg1->get_value() * arg2->get_value());
     }
 
-    GM_Value* GM_FloatValue::__div(const GM_Parameter* param)
+    GM_FUNCTION_I(GM_FloatValue, __div)
     {
         auto float_arg1 = param->get_param<GM_FloatValue>(0);
         auto arg2 = param->get_param<GM_NumberValue>(1);
@@ -98,4 +96,77 @@ namespace GM
         return GM_Value::float_value(float_arg1->get_environment(),
                                      float_arg1->get_value() / arg2->get_value());
     }
+
+    GM_FUNCTION_I(GM_FloatValue, __ls)
+    {
+        auto arg1 = param->get_param<GM_NumberValue>(0);
+        auto arg2 = param->get_param<GM_NumberValue>(1);
+
+        if (arg1 == nullptr || arg2 == nullptr)
+            return nullptr;
+
+        return GM_Value::bool_value(param->get_environment(),
+                                    arg1->get_value() < arg2->get_value());
+    }
+
+    GM_FUNCTION_I(GM_FloatValue, __eq)
+    {
+        auto arg1 = param->get_param<GM_NumberValue>(0);
+        auto arg2 = param->get_param<GM_NumberValue>(1);
+
+        if (arg1 == nullptr || arg2 == nullptr)
+            return nullptr;
+
+        return GM_Value::bool_value(param->get_environment(),
+                                    arg1->get_value() == arg2->get_value());
+    }
+
+    GM_FUNCTION_I(GM_FloatValue, __gt)
+    {
+        auto arg1 = param->get_param<GM_NumberValue>(0);
+        auto arg2 = param->get_param<GM_NumberValue>(1);
+
+        if (arg1 == nullptr || arg2 == nullptr)
+            return nullptr;
+
+        return GM_Value::bool_value(param->get_environment(),
+                                    arg1->get_value() > arg2->get_value());
+    }
+
+    GM_FUNCTION_I(GM_FloatValue, __le)
+    {
+        auto arg1 = param->get_param<GM_NumberValue>(0);
+        auto arg2 = param->get_param<GM_NumberValue>(1);
+
+        if (arg1 == nullptr || arg2 == nullptr)
+            return nullptr;
+
+        return GM_Value::bool_value(param->get_environment(),
+                                    arg1->get_value() <= arg2->get_value());
+    }
+
+    GM_FUNCTION_I(GM_FloatValue, __ge)
+    {
+        auto arg1 = param->get_param<GM_NumberValue>(0);
+        auto arg2 = param->get_param<GM_NumberValue>(1);
+
+        if (arg1 == nullptr || arg2 == nullptr)
+            return nullptr;
+
+        return GM_Value::bool_value(param->get_environment(),
+                                    arg1->get_value() >= arg2->get_value());
+    }
+
+    GM_FUNCTION_I(GM_FloatValue, __ne)
+    {
+        auto arg1 = param->get_param<GM_NumberValue>(0);
+        auto arg2 = param->get_param<GM_NumberValue>(1);
+
+        if (arg1 == nullptr || arg2 == nullptr)
+            return nullptr;
+
+        return GM_Value::bool_value(param->get_environment(),
+                                    arg1->get_value() != arg2->get_value());
+    }
+
 }

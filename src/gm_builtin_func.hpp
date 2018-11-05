@@ -4,7 +4,14 @@
 
 #define BUILTIN_FUNC_PRINT  "print"
 #define BUILTIN_FUNC_EXIT   "exit"
-#define BUILTIN_FUNC_LET   "let"
+#define BUILTIN_FUNC_LET    "let"
+#define BUILTIN_FUNC_FOR    "for"
+#define BUILTIN_FUNC_LS     "<"
+#define BUILTIN_FUNC_EQ     "="
+#define BUILTIN_FUNC_GT     ">"
+#define BUILTIN_FUNC_LE     "<="
+#define BUILTIN_FUNC_GE     ">="
+#define BUILTIN_FUNC_NE     "!="
 
 namespace GM
 {
@@ -19,11 +26,21 @@ namespace GM
         static bool init(GM_Environment* env);
 
     private:
-        static GM_Value* __print(const GM_Parameter* param);
+        GM_STATIC_FUNCTION_D(__print);
 
-        static GM_Value* __exit(const GM_Parameter* param);
+        GM_STATIC_FUNCTION_D(__exit);
 
-        static GM_Value* __let(const GM_Parameter* param);
+        GM_STATIC_FUNCTION_D(__let);
+
+        GM_STATIC_FUNCTION_D(__for);
+
+        GM_STATIC_FUNCTION_D(__ls);     // <
+        GM_STATIC_FUNCTION_D(__eq);     // =
+        GM_STATIC_FUNCTION_D(__gt);     // >
+        GM_STATIC_FUNCTION_D(__le);     // <=
+        GM_STATIC_FUNCTION_D(__ge);     // >=
+        GM_STATIC_FUNCTION_D(__ne);     // !=
+
     };
 
 }

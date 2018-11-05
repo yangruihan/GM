@@ -14,20 +14,21 @@ namespace GM
 
     size_t GM_AST_VAR_EXPR::get_need_child_count() const
     {
-        if (m_var_type == VAR_TYPE_VALUE)
+        auto object = m_environment->get_current_env_var(m_token);
+        if (object == nullptr)
+            return 0;
+
+        if (GM_Utils::is_instance_of<GM_Object, GM_Value>(object))
         {
             return 0;
         }
-        else if (m_var_type == VAR_TYPE_FUNC)
+        else if (GM_Utils::is_instance_of<GM_Object, GM_Function>(object))
         {
-            auto object = m_environment->get_var(m_token);
             auto func = dynamic_cast<GM_Function*>(object);
             return func->get_param_count();
         }
-        else
-        {
-            return 0;
-        }
+
+        return 0;
     }
 
     bool GM_AST_VAR_EXPR::check_token_valid(const std::string &token)
@@ -35,37 +36,22 @@ namespace GM
         if (GM_Utils::is_digit(token[0]))
             return false;
 
-        for (size_t i = 1; i < token.size(); i++)
-        {
-            if (!GM_Utils::is_alpha(token[i]) && token[i] != '_')
-                return false;
-        }
-
         return true;
     }
 
-    GM_Value *GM_AST_VAR_EXPR::eval()
+    GM_Value* GM_AST_VAR_EXPR::eval()
     {
-        if (m_var_type == VAR_TYPE_VAR_NAME)
-        {
-            return GM_Value::var_name_value(get_environment(), m_token);
-        }
-        else if (m_var_type == VAR_TYPE_OTHER)
-        {
-            return nullptr;
-        }
-
         auto object = m_environment->get_var(m_token);
         if (object == nullptr)
-            return nullptr;
+            return GM_Value::var_name_value(get_environment(), m_token);
 
-        if (m_var_type == VAR_TYPE_VALUE)
+        auto value = GM_Value::convert_to_value(object);
+        if (value != nullptr)
+            return value;
+
+        auto func = dynamic_cast<GM_Function*>(object);
+        if (func != nullptr)
         {
-            return (dynamic_cast<GM_Value*>(object));
-        }
-        else if (m_var_type == VAR_TYPE_FUNC)
-        {
-            auto func = dynamic_cast<GM_Function*>(object);
             auto list_param = new std::vector<GM_Object*>();
             for (size_t i = 0, count = get_child_count(); i < count; i++)
             {
@@ -75,10 +61,22 @@ namespace GM
                                               list_param, nullptr);
             return func->eval(parameter);
         }
-        else
-        {
+
+        return nullptr;
+    }
+
+    GM_VarNameValue* GM_AST_VAR_EXPR::convert_var_name_value(GM_AST_TREE* tree)
+    {
+        auto var_expr = dynamic_cast<GM_AST_VAR_EXPR*>(tree);
+        if (var_expr == nullptr)
             return nullptr;
-        }
+
+        return var_expr->get_var_name_value();
+    }
+
+    GM_VarNameValue* GM_AST_VAR_EXPR::get_var_name_value() const
+    {
+        return GM_Value::var_name_value(m_environment, m_token);
     }
 
     bool GM_AST_VAR_EXPR::_check_childs_valid() const
@@ -88,27 +86,6 @@ namespace GM
     
     GM_Environment *GM_AST_VAR_EXPR::before_set_environment(GM_Environment *env)
     {
-        auto object = env->get_current_env_var(m_token);
-        if (object == nullptr)
-        {
-//            PRINT_ERROR_F("UndefinedError: cannot find symbol '%s'", m_token.c_str());
-            m_var_type = VAR_TYPE_VAR_NAME;
-            return env;
-        }
-
-        if (GM_Utils::is_instance_of<GM_Object, GM_Value>(object))
-        {
-            m_var_type = VAR_TYPE_VALUE;
-        }
-        else if (GM_Utils::is_instance_of<GM_Object, GM_Function>(object))
-        {
-            m_var_type = VAR_TYPE_FUNC;
-        }
-        else
-        {
-            m_var_type = VAR_TYPE_OTHER;
-        }
-
         return env;
     }
 

@@ -30,18 +30,16 @@ namespace GM
 
     void GM_IntValue::_init_functions()
     {
-        GM_Value::set_func(GM_Function::create_func(FUNC_ADD_OP_KEY,
-                                                    2,
-                                                    GM_IntValue::__add));
-        GM_Value::set_func(GM_Function::create_func(FUNC_SUB_OP_KEY,
-                                                    2,
-                                                    GM_IntValue::__sub));
-        GM_Value::set_func(GM_Function::create_func(FUNC_MUL_OP_KEY,
-                                                    2,
-                                                    GM_IntValue::__mul));
-        GM_Value::set_func(GM_Function::create_func(FUNC_DIV_OP_KEY,
-                                                    2,
-                                                    GM_IntValue::__div));
+        GM_VALUE_SET_FUNCTION(FUNC_ADD_OP_KEY, 2, GM_IntValue::__add);
+        GM_VALUE_SET_FUNCTION(FUNC_SUB_OP_KEY, 2, GM_IntValue::__sub);
+        GM_VALUE_SET_FUNCTION(FUNC_MUL_OP_KEY, 2, GM_IntValue::__mul);
+        GM_VALUE_SET_FUNCTION(FUNC_DIV_OP_KEY, 2, GM_IntValue::__div);
+        GM_VALUE_SET_FUNCTION(FUNC_LS_OP_KEY,  2, GM_IntValue::__ls);
+        GM_VALUE_SET_FUNCTION(FUNC_EQ_OP_KEY,  2, GM_IntValue::__eq);
+        GM_VALUE_SET_FUNCTION(FUNC_GT_OP_KEY,  2, GM_IntValue::__gt);
+        GM_VALUE_SET_FUNCTION(FUNC_LE_OP_KEY,  2, GM_IntValue::__le);
+        GM_VALUE_SET_FUNCTION(FUNC_GE_OP_KEY,  2, GM_IntValue::__ge);
+        GM_VALUE_SET_FUNCTION(FUNC_NE_OP_KEY,  2, GM_IntValue::__ne);
     }
 
     std::string GM_IntValue::str() const
@@ -49,7 +47,7 @@ namespace GM
         return GM_Utils::format_str("%d", m_value);
     }
 
-    GM_Value* GM_IntValue::__add(const GM_Parameter* param)
+    GM_FUNCTION_I(GM_IntValue, __add)
     {
         auto int_arg1 = param->get_param<GM_IntValue>(0);
         auto arg2 = param->get_param<GM_NumberValue>(1);
@@ -76,7 +74,7 @@ namespace GM
         return nullptr;
     }
 
-    GM_Value* GM_IntValue::__sub(const GM_Parameter* param)
+    GM_FUNCTION_I(GM_IntValue, __sub)
     {
         auto int_arg1 = param->get_param<GM_IntValue>(0);
         auto arg2 = param->get_param<GM_NumberValue>(1);
@@ -103,7 +101,7 @@ namespace GM
         return nullptr;
     }
 
-    GM_Value* GM_IntValue::__mul(const GM_Parameter* param)
+    GM_FUNCTION_I(GM_IntValue, __mul)
     {
         auto int_arg1 = param->get_param<GM_IntValue>(0);
         auto arg2 = param->get_param<GM_NumberValue>(1);
@@ -130,7 +128,7 @@ namespace GM
         return nullptr;
     }
 
-    GM_Value* GM_IntValue::__div(const GM_Parameter* param)
+    GM_FUNCTION_I(GM_IntValue, __div)
     {
         auto int_arg1 = param->get_param<GM_IntValue>(0);
         auto arg2 = param->get_param<GM_NumberValue>(1);
@@ -166,4 +164,77 @@ namespace GM
         PRINT_ERROR("TypeError: unsupported operand type(s) for +");
         return nullptr;
     }
+
+    GM_FUNCTION_I(GM_IntValue, __ls)
+    {
+        auto arg1 = param->get_param<GM_NumberValue>(0);
+        auto arg2 = param->get_param<GM_NumberValue>(1);
+
+        if (arg1 == nullptr || arg2 == nullptr)
+            return nullptr;
+
+        return GM_Value::bool_value(param->get_environment(),
+                                    arg1->get_value() < arg2->get_value());
+    }
+
+    GM_FUNCTION_I(GM_IntValue, __eq)
+    {
+        auto arg1 = param->get_param<GM_NumberValue>(0);
+        auto arg2 = param->get_param<GM_NumberValue>(1);
+
+        if (arg1 == nullptr || arg2 == nullptr)
+            return nullptr;
+
+        return GM_Value::bool_value(param->get_environment(),
+                                    arg1->get_value() == arg2->get_value());
+    }
+
+    GM_FUNCTION_I(GM_IntValue, __gt)
+    {
+        auto arg1 = param->get_param<GM_NumberValue>(0);
+        auto arg2 = param->get_param<GM_NumberValue>(1);
+
+        if (arg1 == nullptr || arg2 == nullptr)
+            return nullptr;
+
+        return GM_Value::bool_value(param->get_environment(),
+                                    arg1->get_value() > arg2->get_value());
+    }
+
+    GM_FUNCTION_I(GM_IntValue, __le)
+    {
+        auto arg1 = param->get_param<GM_NumberValue>(0);
+        auto arg2 = param->get_param<GM_NumberValue>(1);
+
+        if (arg1 == nullptr || arg2 == nullptr)
+            return nullptr;
+
+        return GM_Value::bool_value(param->get_environment(),
+                                    arg1->get_value() <= arg2->get_value());
+    }
+
+    GM_FUNCTION_I(GM_IntValue, __ge)
+    {
+        auto arg1 = param->get_param<GM_NumberValue>(0);
+        auto arg2 = param->get_param<GM_NumberValue>(1);
+
+        if (arg1 == nullptr || arg2 == nullptr)
+            return nullptr;
+
+        return GM_Value::bool_value(param->get_environment(),
+                                    arg1->get_value() >= arg2->get_value());
+    }
+    
+    GM_FUNCTION_I(GM_IntValue, __ne)
+    {
+        auto arg1 = param->get_param<GM_NumberValue>(0);
+        auto arg2 = param->get_param<GM_NumberValue>(1);
+
+        if (arg1 == nullptr || arg2 == nullptr)
+            return nullptr;
+
+        return GM_Value::bool_value(param->get_environment(),
+                                    arg1->get_value() != arg2->get_value());
+    }
+
 }

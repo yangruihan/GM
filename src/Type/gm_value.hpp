@@ -27,6 +27,8 @@ namespace GM
         virtual ~GM_Value ();
 
     public:
+        static GM_Value* convert_to_value(GM_Object* obj);
+
         GM_Environment* get_environment() const { return m_environment; }
 
         GM_Function* get_func(std::string func_name) const;

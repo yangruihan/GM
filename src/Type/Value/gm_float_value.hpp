@@ -39,10 +39,17 @@ namespace GM
         double m_value;
 
     private:
-        static GM_Value* __add(const GM_Parameter* args);
-        static GM_Value* __sub(const GM_Parameter* args);
-        static GM_Value* __mul(const GM_Parameter* args);
-        static GM_Value* __div(const GM_Parameter* args);
+        GM_STATIC_FUNCTION_D(__add);
+        GM_STATIC_FUNCTION_D(__sub);
+        GM_STATIC_FUNCTION_D(__mul);
+        GM_STATIC_FUNCTION_D(__div);
+
+        GM_STATIC_FUNCTION_D(__ls);     // <
+        GM_STATIC_FUNCTION_D(__eq);     // =
+        GM_STATIC_FUNCTION_D(__gt);     // >
+        GM_STATIC_FUNCTION_D(__le);     // <=
+        GM_STATIC_FUNCTION_D(__ge);     // >=
+        GM_STATIC_FUNCTION_D(__ne);     // !=
 
     };
 
