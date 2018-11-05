@@ -12,6 +12,7 @@
 #define T_GM_BOOL_VALUE         107
 #define T_GM_NULL_VALUE         108
 #define T_GM_VAR_NAME_VALUE     109
+#define T_GM_CUST_FUNC_VALUE    110
 
 namespace GM
 {

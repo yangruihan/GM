@@ -24,6 +24,8 @@ namespace GM
         }
 
     public:
+        std::string str() const override { return get_token(); }
+
         /* --- eval --- */
         virtual GM_Value* eval() = 0;
 
@@ -64,7 +66,10 @@ namespace GM
 
         void add_child(GM_AST_TREE* child) 
         {
-            m_childs->push_back(child); 
+            m_childs->push_back(child);
+            DEBUG_LOG_F("Current AST_NODE(%s) add child AST_NODE(%s)",
+                        str().c_str(),
+                        child->str().c_str());
         }
 
         /* --- environment --- */

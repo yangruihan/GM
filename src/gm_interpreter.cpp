@@ -88,6 +88,9 @@ namespace GM
                         while (m_left_parentheses_count >= parentheses_count)
                         {
                             ret->add_child(_parse(command, new_env));
+
+                            if (m_left_parentheses_count == 1 && command[m_start_pos] == ')')
+                                break;
                         }
                     }
                     // fixed parameter
@@ -210,16 +213,23 @@ namespace GM
 
                 m_left_parentheses_count--;
                 token = command.substr(start_pos, end_pos - start_pos);
-                DEBUG_LOG_F("%s sub (%ld, %ld)", command.c_str(), start_pos, start_pos);
+                DEBUG_LOG_F("%s sub (%ld, %ld)", command.c_str(), start_pos, end_pos);
                 m_start_pos = end_pos + 1;
                 return true;
             }
             else if (GM_Utils::is_space(c))
             {
+                if (end_pos == start_pos)
+                {
+                    start_pos++;
+                    end_pos++;
+                    continue;
+                }
+
                 if (!quotation_mark)
                 {
                     token = command.substr(start_pos, end_pos - start_pos);
-                    DEBUG_LOG_F("%s sub (%ld, %ld)", command.c_str(), start_pos, start_pos);
+                    DEBUG_LOG_F("%s sub (%ld, %ld)", command.c_str(), start_pos, end_pos);
                     m_start_pos = end_pos + 1;
                     return true;
                 }
