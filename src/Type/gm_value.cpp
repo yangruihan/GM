@@ -87,4 +87,9 @@ namespace GM
     GM_VarNameValue* GM_Value::var_name_value(GM_Environment *env, const std::string &var_name)
     { return new GM_VarNameValue(env, var_name); }
 
+    GM_CustomFuncValue *GM_Value::cust_func_value(GM_Environment *env,
+                                                  const std::string func_name,
+                                                  GM_AST_LIST_EXPR *param_list,
+                                                  GM_AST_LIST_EXPR *func_body)
+    { return new GM_CustomFuncValue(env, func_name, param_list, func_body); }
 }

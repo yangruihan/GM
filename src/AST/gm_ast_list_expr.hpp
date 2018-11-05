@@ -20,6 +20,8 @@ namespace GM
 
         GM_Value* eval() override;
 
+        std::string token_list_str() const;
+
     protected:
         bool _check_childs_valid() const override;
 

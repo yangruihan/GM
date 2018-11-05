@@ -1,6 +1,7 @@
 #include "gm_ast_list_expr.hpp"
 
 #include "../GM.h"
+#include <sstream>
 
 namespace GM
 {
@@ -29,6 +30,19 @@ namespace GM
             list_value->add_item(get_child(i)->eval());
         }
         return list_value;
+    }
+
+    std::string GM_AST_LIST_EXPR::token_list_str() const
+    {
+        std::ostringstream stream;
+        stream << "(";
+        for (size_t i = 0, count = get_child_count() - 1; i < count; i++)
+        {
+            stream << get_child(i)->get_token() << ", ";
+        }
+        stream << get_child(get_child_count() - 1)->get_token() << ")";
+
+        return stream.str();
     }
 
     bool GM_AST_LIST_EXPR::_check_childs_valid() const

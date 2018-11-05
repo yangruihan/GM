@@ -1,6 +1,8 @@
 #include "gm_list_value.hpp"
 #include <sstream>
 
+#include "../../GM.h"
+
 namespace GM
 {
     GM_ListValue::GM_ListValue(GM_Environment* env): GM_Value(env)

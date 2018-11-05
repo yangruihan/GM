@@ -14,3 +14,4 @@
 #include "Value/gm_bool_value.hpp"
 #include "Value/gm_null_value.hpp"
 #include "Value/gm_var_name_value.hpp"
+#include "Value/gm_custom_function.hpp"

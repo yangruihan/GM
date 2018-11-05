@@ -18,6 +18,8 @@ namespace GM
     class GM_FloatValue;
     class GM_ListValue;
     class GM_VarNameValue;
+    class GM_CustomFuncValue;
+    class GM_AST_LIST_EXPR;
 
     class GM_Value : extends(GM_Object)
     {
@@ -78,6 +80,11 @@ namespace GM
 
         static GM_VarNameValue* var_name_value (GM_Environment* env,
                                                 const std::string& var_name);
+
+        static GM_CustomFuncValue* cust_func_value (GM_Environment* env,
+                                                    const std::string func_name,
+                                                    GM_AST_LIST_EXPR* param_list,
+                                                    GM_AST_LIST_EXPR* func_body);
 
     };
 
