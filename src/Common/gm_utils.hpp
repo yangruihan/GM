@@ -12,8 +12,15 @@
 #define _PRINT(content) std::cout << (content)
 #define _PRINT_F(format, ...) printf((format), ##__VA_ARGS__)
 
-#define PRINT(level, content) do { _PRINT(level); _PRINT(" "); _PRINT(content); _PRINT("\n"); } while (0)
-#define PRINT_F(level, format, ...) do { _PRINT(level); _PRINT(" "); _PRINT_F(format, ##__VA_ARGS__); _PRINT("\n"); } while (0)
+#define PRINT(level, content) \
+do { \
+_PRINT(level); _PRINT(" "); \
+_PRINT(content); _PRINT_F("   [%s %s %d]", __FILE__, __func__, __LINE__); \
+_PRINT("\n"); } while (0)
+
+#define PRINT_F(level, format, ...) \
+do { _PRINT(level); _PRINT(" "); _PRINT_F(format, ##__VA_ARGS__); \
+_PRINT_F("   [%s %s %d]", __FILE__, __func__, __LINE__); _PRINT("\n"); } while (0)
 
 #ifdef DEBUG
     #define DEBUG_LOG(content) PRINT("[DEBUG LOG]", content)

@@ -1,0 +1,10 @@
+(let a 
+    (def power
+        (list x)
+        (* x x)
+    )
+)
+
+(for (let i 0) (< i 10) (let i (+ i 1))
+    (print (a i))
+)
