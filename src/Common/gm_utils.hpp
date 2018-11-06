@@ -15,12 +15,12 @@
 #define PRINT(level, content) \
 do { \
 _PRINT(level); _PRINT(" "); \
-_PRINT(content); _PRINT_F("   [%s %s %d]", __FILE__, __func__, __LINE__); \
+_PRINT(content); _PRINT_F("   (file:%s, function:%s, line:%d)", __FILE__, __func__, __LINE__); \
 _PRINT("\n"); } while (0)
 
 #define PRINT_F(level, format, ...) \
 do { _PRINT(level); _PRINT(" "); _PRINT_F(format, ##__VA_ARGS__); \
-_PRINT_F("   [%s %s %d]", __FILE__, __func__, __LINE__); _PRINT("\n"); } while (0)
+_PRINT_F("   (file:%s, function:%s, line:%d)", __FILE__, __func__, __LINE__); _PRINT("\n"); } while (0)
 
 #ifdef DEBUG
     #define DEBUG_LOG(content) PRINT("[DEBUG LOG]", content)
