@@ -74,6 +74,20 @@ namespace GM
         return stream.str();
     }
 
+    bool GM_Utils::is_empty_or_all_space(const std::string& str)
+    {
+        if (str == "")
+            return true;
+
+        for (size_t i = 0, count = str.size(); i < count; i++)
+        {
+            if (!is_space(str[i]))
+                return false;
+        }
+
+        return true;
+    }
+
     bool GM_Utils::str_ends_with(const std::string& full_str, const std::string& ends)
     {
         if (full_str.length() >= ends.length())

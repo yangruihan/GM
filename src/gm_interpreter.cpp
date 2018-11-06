@@ -76,6 +76,7 @@ namespace GM
             else
             {
                 std::cout << "Error Code: " << ret << std::endl;
+                break;
             }
         }
 
@@ -118,58 +119,55 @@ namespace GM
         {
             DEBUG_LOG_F("Get Token %s", token.c_str());
 
-            if (token != "")
+            ret = _get_ast_tree_from_token(token);
+
+            if (ret != nullptr)
             {
-                ret = _get_ast_tree_from_token(token);
+                auto new_env = ret->set_environment(env);
 
-                if (ret != nullptr)
+                DEBUG_LOG_F("Create AST Node %s, child count %zu",
+                            ret->get_token().c_str(),
+                            ret->get_need_child_count());
+
+                auto child_count = ret->get_need_child_count();
+
+                // variadic parameter
+                if (child_count == GM_AST_VARIADIC_PARAMS_FLAG)
                 {
-                    auto new_env = ret->set_environment(env);
-                    
-                    DEBUG_LOG_F("Create AST Node %s, child count %zu",
-                                ret->get_token().c_str(),
-                                ret->get_need_child_count());
-
-                    auto child_count = ret->get_need_child_count();
-
-                    // variadic parameter
-                    if (child_count == GM_AST_VARIADIC_PARAMS_FLAG)
+                    if (is_func)
                     {
-                        if (is_func)
+                        auto parentheses_count = m_left_parentheses_count;
+                        auto command_len = command.size();
+                        while (m_start_pos < command_len && m_left_parentheses_count >= parentheses_count)
                         {
-                            auto parentheses_count = m_left_parentheses_count;
-                            auto command_len = command.size();
-                            while (m_start_pos < command_len && m_left_parentheses_count >= parentheses_count)
+                            ret->add_child(_parse(command, new_env));
+
+                            while (command[m_start_pos] == ')'
+                                   || GM_Utils::is_space(command[m_start_pos]))
                             {
-                                ret->add_child(_parse(command, new_env));
+                                if (command[m_start_pos] == ')')
+                                    m_left_parentheses_count--;
 
-                                while (command[m_start_pos] == ')'
-                                       || GM_Utils::is_space(command[m_start_pos]))
-                                {
-                                    if (command[m_start_pos] == ')')
-                                        m_left_parentheses_count--;
-
-                                    m_start_pos++;
-                                }
+                                m_start_pos++;
                             }
                         }
                     }
-                    // fixed parameter
-                    else
+                }
+                // fixed parameter
+                else
+                {
+                    for (size_t i = 0; i < child_count; i++)
                     {
-                        for (size_t i = 0; i < child_count; i++)
-                        {
-                            ret->add_child(_parse(command, new_env));
-                        }
+                        ret->add_child(_parse(command, new_env));
+                    }
 
-                        while (command[m_start_pos] == ')'
-                               || GM_Utils::is_space(command[m_start_pos]))
-                        {
-                            if (command[m_start_pos] == ')')
-                                m_left_parentheses_count--;
+                    while (command[m_start_pos] == ')'
+                           || GM_Utils::is_space(command[m_start_pos]))
+                    {
+                        if (command[m_start_pos] == ')')
+                            m_left_parentheses_count--;
 
-                            m_start_pos++;
-                        }
+                        m_start_pos++;
                     }
                 }
             }
@@ -181,12 +179,9 @@ namespace GM
     GM_AST_TREE* GM_Interpreter::_get_ast_tree_from_token(const std::string& token) const
     {
         auto token_size = token.size();
-        if (token_size == 0)
-        {
-            PRINT_ERROR("Token Error: token is empty");
-            return nullptr;
-        }
-        
+        if (token_size == 0 || token[0] == ' ')
+            return new GM_AST_NULL_EXPR("");
+
         GM_AST_TREE* ret;
         
         if (token_size == 1)
@@ -284,7 +279,15 @@ namespace GM
 
                 m_left_parentheses_count--;
 
-                if (end_pos == start_pos)
+                if (command[end_pos - 1] == '(')
+                {
+                    DEBUG_ERROR("()");
+
+                    m_start_pos = end_pos + 1;
+                    token = "";
+                    return true;
+                }
+                else if (end_pos == start_pos)
                 {
                     start_pos++;
                     end_pos++;

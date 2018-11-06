@@ -131,6 +131,7 @@ namespace GM
         // ----- str ----- //
         static std::string vector_str(const std::vector<GM_Object*>* vector);
         static std::string dict_str(const std::map<std::string, GM_Object*>* dict);
+        static bool is_empty_or_all_space(const std::string& str);
 
         static bool str_ends_with (std::string const& full_str, std::string const& ends);
 
