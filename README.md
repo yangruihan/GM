@@ -1,6 +1,6 @@
 # GM
 
-GM A dynamic interpretation toy programming language, which syntax like LISP.
+GM is a dynamic interpretation toy programming language, which syntax like LISP.
 
 ## Screenshots
 
