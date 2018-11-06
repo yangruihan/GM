@@ -1,7 +1,9 @@
 #include "gm_utils.hpp"
 
+#include <string>
 #include <stack>
 #include <sstream>
+#include <fstream>
 #include "../GM.h"
 
 namespace GM
@@ -61,6 +63,34 @@ namespace GM
         }
         stream << "}";
         return stream.str();
+    }
+
+    bool GM_Utils::read_file(const char* file_path, std::string& content)
+    {
+        std::ifstream file(file_path);
+        content = "";
+        if (file.is_open())
+        {
+            std::stringstream buffer;
+            buffer << file.rdbuf();
+            content = buffer.str();
+            return true;
+        }
+
+        return false;
+    }
+
+    bool GM_Utils::write_file(const char* file_path, const std::string& content)
+    {
+        std::ofstream file (file_path);
+        if (file.is_open())
+        {
+            file << content;
+            file.close();
+            return true;
+        }
+
+        return false;
     }
 
 }

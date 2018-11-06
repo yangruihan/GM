@@ -127,10 +127,11 @@ namespace GM
             return std::string(m_str_buffer);
         }
 
+        // ----- container ----- //
         static std::string vector_str(const std::vector<GM_Object*>* vector);
-
         static std::string dict_str(const std::map<std::string, GM_Object*>* dict);
 
+        // ----- type ----- //
         template<typename InstanceType, typename CheckType>
         static CheckType* is_instance_of(InstanceType* instance)
         {
@@ -148,6 +149,9 @@ namespace GM
 
         static GM_Environment* set_env_for_childs(GM_AST_TREE* tree, GM_Environment* new_env);
 
+        // ----- file ----- //
+        static bool read_file(const char* file_path, std::string &result);
+        static bool write_file(const char* file_path, const std::string& content);
     };
 
 }
