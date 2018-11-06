@@ -6,90 +6,74 @@
 
 using namespace GM;
 
-#ifdef DEBUG
-
-void print_ast(GM_AST_TREE* node, int indent)
+void repl(GM_Interpreter* interpreter)
 {
-    if (node == nullptr)
-    {
-        DEBUG_ERROR("node is nullptr");
-        return;
-    }
-
-    std::cout << std::endl;
-
-    for (size_t i = 0; i < indent; i++)
-    {
-        std::cout << "\t";
-    }
-
-    printf("(Token: %s, child count: %ld)", 
-                        node->get_token().c_str(),
-                        node->get_child_count());
-
-    for (size_t i = 0; i < node->get_child_count(); i++)
-    {
-        print_ast(node->get_child(i), indent + 1);
-    }
-}
-
-#endif // DEBUG
-
-
-int main()
-{
-    DEBUG_LOG_F("----- GM Interpreter [Version %d.%d.%d]-----", 0, 0, 1);
-
-    GM_Interpreter* interpreter = new GM_Interpreter();
-    interpreter->init();
+    interpreter->set_parse_mode(GM_INTERPRETER_REPL_MODE);
 
     std::string command;
-    int ret = 0;
     bool running_flag = true;
     while (running_flag)
     {
         std::cout << "> ";
-
         std::getline(std::cin, command);
+
         DEBUG_LOG_F("-- Input: %s", command.c_str());
-        
-        ret = interpreter->parse(command);
 
-        if (ret == 0)
-        {
-            DEBUG_LOG_F("Create AST success");
-            DEBUG_LOG_F("--- Show AST structure ---");
-            auto root = interpreter->get_ast_root();
-                        
-#ifdef DEBUG
-            
-            print_ast(root, 0);
-            std::cout << std::endl;
-    
-#endif
-
-            auto result = interpreter->eval();
-            if (result != nullptr)
-            {
-#ifdef DEBUG
-                PRINT_LOG_F("--------------------");
-                PRINT_LOG_F("- Expr: %s", command.c_str());
-                PRINT_LOG_F("- Result: %s", result->str().c_str());
-                PRINT_LOG_F("--------------------");
-#else
-
-                std::cout << result->str().c_str() << std::endl;
-
-#endif
-            }
-        }
-        else
-        {
-        }
+        interpreter->parse_and_eval(command);
 
         running_flag = interpreter->get_running_flag();
     }
-    
+}
+
+void parse_files(int argc, char* argv[], GM_Interpreter* interpreter)
+{
+    interpreter->set_parse_mode(GM_INTERPRETER_FILE_MODE);
+
+    std::string file_name;
+    std::string file_content;
+    for (size_t i = 0; i < argc; i++)
+    {
+        file_name = argv[i];
+        if (GM_Utils::str_ends_with(file_name, GM_SOURCE_FILE_SUFFIX))
+        {
+            if (GM_Utils::read_file(file_name.c_str(), file_content))
+            {
+                DEBUG_LOG_F("File content: %s", file_content.c_str());
+
+                interpreter->parse_and_eval(file_content);
+            }
+            else
+            {
+                PRINT_ERROR_F("IOError: file(%s) read failed", file_name.c_str());
+            }
+        }
+    }
+}
+
+int main(int argc, char* argv[])
+{
+    DEBUG_LOG("\n\n\n");
+
+    DEBUG_LOG("- GM parameters ---");
+
+#ifdef DEBUG
+    for (size_t i = 0; i < argc; i++)
+    {
+        DEBUG_LOG_F("- %zu: %s", i, argv[i]);
+    }
+#endif
+
+    DEBUG_LOG("-------------------");
+
+    DEBUG_LOG_F("----- GM Interpreter [Version %d.%d.%d]-----", 0, 0, 1);
+
+    GM_Interpreter* interpreter = new GM_Interpreter();
+
+    if (argc == 1)
+        repl(interpreter);
+    else
+        parse_files(argc, argv, interpreter);
+
     delete interpreter;
 
     return 0;

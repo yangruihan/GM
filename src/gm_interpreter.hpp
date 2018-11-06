@@ -24,23 +24,26 @@ namespace GM
 
         bool init();
 
-        int parse(std::string command);
-    
+        int parse(const std::string& command);
+        GM_Value* eval() const;
+        int parse_and_eval(const std::string& command);
+
     public:
         std::string str() const override { return "interpreter"; }
 
         GM_AST_TREE* get_ast_root() const { return m_ast_root; }
 
-        GM_Value* eval() const;
-
         bool get_running_flag() const;
 
+        void set_parse_mode(const size_t& mode) { m_parse_mode = mode; }
+        size_t get_parse_mode() const { return m_parse_mode; }
+
     private:
-        GM_AST_TREE* _parse(std::string& command, GM_Environment* env);
+        GM_AST_TREE* _parse(const std::string& command, GM_Environment* env);
 
-        GM_AST_TREE* _get_ast_tree_from_token(std::string& token) const;
+        GM_AST_TREE* _get_ast_tree_from_token(const std::string& token) const;
 
-        bool _take_token(std::string command, std::string& token, bool& is_func);
+        bool _take_token(const std::string& command, std::string& token, bool& is_func);
     
     private:
         GM_Environment* m_environment;
@@ -48,6 +51,12 @@ namespace GM
         
         size_t m_start_pos;
         size_t m_left_parentheses_count;
+
+        size_t m_parse_mode;
+
+#ifdef DEBUG
+        void _print_ast(GM_AST_TREE* node, int indent) const;
+#endif
     };
 
 }

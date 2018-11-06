@@ -6,12 +6,17 @@
 
 #include <cstdint>
 
+#define GM_SOURCE_FILE_SUFFIX ".gm"
+
 #define extends(class_name) public class_name
 #define implements(class_name) public class_name
 
 #define GM_AST_VARIADIC_PARAMS_FLAG SIZE_MAX
 
 #define GM_INTERPRETER_RUN_FLAG "__GM__INTERPRETER_RUN_FLAG__"
+
+#define GM_INTERPRETER_REPL_MODE 0
+#define GM_INTERPRETER_FILE_MODE 1
 
 #define FUNC_ADD_OP_KEY "__add"
 #define FUNC_SUB_OP_KEY "__sub"

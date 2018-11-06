@@ -1,0 +1,16 @@
+(def power (list x)
+    (* x x)
+)
+
+(print (+ "hello" " world"))
+
+(def mul (list x y)
+    (* x y)
+)
+
+(for (let i 0) (< i 10) (let i (+ i 1))
+    (list 
+        (let a (power i))
+        (print (mul a 2))
+    )
+)

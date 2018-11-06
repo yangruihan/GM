@@ -127,9 +127,11 @@ namespace GM
             return std::string(m_str_buffer);
         }
 
-        // ----- container ----- //
+        // ----- str ----- //
         static std::string vector_str(const std::vector<GM_Object*>* vector);
         static std::string dict_str(const std::map<std::string, GM_Object*>* dict);
+
+        static bool str_ends_with (std::string const& full_str, std::string const& ends);
 
         // ----- type ----- //
         template<typename InstanceType, typename CheckType>

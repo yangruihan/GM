@@ -65,6 +65,14 @@ namespace GM
         return stream.str();
     }
 
+    bool GM_Utils::str_ends_with(const std::string& full_str, const std::string& ends)
+    {
+        if (full_str.length() >= ends.length())
+            return (0 == full_str.compare (full_str.length() - ends.length(), ends.length(), ends));
+        else
+            return false;
+    }
+
     bool GM_Utils::read_file(const char* file_path, std::string& content)
     {
         std::ifstream file(file_path);
