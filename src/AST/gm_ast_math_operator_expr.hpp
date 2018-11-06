@@ -17,6 +17,8 @@ namespace GM
     public:
         size_t get_need_child_count() const override { return 2; };
 
+        std::string str() const override { return "+"; }
+
         static bool check_token_valid(const std::string& token)
         {
             return token.size() == 1 && token[0] == '+';
@@ -37,6 +39,8 @@ namespace GM
 
     public:
         size_t get_need_child_count() const override { return 2; };
+
+        std::string str() const override { return "-"; }
 
         static bool check_token_valid(const std::string& token)
         {
@@ -60,6 +64,8 @@ namespace GM
     public:
         size_t get_need_child_count() const override { return 2; };
 
+        std::string str() const override { return "*"; }
+
         static bool check_token_valid(const std::string& token)
         {
             return token.size() == 1 && token[0] == '*';
@@ -81,6 +87,8 @@ namespace GM
 
     public:
         size_t get_need_child_count() const override { return 2; };
+
+        std::string str() const override { return "/"; }
 
         static bool check_token_valid(const std::string& token)
         {

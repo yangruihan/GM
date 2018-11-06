@@ -79,6 +79,12 @@ namespace GM
 
         GM_Environment* get_environment() const { return m_environment; }
 
+        size_t get_list_param_count() const { return m_list_params->size(); }
+        std::vector<GM_Object*>* get_list_params() const { return m_list_params; }
+
+        size_t get_dict_param_count() const { return m_dict_params->size(); }
+        std::map<std::string, GM_Object*>* get_dict_params() const { return m_dict_params; }
+
     private:
         std::string* _handle_param_item(GM_Object* value) const;
         

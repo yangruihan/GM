@@ -66,7 +66,7 @@ int main()
             print_ast(root, 0);
             std::cout << std::endl;
     
-#endif // DEBUG
+#endif
 
             auto result = interpreter->eval();
             if (result != nullptr)

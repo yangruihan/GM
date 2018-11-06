@@ -7,7 +7,7 @@
 auto var_name = param->get_param<type>(index); \
 if (var_name == nullptr) \
 { \
-    PRINT_ERROR_F("GetParamError: param(%d) type not mathcing or value is nullptr", index); \
+    PRINT_ERROR_F("GetParamError: param(%d) type not mathcing type(%s) or value is nullptr", index, #type); \
     return GM_Value::null_value(); \
 }
 

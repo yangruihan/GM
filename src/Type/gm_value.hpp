@@ -9,6 +9,7 @@
 
 namespace GM
 {
+    class GM_Object;
     class GM_Environment;
     class GM_Function;
 

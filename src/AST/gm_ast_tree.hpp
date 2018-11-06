@@ -69,7 +69,15 @@ namespace GM
 
         void add_child(GM_AST_TREE* child) 
         {
+            if (child == nullptr)
+            {
+                PRINT_ERROR_F("NullptrError: AST_NODE(%s) add child error, child is nullptr",
+                              get_token().c_str());
+                return;
+            }
+
             m_childs->push_back(child);
+
             DEBUG_LOG_F("Current AST_NODE(%s) add child AST_NODE(%s)",
                         str().c_str(),
                         child->str().c_str());

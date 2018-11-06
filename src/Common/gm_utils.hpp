@@ -5,6 +5,8 @@
 #include <ctype.h>
 #include <string>
 #include <stdarg.h>
+#include <vector>
+#include <map>
 #include <cstring>
 
 #define _PRINT(content) std::cout << (content)
@@ -60,6 +62,7 @@
 
 namespace GM
 {
+    class GM_Object;
     class GM_AST_TREE;
     class GM_Environment;
 
@@ -123,7 +126,11 @@ namespace GM
             va_end(args);
             return std::string(m_str_buffer);
         }
-        
+
+        static std::string vector_str(const std::vector<GM_Object*>* vector);
+
+        static std::string dict_str(const std::map<std::string, GM_Object*>* dict);
+
         template<typename InstanceType, typename CheckType>
         static CheckType* is_instance_of(InstanceType* instance)
         {

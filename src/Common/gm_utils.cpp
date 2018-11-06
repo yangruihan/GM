@@ -1,6 +1,7 @@
 #include "gm_utils.hpp"
 
 #include <stack>
+#include <sstream>
 #include "../GM.h"
 
 namespace GM
@@ -29,6 +30,37 @@ namespace GM
         }
 
         return new_env;
+    }
+
+    std::string GM_Utils::vector_str(const std::vector<GM_Object*>* vector)
+    {
+        if (vector == nullptr)
+            return "[vector is nullptr]";
+
+        std::ostringstream stream;
+        stream << "[";
+        auto count = vector->size() - 1;
+        for (size_t i = 0; i < count; i++)
+        {
+            stream << (*vector)[i]->str() << ", ";
+        }
+        stream << (*vector)[count]->str() << "]";
+        return stream.str();
+    }
+
+    std::string GM_Utils::dict_str(const std::map<std::string, GM_Object *> *dict)
+    {
+        if (dict == nullptr)
+            return "{dict is nullptr}";
+
+        std::ostringstream stream;
+        stream << "{";
+        for (auto it = dict->begin(); it != dict->end(); it++)
+        {
+            stream << '\"' << it->first << '\"' << ": " << it->second << std::endl;
+        }
+        stream << "}";
+        return stream.str();
     }
 
 }
