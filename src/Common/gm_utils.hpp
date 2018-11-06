@@ -62,6 +62,7 @@
 
 namespace GM
 {
+    class GM_Value;
     class GM_Object;
     class GM_AST_TREE;
     class GM_Environment;
@@ -149,7 +150,10 @@ namespace GM
             return dynamic_cast<CheckType*>(&instance);
         }
 
+        // ----- GM_Value ----- //
         static GM_Environment* set_env_for_childs(GM_AST_TREE* tree, GM_Environment* new_env);
+
+        static GM_Value* get_last_value(GM_Value* value);
 
         // ----- file ----- //
         static bool read_file(const char* file_path, std::string &result);

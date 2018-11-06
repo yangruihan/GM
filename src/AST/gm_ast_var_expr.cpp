@@ -14,25 +14,6 @@ namespace GM
 
     size_t GM_AST_VAR_EXPR::get_need_child_count() const
     {
-//        auto object = m_environment->get_current_env_var(m_token);
-//        if (object == nullptr)
-//            return 0;
-//
-//        if (GM_Utils::is_instance_of<GM_Object, GM_Function>(object))
-//        {
-//            auto func = dynamic_cast<GM_Function*>(object);
-//            return func->get_param_count();
-//        }
-//        else if (GM_Utils::is_instance_of<GM_Object, GM_CustomFuncValue>(object))
-//        {
-//            auto func = dynamic_cast<GM_CustomFuncValue*>(object);
-//            return func->get_param_count();
-//        }
-//        else if (GM_Utils::is_instance_of<GM_Object, GM_Value>(object))
-//        {
-//            return 0;
-//        }
-
         return GM_AST_VARIADIC_PARAMS_FLAG;
     }
 
@@ -66,7 +47,7 @@ namespace GM
         auto cust_func = dynamic_cast<GM_CustomFuncValue*>(object);
         if (cust_func != nullptr)
         {
-            auto env = cust_func->get_environment();
+            auto env = GM_Environment::create(cust_func->get_environment());
 
             // prepare parameters
             for (size_t i = 0, count = cust_func->get_param_count(); i < count; i++)
@@ -75,7 +56,12 @@ namespace GM
                 env->set_var(cust_func->get_param_name(i), value);
             }
 
-            return cust_func->eval();
+            GM_Utils::set_env_for_childs(cust_func->get_func_body(), env);
+            auto ret = cust_func->eval();
+            GM_Utils::set_env_for_childs(cust_func->get_func_body(),
+                                         cust_func->get_environment());
+
+            return ret;
         }
 
         auto value = GM_Value::convert_to_value(object);

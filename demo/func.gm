@@ -2,8 +2,6 @@
     (* x x)
 )
 
-(print (+ "hello" " world"))
-
 (def mul (list x y)
     (* x y)
 )

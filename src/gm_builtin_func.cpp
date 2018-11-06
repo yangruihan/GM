@@ -37,6 +37,7 @@ namespace GM
         GM_ENV_SET_FUNCTION(BUILTIN_FUNC_GE,    2, GM_BuiltinFunc::__ge);
         GM_ENV_SET_FUNCTION(BUILTIN_FUNC_NE,    2, GM_BuiltinFunc::__ne);
         GM_ENV_SET_FUNCTION(BUILTIN_FUNC_DEF,   3, GM_BuiltinFunc::__def);
+        GM_ENV_SET_FUNCTION(BUILTIN_FUNC_IF,    3, GM_BuiltinFunc::__if);
 
         return true;
     }
@@ -107,11 +108,7 @@ namespace GM
             condition_result = dynamic_cast<GM_BoolValue*>(ast_condition_part->eval());
         }
 
-        auto list_value = dynamic_cast<GM_ListValue*>(ret);
-        if (list_value == nullptr)
-            return ret;
-
-      return (*list_value)[list_value->get_item_count() - 1];
+        return GM_Utils::get_last_value(ret);
     }
 
     GM_FUNCTION_I(GM_BuiltinFunc, __ls)
@@ -233,6 +230,28 @@ namespace GM
                                                          func_body_part);
         param->get_environment()->set_var(func_name, cust_func_value);
         return cust_func_value;
+    }
+
+    GM_FUNCTION_I(GM_BuiltinFunc, __if)
+    {
+        get_ast_tree(ast_condition_part, 0);
+        get_ast_tree(ast_true_part,      1);
+        get_ast_tree(ast_false_part,     2);
+
+        auto condition_result = dynamic_cast<GM_BoolValue*>(ast_condition_part->eval());
+        if (condition_result == nullptr)
+        {
+            PRINT_ERROR("SyntaxError: condition statement not return a bool value");
+            return GM_Value::null_value();
+        }
+
+        GM_Value* ret;
+        if (condition_result->get_value())
+            ret = ast_true_part->eval();
+        else
+            ret = ast_false_part->eval();
+
+        return GM_Utils::get_last_value(ret);
     }
 
 }

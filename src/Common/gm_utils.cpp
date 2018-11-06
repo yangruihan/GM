@@ -34,6 +34,15 @@ namespace GM
         return new_env;
     }
 
+    GM_Value* GM_Utils::get_last_value(GM_Value *value)
+    {
+        auto list_value = dynamic_cast<GM_ListValue*>(value);
+        if (list_value == nullptr)
+            return value;
+
+        return (*list_value)[list_value->get_item_count() - 1];
+    }
+
     std::string GM_Utils::vector_str(const std::vector<GM_Object*>* vector)
     {
         if (vector == nullptr)

@@ -1,0 +1,11 @@
+(def re (list x)
+    (list 
+        (print x)
+        (if (> x 5)
+            (print "x>5 over")
+            (re (+ x 1))
+        )
+    )
+)
+
+(re 1)

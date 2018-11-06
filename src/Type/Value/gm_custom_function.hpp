@@ -44,6 +44,8 @@ namespace GM
             return (*m_param_names)[index];
         }
 
+        GM_AST_TREE* get_func_body() const { return m_func_body; }
+
         GM_Value* eval();
 
     protected:
