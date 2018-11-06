@@ -3,6 +3,15 @@
 
 #include <iostream>
 
+// ----- get param without check ----- //
+#define get_param_without_check(var_name, type, index) \
+type* var_name = nullptr; \
+if (index < param->get_list_param_count()) \
+{ var_name = param->get_param<type>(index); }
+
+#define get_ast_tree_without_check(var_name, index) get_param_without_check(var_name, GM_AST_TREE, index)
+
+// ----- get param with check nullptr ----- //
 #define get_param(var_name, type, index) \
 auto var_name = param->get_param<type>(index); \
 if (var_name == nullptr) \
@@ -13,6 +22,7 @@ if (var_name == nullptr) \
 
 #define get_ast_tree(var_name, index) get_param(var_name, GM_AST_TREE, index)
 
+// ----- get func with check nullptr ----- //
 #define get_func(var_name, value, func_name) \
 auto var_name = value->get_func(func_name); \
 if (var_name == nullptr) \
@@ -234,9 +244,9 @@ namespace GM
 
     GM_FUNCTION_I(GM_BuiltinFunc, __if)
     {
-        get_ast_tree(ast_condition_part, 0);
-        get_ast_tree(ast_true_part,      1);
-        get_ast_tree(ast_false_part,     2);
+        get_ast_tree(ast_condition_part,            0);
+        get_ast_tree_without_check(ast_true_part,  1);
+        get_ast_tree_without_check(ast_false_part, 2);
 
         auto condition_result = dynamic_cast<GM_BoolValue*>(ast_condition_part->eval());
         if (condition_result == nullptr)
@@ -245,11 +255,16 @@ namespace GM
             return GM_Value::null_value();
         }
 
-        GM_Value* ret;
+        GM_Value* ret = GM_Value::null_value();
         if (condition_result->get_value())
+        {
             ret = ast_true_part->eval();
+        }
         else
-            ret = ast_false_part->eval();
+        {
+            if (ast_false_part != nullptr)
+                ret = ast_false_part->eval();
+        }
 
         return GM_Utils::get_last_value(ret);
     }

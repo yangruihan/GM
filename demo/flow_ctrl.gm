@@ -1,0 +1,10 @@
+(let a 5)
+
+(if (< a 10)
+    (print "a<10")
+    (print "a>10")
+)
+
+(if (< a 10)
+    (print "other a<10")
+)
