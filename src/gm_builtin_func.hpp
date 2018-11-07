@@ -14,6 +14,7 @@
 #define BUILTIN_FUNC_LE     "<="
 #define BUILTIN_FUNC_GE     ">="
 #define BUILTIN_FUNC_NE     "!="
+#define BUILTIN_FUNC_PAIR   ":"
 
 namespace GM
 {
@@ -46,6 +47,8 @@ namespace GM
         GM_STATIC_FUNCTION_D(__def);
         GM_STATIC_FUNCTION_D(__if);
 
+        GM_STATIC_FUNCTION_D(__pair);
+        
     };
 
 }

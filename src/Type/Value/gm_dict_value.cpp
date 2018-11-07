@@ -23,7 +23,7 @@ namespace GM
         stream << "{" << std::endl;
         for (auto it = m_items->begin(); it != m_items->end(); it++)
         {
-            stream << "\t\"" << it->first << "\": " << it->second->_str() << ",\n";
+            stream << "\t\"" << it->first << "\": " << it->second->get_value_str() << ",\n";
         }
         stream << "}" << std::endl;
         return stream.str();

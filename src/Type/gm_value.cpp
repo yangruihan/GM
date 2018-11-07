@@ -84,6 +84,11 @@ namespace GM
     GM_ListValue* GM_Value::list_value(GM_Environment *env)
     { return new GM_ListValue(env); }
 
+    GM_PairValue* GM_Value::pair_value (GM_Environment* env,
+                                        const std::string& key,
+                                        GM_Object* value)
+    { return new GM_PairValue(env, key, value); }
+
     GM_DictValue* GM_Value::dict_value(GM_Environment *env)
     { return new GM_DictValue(env); }
 

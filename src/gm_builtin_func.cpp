@@ -48,6 +48,7 @@ namespace GM
         GM_ENV_SET_FUNCTION(BUILTIN_FUNC_NE,    2, GM_BuiltinFunc::__ne);
         GM_ENV_SET_FUNCTION(BUILTIN_FUNC_DEF,   3, GM_BuiltinFunc::__def);
         GM_ENV_SET_FUNCTION(BUILTIN_FUNC_IF,    3, GM_BuiltinFunc::__if);
+        GM_ENV_SET_FUNCTION(BUILTIN_FUNC_PAIR,  2, GM_BuiltinFunc::__pair);
 
         return true;
     }
@@ -275,6 +276,37 @@ namespace GM
         }
 
         return GM_Utils::get_last_value(ret);
+    }
+
+    GM_FUNCTION_I(GM_BuiltinFunc, __pair)
+    {
+        GET_PARAM(ast_key, GM_AST_STR_LITERAL_EXPR, 0);
+        GET_AST_TREE(ast_value, 1);
+
+        auto key_value = dynamic_cast<GM_StrValue*>(ast_key->eval());
+        if (key_value == nullptr)
+        {
+            PRINT_ERROR("SyntaxError: key statement not return a str value");
+            return GM_Value::null_value();
+        }
+
+        GM_Object* var_value = nullptr;
+
+        auto value_var_expr = dynamic_cast<GM_AST_VAR_EXPR*>(ast_value);
+        if (value_var_expr != nullptr && value_var_expr->get_token_index() != 0)
+            var_value = value_var_expr->get_value();
+        else
+            var_value = ast_value->eval();
+
+        if (var_value == nullptr)
+        {
+            PRINT_ERROR("SyntaxError: value statement not return a value");
+            return GM_Value::null_value();
+        }
+
+        return GM_Value::pair_value(param->get_environment(),
+                                    key_value->get_value(),
+                                    var_value);
     }
 
 }

@@ -48,6 +48,11 @@ env->set_var(func_name, GM_Function::create_func(func_name, \
                                                  param_count, \
                                                  func))
 
+#define GM_ENV_ALIAS_FUNCTION(func_name, origin_func_name, param_count, func) \
+env->set_var(func_name, GM_Function::create_func(func_name, \
+                                                 param_count, \
+                                                 func))
+
 #define GM_STR(format, ...) \
 GM::GM_Utils::format_str(format, ##__VA_ARGS__)
 
