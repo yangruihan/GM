@@ -1,6 +1,7 @@
 #pragma once
 
 #include <string>
+#include <stack>
 
 #include "gm_common_header.h"
 #include "gm_environment.hpp"
@@ -50,9 +51,11 @@ namespace GM
         GM_AST_TREE* m_ast_root;
         
         size_t m_start_pos;
-        size_t m_left_parentheses_count;
 
-        size_t m_parse_mode;
+        std::stack<size_t>* m_token_index_stack;
+        size_t m_current_token_index;
+
+        size_t m_parse_mode;        // Parse Mode: (REPL | Source file)
 
 #ifdef DEBUG
         void _print_ast(GM_AST_TREE* node, int indent) const;

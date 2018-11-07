@@ -19,12 +19,15 @@ namespace GM
     
     GM_Interpreter::~GM_Interpreter() 
     {
+        delete m_token_index_stack;
         delete m_environment;
         delete m_ast_root;
     }
 
     bool GM_Interpreter::init()
     {
+        m_token_index_stack = new std::stack<size_t>();
+
         m_environment->set_var(GM_INTERPRETER_RUN_FLAG,
                                GM_Value::bool_value(m_environment, true));
 
@@ -41,7 +44,6 @@ namespace GM
     int GM_Interpreter::parse_and_eval(const std::string& command)
     {
         m_start_pos = 0;
-        m_left_parentheses_count = 0;
 
         auto command_len = command.size();
         auto ret = 0;
@@ -105,6 +107,8 @@ namespace GM
 
     int GM_Interpreter::parse(const std::string& command)
     {
+        m_current_token_index = 0;
+
         m_ast_root = _parse(command, m_environment);
 
         if (m_ast_root == nullptr)
@@ -124,12 +128,32 @@ namespace GM
         bool is_func;
         if (_take_token(command, token, is_func))
         {
-            DEBUG_LOG_F("Get Token %s", token.c_str());
+            DEBUG_LOG_F("Get Token %s (%zu, %zu)",
+                        token.c_str(),
+                        m_token_index_stack->size(),
+                        m_current_token_index);
 
             ret = _get_ast_tree_from_token(token);
 
-            if (ret != nullptr)
+            if (ret == nullptr)
             {
+                // TODO invalid
+            }
+            else
+            {
+                // set token index for AST Node
+                ret->set_token_index(m_current_token_index);
+
+                if (command[m_start_pos - 1] == ')')
+                {
+                    m_current_token_index = m_token_index_stack->top();
+                    m_token_index_stack->pop();
+                }
+                else
+                {
+                    m_current_token_index ++;
+                }
+
                 auto new_env = ret->set_environment(env);
 
                 DEBUG_LOG_F("Create AST Node %s, child count %zu",
@@ -143,9 +167,10 @@ namespace GM
                 {
                     if (is_func)
                     {
-                        auto parentheses_count = m_left_parentheses_count;
+                        auto parentheses_count = m_token_index_stack->size();
                         auto command_len = command.size();
-                        while (m_start_pos < command_len && m_left_parentheses_count >= parentheses_count)
+                        while (m_start_pos < command_len
+                               && m_token_index_stack->size() >= parentheses_count)
                         {
                             ret->add_child(_parse(command, new_env));
 
@@ -153,7 +178,10 @@ namespace GM
                                    || GM_Utils::is_space(command[m_start_pos]))
                             {
                                 if (command[m_start_pos] == ')')
-                                    m_left_parentheses_count--;
+                                {
+                                    m_current_token_index = m_token_index_stack->top();
+                                    m_token_index_stack->pop();
+                                }
 
                                 m_start_pos++;
                             }
@@ -172,7 +200,10 @@ namespace GM
                            || GM_Utils::is_space(command[m_start_pos]))
                     {
                         if (command[m_start_pos] == ')')
-                            m_left_parentheses_count--;
+                        {
+                            m_current_token_index = m_token_index_stack->top();
+                            m_token_index_stack->pop();
+                        }
 
                         m_start_pos++;
                     }
@@ -260,7 +291,9 @@ namespace GM
                 }
                 else
                 {
-                    m_left_parentheses_count++;
+                    m_token_index_stack->push(m_current_token_index);
+                    m_current_token_index = 0;
+
                     left_parentheses = true;
                     is_func = true;
                     start_pos++;
@@ -270,19 +303,15 @@ namespace GM
             }
             else if (c == ')')
             {
-                if (m_left_parentheses_count == 0)
+                if (m_token_index_stack->size() == 0)
                 {
                     PRINT_ERROR("Syntax Error: no matching left parenthesis");
                     m_start_pos = command_len;
                     return false;
                 }
 
-                m_left_parentheses_count--;
-
                 if (command[end_pos - 1] == '(')
                 {
-                    DEBUG_ERROR("()");
-
                     m_start_pos = end_pos + 1;
                     token = "";
                     return true;

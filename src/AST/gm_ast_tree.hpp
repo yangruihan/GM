@@ -34,9 +34,13 @@ namespace GM
         virtual GM_Value* eval() = 0;
 
         /* --- token --- */
-        static bool check_token_valid(std::string& token) { return false; };
+        static bool check_token_valid(std::string& token) { return false; }
 
         std::string get_token() const { return m_token; }
+
+        void set_token_index(const size_t& token_index) { m_token_index = token_index; }
+
+        size_t get_token_index() { return m_token_index; }
 
         /* --- child --- */
         virtual size_t get_need_child_count() const = 0;
@@ -108,6 +112,8 @@ namespace GM
         std::vector<GM_AST_TREE*>* m_childs;
 
         const std::string m_token;
+
+        size_t m_token_index;
         
         GM_Environment* m_environment;
     };
