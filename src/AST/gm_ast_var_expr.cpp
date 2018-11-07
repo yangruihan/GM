@@ -86,6 +86,11 @@ namespace GM
         return GM_Value::var_name_value(m_environment, m_token);
     }
 
+    GM_Object* GM_AST_VAR_EXPR::get_value() const
+    {
+        return m_environment->get_var(m_token);
+    }
+
     bool GM_AST_VAR_EXPR::_check_childs_valid() const
     {
         return true;

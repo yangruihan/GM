@@ -82,14 +82,21 @@ namespace GM
         GET_AST_TREE(ast_tree2, 1);
 
         auto var_key = ast_tree1->get_var_name_value();
-        auto var_value = ast_tree2->eval();
+        GM_Object* var_value = nullptr;
+
+        auto value_var_expr = dynamic_cast<GM_AST_VAR_EXPR*>(ast_tree2);
+        if (value_var_expr != nullptr)
+            var_value = value_var_expr->get_value();
+        else
+            var_value = ast_tree2->eval();
 
         if (var_key != nullptr && var_value != nullptr)
         {
             param->get_environment()->set_var(var_key->get_var_name(),
                                               var_value);
         }
-        return var_value;
+
+        return GM_Value::str_value(param->get_environment(), var_value->str());
     }
 
     GM_FUNCTION_I(GM_BuiltinFunc, __for)
