@@ -4,6 +4,14 @@ GM is a dynamic interpretation toy programming language, which syntax like LISP.
 
 ## Screenshots
 
-![](./imgs/parse_file.png)
+### Hello World
 
-![](./imgs/custom_function.png)
+![hello world](./imgs/hello_world.png)
+
+### Parse file
+
+![parse file](./imgs/parse_file.png)
+
+### REPL
+
+![repl](./imgs/custom_function.png)
