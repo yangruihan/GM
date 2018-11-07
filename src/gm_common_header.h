@@ -54,11 +54,20 @@ GM::GM_Utils::format_str(format, ##__VA_ARGS__)
 #define GM_STR_FUNC(format, ...) \
 std::string str() const override { return GM_STR(format, ##__VA_ARGS__); }
 
+#ifdef DEBUG
 #define GM_AST_STR_FUNC(type) \
 GM_STR_FUNC("[$%s, token:%s, child_count:%zu]", #type, m_token.c_str(), get_child_count())
+#else
+#define GM_AST_STR_FUNC(type)
+#endif
 
+#ifdef DEBUG
 #define GM_VALUE_STR_FUNC(type) \
 GM_STR_FUNC("[$%s, value:%s]", #type, _str().c_str())
+#else
+#define GM_VALUE_STR_FUNC(type) \
+GM_STR_FUNC("%s", _str().c_str())
+#endif
 
 namespace GM
 {

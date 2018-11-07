@@ -1,0 +1,14 @@
+(def foo
+    (list x)
+    (list
+        (let a "hello world")
+        (def bar
+            (list x)
+            (print a)
+        )
+    )
+)
+
+(let test (foo 0))
+
+(test 0)

@@ -85,7 +85,7 @@ namespace GM
         GM_Object* var_value = nullptr;
 
         auto value_var_expr = dynamic_cast<GM_AST_VAR_EXPR*>(ast_tree2);
-        if (value_var_expr != nullptr)
+        if (value_var_expr != nullptr && value_var_expr->get_token_index() != 0)
             var_value = value_var_expr->get_value();
         else
             var_value = ast_tree2->eval();

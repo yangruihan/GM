@@ -1,0 +1,16 @@
+(def mul5 
+    (list x)
+    
+    (list 
+        (let a 5)
+        
+        (def inner_func 
+            (list x)
+            (* x a)
+        )
+
+        (inner_func x)
+    )
+)
+
+(print (mul5 3))
