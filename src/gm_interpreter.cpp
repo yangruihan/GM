@@ -24,6 +24,18 @@ namespace GM
         delete m_ast_root;
     }
 
+    GM_Interpreter* GM_Interpreter::s_ins = new GM_Interpreter();
+
+    GM_Interpreter* GM_Interpreter::instance()
+    {
+        return s_ins;
+    }
+
+    void GM_Interpreter::destory()
+    {
+        delete s_ins;
+    }
+
     bool GM_Interpreter::init()
     {
         m_token_index_stack = new std::stack<size_t>();

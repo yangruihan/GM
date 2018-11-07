@@ -19,10 +19,22 @@ namespace GM
 
     class GM_Interpreter : extends(GM_Object)
     {
-    public:
+    private:
         GM_Interpreter();
         ~GM_Interpreter() override;
 
+    public:
+        GM_Interpreter(GM_Interpreter& other) = delete;
+        void operator=(const GM_Interpreter& other) = delete;
+
+        static GM_Interpreter* instance();
+
+        static void destory();
+
+    private:
+        static GM_Interpreter* s_ins;
+
+    public:
         bool init();
 
         int parse(const std::string& command);
@@ -48,6 +60,7 @@ namespace GM
     
     private:
         GM_Environment* m_environment;
+
         GM_AST_TREE* m_ast_root;
         
         size_t m_start_pos;

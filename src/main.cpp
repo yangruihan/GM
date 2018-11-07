@@ -67,14 +67,14 @@ int main(int argc, char* argv[])
 
     DEBUG_LOG_F("----- GM Interpreter [Version %d.%d.%d]-----", 0, 0, 1);
 
-    GM_Interpreter* interpreter = new GM_Interpreter();
+    GM_Interpreter* interpreter = GM_Interpreter::instance();
 
     if (argc == 1)
         repl(interpreter);
     else
         parse_files(argc, argv, interpreter);
 
-    delete interpreter;
+    GM_Interpreter::destory();
 
     return 0;
 }
