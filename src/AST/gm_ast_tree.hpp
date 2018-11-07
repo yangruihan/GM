@@ -54,7 +54,7 @@ namespace GM
                 return nullptr;
             }
 
-            return m_childs->at(index);
+            return (*m_childs)[index];
         }
 
         size_t get_child_count() const

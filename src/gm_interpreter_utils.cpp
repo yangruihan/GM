@@ -72,4 +72,15 @@ namespace GM
 
         return nullptr;
     }
+
+    GM_AST_TREE* GM_InterpreterUtils::check_token_is_dict(const std::string &token)
+    {
+        if (GM_AST_DICT_EXPR::check_token_valid(token))
+        {
+            return new GM_AST_DICT_EXPR(token);
+        }
+
+        return nullptr;
+    }
+    
 }

@@ -1,6 +1,13 @@
 #include "gm_interpreter.hpp"
 #include "GM.h"
 
+#define CHECK_TOKEN(func) \
+do { \
+ret = GM_InterpreterUtils::func(token); \
+if (ret != nullptr) \
+    return ret;     \
+} while(0)
+
 namespace GM
 {
 
@@ -186,30 +193,23 @@ namespace GM
         
         if (token_size == 1)
         {
-            ret = GM_InterpreterUtils::check_token_is_operator(token);
-            if (ret != nullptr)
-                return ret;
+            CHECK_TOKEN(check_token_is_operator);
         }
 
         // digit
-        ret = GM_InterpreterUtils::check_token_is_number_literal(token);
-        if (ret != nullptr)
-            return ret;
+        CHECK_TOKEN(check_token_is_number_literal);
         
         // str
-        ret = GM_InterpreterUtils::check_token_is_str_literal(token);
-        if (ret != nullptr)
-            return ret;
+        CHECK_TOKEN(check_token_is_str_literal);
 
         // list
-        ret = GM_InterpreterUtils::check_token_is_list(token);
-        if (ret != nullptr)
-            return ret;
+        CHECK_TOKEN(check_token_is_list);
+
+        // dict
+        CHECK_TOKEN(check_token_is_dict);
 
         // variable
-        ret = GM_InterpreterUtils::check_token_is_variable(token);
-        if (ret != nullptr)
-            return ret;
+        CHECK_TOKEN(check_token_is_variable);
 
         PRINT_ERROR_F("SyntaxError: token(%s) is error", token.c_str());
         return nullptr;

@@ -8,4 +8,5 @@
 #include "gm_ast_tree.hpp"
 #include "gm_ast_var_expr.hpp"
 #include "gm_ast_list_expr.hpp"
+#include "gm_ast_dict_expr.hpp"
 #include "gm_ast_null_expr.hpp"

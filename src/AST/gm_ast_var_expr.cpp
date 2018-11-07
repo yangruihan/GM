@@ -34,10 +34,11 @@ namespace GM
         auto func = dynamic_cast<GM_Function*>(object);
         if (func != nullptr)
         {
-            auto list_param = new std::vector<GM_Object*>();
-            for (size_t i = 0, count = get_child_count(); i < count; i++)
+            auto count = get_child_count();
+            auto list_param = new std::vector<GM_Object*>(count);
+            for (size_t i = 0; i < count; i++)
             {
-                list_param->push_back(get_child(i));
+                (*list_param)[i] = (get_child(i));
             }
             auto parameter = new GM_Parameter(get_environment(),
                                               list_param, nullptr);

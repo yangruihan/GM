@@ -19,6 +19,9 @@ namespace GM
 
     bool GM_AST_LIST_EXPR::check_token_valid(const std::string& token)
     {
+        if (token[0] != 'l' || token.size() !=4)
+            return false;
+
         return token == "list";
     }
 

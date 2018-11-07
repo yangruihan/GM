@@ -8,11 +8,12 @@
 #define T_GM_FLOAT_VALUE        103
 #define T_GM_STR_VALUE          104
 #define T_GM_LIST_VALUE         105
-#define T_GM_DICTIONARY_VALUE   106
+#define T_GM_DICT_VALUE         106
 #define T_GM_BOOL_VALUE         107
 #define T_GM_NULL_VALUE         108
 #define T_GM_VAR_NAME_VALUE     109
 #define T_GM_CUST_FUNC_VALUE    110
+#define T_GM_PAIR_VALUE         111
 
 namespace GM
 {

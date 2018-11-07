@@ -19,6 +19,7 @@ namespace GM
     class GM_IntValue;
     class GM_FloatValue;
     class GM_ListValue;
+    class GM_DictValue;
     class GM_VarNameValue;
     class GM_CustomFuncValue;
     class GM_AST_TREE;
@@ -79,6 +80,8 @@ namespace GM
                                            double value);
 
         static GM_ListValue* list_value (GM_Environment* env);
+
+        static GM_DictValue* dict_value (GM_Environment* env);
 
         static GM_VarNameValue* var_name_value (GM_Environment* env,
                                                 const std::string& var_name);

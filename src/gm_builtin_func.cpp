@@ -4,15 +4,15 @@
 #include <iostream>
 
 // ----- get param without check ----- //
-#define get_param_without_check(var_name, type, index) \
+#define GET_PARAM_WITHOUT_CHECK(var_name, type, index) \
 type* var_name = nullptr; \
 if (index < param->get_list_param_count()) \
 { var_name = param->get_param<type>(index); }
 
-#define get_ast_tree_without_check(var_name, index) get_param_without_check(var_name, GM_AST_TREE, index)
+#define GET_AST_TREE_WITHOUT_CHECK(var_name, index) GET_PARAM_WITHOUT_CHECK(var_name, GM_AST_TREE, index)
 
 // ----- get param with check nullptr ----- //
-#define get_param(var_name, type, index) \
+#define GET_PARAM(var_name, type, index) \
 auto var_name = param->get_param<type>(index); \
 if (var_name == nullptr) \
 { \
@@ -20,10 +20,10 @@ if (var_name == nullptr) \
     return GM_Value::null_value(); \
 }
 
-#define get_ast_tree(var_name, index) get_param(var_name, GM_AST_TREE, index)
+#define GET_AST_TREE(var_name, index) GET_PARAM(var_name, GM_AST_TREE, index)
 
 // ----- get func with check nullptr ----- //
-#define get_func(var_name, value, func_name) \
+#define GET_FUNC(var_name, value, func_name) \
 auto var_name = value->get_func(func_name); \
 if (var_name == nullptr) \
 { \
@@ -54,7 +54,7 @@ namespace GM
 
     GM_FUNCTION_I(GM_BuiltinFunc, __print)
     {
-        get_ast_tree(ast_tree, 0);
+        GET_AST_TREE(ast_tree, 0);
 
         auto value = ast_tree->eval();
         if (value == nullptr)
@@ -78,8 +78,8 @@ namespace GM
     
     GM_FUNCTION_I(GM_BuiltinFunc, __let)
     {
-        get_param(ast_tree1, GM_AST_VAR_EXPR, 0);
-        get_ast_tree(ast_tree2, 1);
+        GET_PARAM(ast_tree1, GM_AST_VAR_EXPR, 0);
+        GET_AST_TREE(ast_tree2, 1);
 
         auto var_key = ast_tree1->get_var_name_value();
         auto var_value = ast_tree2->eval();
@@ -94,10 +94,10 @@ namespace GM
 
     GM_FUNCTION_I(GM_BuiltinFunc, __for)
     {
-        get_ast_tree(ast_init_part,      0);
-        get_ast_tree(ast_condition_part, 1);
-        get_ast_tree(ast_change_part,    2);
-        get_ast_tree(ast_statement_part, 3);
+        GET_AST_TREE(ast_init_part,      0);
+        GET_AST_TREE(ast_condition_part, 1);
+        GET_AST_TREE(ast_change_part,    2);
+        GET_AST_TREE(ast_statement_part, 3);
 
         // init
         ast_init_part->eval();
@@ -123,13 +123,13 @@ namespace GM
 
     GM_FUNCTION_I(GM_BuiltinFunc, __ls)
     {
-        get_ast_tree(ast_tree1, 0);
-        get_ast_tree(ast_tree2, 1);
+        GET_AST_TREE(ast_tree1, 0);
+        GET_AST_TREE(ast_tree2, 1);
 
         auto arg1 = GM_Value::convert_to_value(ast_tree1->eval());
         auto arg2 = GM_Value::convert_to_value(ast_tree2->eval());
 
-        get_func(func, arg1, FUNC_LS_OP_KEY);
+        GET_FUNC(func, arg1, FUNC_LS_OP_KEY);
 
         return func->eval(new GM_Parameter(param->get_environment(),
                                            2, arg1, arg2));
@@ -137,13 +137,13 @@ namespace GM
 
     GM_FUNCTION_I(GM_BuiltinFunc, __eq)
     {
-        get_ast_tree(ast_tree1, 0);
-        get_ast_tree(ast_tree2, 1);
+        GET_AST_TREE(ast_tree1, 0);
+        GET_AST_TREE(ast_tree2, 1);
 
         auto arg1 = GM_Value::convert_to_value(ast_tree1->eval());
         auto arg2 = GM_Value::convert_to_value(ast_tree2->eval());
 
-        get_func(func, arg1, FUNC_EQ_OP_KEY);
+        GET_FUNC(func, arg1, FUNC_EQ_OP_KEY);
 
         return func->eval(new GM_Parameter(param->get_environment(),
                                            2, arg1, arg2));
@@ -151,13 +151,13 @@ namespace GM
 
     GM_FUNCTION_I(GM_BuiltinFunc, __gt)
     {
-        get_ast_tree(ast_tree1, 0);
-        get_ast_tree(ast_tree2, 1);
+        GET_AST_TREE(ast_tree1, 0);
+        GET_AST_TREE(ast_tree2, 1);
 
         auto arg1 = GM_Value::convert_to_value(ast_tree1->eval());
         auto arg2 = GM_Value::convert_to_value(ast_tree2->eval());
 
-        get_func(func, arg1, FUNC_GT_OP_KEY);
+        GET_FUNC(func, arg1, FUNC_GT_OP_KEY);
 
         return func->eval(new GM_Parameter(param->get_environment(),
                                            2, arg1, arg2));
@@ -165,13 +165,13 @@ namespace GM
 
     GM_FUNCTION_I(GM_BuiltinFunc, __le)
     {
-        get_ast_tree(ast_tree1, 0);
-        get_ast_tree(ast_tree2, 1);
+        GET_AST_TREE(ast_tree1, 0);
+        GET_AST_TREE(ast_tree2, 1);
 
         auto arg1 = dynamic_cast<GM_Value*>(ast_tree1->eval());
         auto arg2 = dynamic_cast<GM_Value*>(ast_tree2->eval());
 
-        get_func(func, arg1, FUNC_LE_OP_KEY);
+        GET_FUNC(func, arg1, FUNC_LE_OP_KEY);
 
         return func->eval(new GM_Parameter(param->get_environment(),
                                            2, arg1, arg2));
@@ -179,13 +179,13 @@ namespace GM
 
     GM_FUNCTION_I(GM_BuiltinFunc, __ge)
     {
-        get_ast_tree(ast_tree1, 0);
-        get_ast_tree(ast_tree2, 1);
+        GET_AST_TREE(ast_tree1, 0);
+        GET_AST_TREE(ast_tree2, 1);
 
         auto arg1 = GM_Value::convert_to_value(ast_tree1->eval());
         auto arg2 = GM_Value::convert_to_value(ast_tree2->eval());
 
-        get_func(func, arg1, FUNC_GE_OP_KEY);
+        GET_FUNC(func, arg1, FUNC_GE_OP_KEY);
 
         return func->eval(new GM_Parameter(param->get_environment(),
                                            2, arg1, arg2));
@@ -193,13 +193,13 @@ namespace GM
 
     GM_FUNCTION_I(GM_BuiltinFunc, __ne)
     {
-        get_ast_tree(ast_tree1, 0);
-        get_ast_tree(ast_tree2, 1);
+        GET_AST_TREE(ast_tree1, 0);
+        GET_AST_TREE(ast_tree2, 1);
 
         auto arg1 = GM_Value::convert_to_value(ast_tree1->eval());
         auto arg2 = GM_Value::convert_to_value(ast_tree2->eval());
 
-        get_func(func, arg1, FUNC_NE_OP_KEY);
+        GET_FUNC(func, arg1, FUNC_NE_OP_KEY);
 
         return func->eval(new GM_Parameter(param->get_environment(),
                                            2, arg1, arg2));
@@ -207,9 +207,9 @@ namespace GM
 
     GM_FUNCTION_I(GM_BuiltinFunc, __def)
     {
-        get_param(func_name_part, GM_AST_VAR_EXPR,   0);
-        get_param(param_list_part, GM_AST_LIST_EXPR, 1);
-        get_ast_tree(func_body_part, 2);
+        GET_PARAM(func_name_part, GM_AST_VAR_EXPR,   0);
+        GET_PARAM(param_list_part, GM_AST_LIST_EXPR, 1);
+        GET_AST_TREE(func_body_part, 2);
 
         auto func_name = func_name_part->get_token();
         if (!GM_CustomFuncValue::check_func_name_valid(func_name))
@@ -218,8 +218,9 @@ namespace GM
             return GM_Value::null_value();
         }
 
-        std::vector<std::string>* param_names = new std::vector<std::string>();
-        for (size_t i = 0, count = param_list_part->get_child_count(); i < count; i++)
+        auto count = param_list_part->get_child_count();
+        auto param_names = new std::vector<std::string>(count);
+        for (size_t i = 0; i < count; i++)
         {
             auto child = param_list_part->get_child(i);
             if (!GM_Utils::is_instance_of<GM_AST_TREE, GM_AST_VAR_EXPR>(child))
@@ -228,7 +229,7 @@ namespace GM
                 return GM_Value::null_value();
             }
 
-            param_names->push_back(child->get_token());
+            (*param_names)[i] = child->get_token();
         }
 
         auto new_env = GM_Utils::set_env_for_childs(func_body_part, param->get_environment());
@@ -244,9 +245,9 @@ namespace GM
 
     GM_FUNCTION_I(GM_BuiltinFunc, __if)
     {
-        get_ast_tree(ast_condition_part,            0);
-        get_ast_tree_without_check(ast_true_part,  1);
-        get_ast_tree_without_check(ast_false_part, 2);
+        GET_AST_TREE(ast_condition_part,            0);
+        GET_AST_TREE_WITHOUT_CHECK(ast_true_part,  1);
+        GET_AST_TREE_WITHOUT_CHECK(ast_false_part, 2);
 
         auto condition_result = dynamic_cast<GM_BoolValue*>(ast_condition_part->eval());
         if (condition_result == nullptr)

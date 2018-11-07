@@ -9,6 +9,7 @@
 
 namespace GM
 {
+    class GM_Value;
     class GM_Environment;
 
     class GM_StrValue : extends(GM_Value)
