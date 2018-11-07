@@ -8,45 +8,16 @@ using namespace GM;
 
 void repl(GM_Interpreter* interpreter)
 {
-    interpreter->set_parse_mode(GM_INTERPRETER_REPL_MODE);
-
-    std::string command;
-    bool running_flag = true;
-    while (running_flag)
-    {
-        std::cout << "> ";
-        std::getline(std::cin, command);
-
-        DEBUG_LOG_F("-- Input: %s", command.c_str());
-
-        interpreter->parse_and_eval(command);
-
-        running_flag = interpreter->get_running_flag();
-    }
+    interpreter->repl();
 }
 
 void parse_files(int argc, char* argv[], GM_Interpreter* interpreter)
 {
-    interpreter->set_parse_mode(GM_INTERPRETER_FILE_MODE);
-
-    std::string file_name;
-    std::string file_content;
+    std::string file_path;
     for (size_t i = 0; i < argc; i++)
     {
-        file_name = argv[i];
-        if (GM_Utils::str_ends_with(file_name, GM_SOURCE_FILE_SUFFIX))
-        {
-            if (GM_Utils::read_file(file_name.c_str(), file_content))
-            {
-                DEBUG_LOG_F("File content: %s", file_content.c_str());
-
-                interpreter->parse_and_eval(file_content);
-            }
-            else
-            {
-                PRINT_ERROR_F("IOError: file(%s) read failed", file_name.c_str());
-            }
-        }
+        file_path = argv[i];
+        interpreter->parse_file(file_path);
     }
 }
 

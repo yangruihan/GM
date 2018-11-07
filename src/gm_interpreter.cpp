@@ -53,6 +53,52 @@ namespace GM
         return dynamic_cast<GM_BoolValue*>(flag)->get_value();
     }
 
+    int GM_Interpreter::repl()
+    {
+        set_parse_mode(GM_INTERPRETER_REPL_MODE);
+
+        std::string command;
+        int ret = 0;
+        bool running_flag = true;
+        while (ret == 0 && running_flag)
+        {
+            std::cout << "> ";
+            std::getline(std::cin, command);
+
+            DEBUG_LOG_F("-- Input: %s", command.c_str());
+
+            ret = parse_and_eval(command);
+
+            running_flag = get_running_flag();
+        }
+
+        return ret;
+    }
+
+    int GM_Interpreter::parse_file(const std::string &file_path)
+    {
+        set_parse_mode(GM_INTERPRETER_FILE_MODE);
+
+        int ret = 0;
+        if (GM_Utils::str_ends_with(file_path, GM_SOURCE_FILE_SUFFIX))
+        {
+            std::string file_content;
+            if (GM_Utils::read_file(file_path.c_str(), file_content))
+            {
+                DEBUG_LOG_F("File content: %s", file_content.c_str());
+
+                ret = parse_and_eval(file_content);
+            }
+            else
+            {
+                ret = -1;
+                PRINT_ERROR_F("IOError: file(%s) read failed", file_path.c_str());
+            }
+        }
+
+        return ret;
+    }
+
     int GM_Interpreter::parse_and_eval(const std::string& command)
     {
         m_start_pos = 0;

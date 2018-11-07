@@ -37,9 +37,13 @@ namespace GM
     public:
         bool init();
 
+        int repl();
+        int parse_file(const std::string& file_path);
+
+        int parse_and_eval(const std::string& command);
+
         int parse(const std::string& command);
         GM_Value* eval() const;
-        int parse_and_eval(const std::string& command);
 
     public:
         std::string str() const override { return "interpreter"; }
@@ -48,6 +52,7 @@ namespace GM
 
         bool get_running_flag() const;
 
+    private:
         void set_parse_mode(const size_t& mode) { m_parse_mode = mode; }
         size_t get_parse_mode() const { return m_parse_mode; }
 
