@@ -14,14 +14,18 @@ namespace GM
         virtual ~GM_VarNameValue ();
 
     public:
+
+        GM_VALUE_STR_FUNC(GM_VarNameValue)
+
+        std::string _str() const override;
+
+    public:
         VALUE_TYPE get_type() const override
         {
             return T_GM_VAR_NAME_VALUE;
         }
 
         std::string get_var_name() const { return m_var_name; }
-
-        std::string str() const override;
 
     protected:
         const std::string m_var_name;

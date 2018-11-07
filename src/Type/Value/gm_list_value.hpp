@@ -19,12 +19,15 @@ namespace GM
         virtual ~GM_ListValue ();
 
     public:
+        GM_VALUE_STR_FUNC(GM_ListValue)
+
+        std::string _str() const override;
+
+    public:
         VALUE_TYPE get_type() const override
         {
             return T_GM_LIST_VALUE;
         }
-
-        std::string str() const override;
 
         GM_ListValue* add_item(GM_Value* value);
 

@@ -24,9 +24,12 @@ namespace GM
             return T_GM_BOOL_VALUE;
         }
 
-        std::string str() const override;
-
         bool get_value() const { return m_value; }
+
+    public:
+        GM_VALUE_STR_FUNC(GM_BoolValue)
+
+        std::string _str() const override;
 
     protected:
         void _init_functions() override;

@@ -16,6 +16,9 @@ namespace GM
         virtual ~GM_NumberValue () {}
 
     public:
+        GM_VALUE_STR_FUNC(GM_NumberValue)
+        
+    public:
         VALUE_TYPE get_type() const override
         {
             return T_GM_NUMBER_VALUE;

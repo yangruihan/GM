@@ -20,12 +20,15 @@ namespace GM
         virtual ~GM_PairValue ();
 
     public:
+        GM_VALUE_STR_FUNC(GM_PairValue)
+
+        std::string _str() const override;
+
+    public:
         VALUE_TYPE get_type() const override
         {
             return T_GM_PAIR_VALUE;
         }
-        
-        std::string str() const override;
 
         std::string get_key() const { return m_key; }
         GM_Value* get_value() const { return m_value; }

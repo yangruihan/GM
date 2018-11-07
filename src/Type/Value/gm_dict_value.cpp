@@ -17,13 +17,13 @@ namespace GM
         delete m_items;
     }
     
-    std::string GM_DictValue::str() const
+    std::string GM_DictValue::_str() const
     {
         std::ostringstream stream;
         stream << "{" << std::endl;
         for (auto it = m_items->begin(); it != m_items->end(); it++)
         {
-            stream << "\t\"" << it->first << "\": " << it->second->str() << ",\n";
+            stream << "\t\"" << it->first << "\": " << it->second->_str() << ",\n";
         }
         stream << "}" << std::endl;
         return stream.str();

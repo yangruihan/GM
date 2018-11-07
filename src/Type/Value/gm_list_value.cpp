@@ -19,17 +19,17 @@ namespace GM
     {
     }
 
-    std::string GM_ListValue::str() const
+    std::string GM_ListValue::_str() const
     {
         std::ostringstream stream;
         stream << "[";
         
         for (size_t i = 0; i < m_items->size() - 1; i++)
         {
-            stream << m_items->at(i)->str() << ", ";
+            stream << m_items->at(i)->_str() << ", ";
         }
 
-        stream << m_items->at(m_items->size() - 1)->str() << "]";
+        stream << m_items->at(m_items->size() - 1)->_str() << "]";
 
         return stream.str();
     }

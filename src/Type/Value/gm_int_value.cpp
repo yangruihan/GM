@@ -42,7 +42,7 @@ namespace GM
         GM_VALUE_SET_FUNCTION(FUNC_NE_OP_KEY,  2, GM_IntValue::__ne);
     }
 
-    std::string GM_IntValue::str() const
+    std::string GM_IntValue::_str() const
     {
         return GM_Utils::format_str("%d", m_value);
     }

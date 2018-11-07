@@ -16,13 +16,16 @@ namespace GM
         ~GM_NullValue() override;
 
     public:
+        GM_VALUE_STR_FUNC(GM_NullValue)
+
+        std::string _str() const override
+        { return "null"; }
+
+    public:
         VALUE_TYPE get_type() const override
         {
             return T_GM_NULL_VALUE;
         }
-
-        std::string str() const override
-        { return "null"; }
 
     protected:
         void _init_functions() override;

@@ -14,7 +14,7 @@ namespace GM
     
     void GM_VarNameValue::_init_functions() {}
 
-    std::string GM_VarNameValue::str() const
+    std::string GM_VarNameValue::_str() const
     {
         auto var = get_environment()->get_var(m_var_name);
         if (var == nullptr)
@@ -26,7 +26,7 @@ namespace GM
         auto value = dynamic_cast<GM_Value*>(var);
         if (value != nullptr)
         {
-            return value->str();
+            return value->_str();
         }
 
         auto func = dynamic_cast<GM_Function*>(var);

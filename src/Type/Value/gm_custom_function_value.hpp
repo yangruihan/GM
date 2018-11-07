@@ -19,6 +19,10 @@ namespace GM
                             const std::vector<std::string>* param_list,
                             GM_AST_TREE* func_body);
         virtual ~GM_CustomFuncValue ();
+    public:
+        GM_VALUE_STR_FUNC(GM_CustomFuncValue)
+
+        std::string _str() const override;
 
     public:
         static bool check_func_name_valid(const std::string& func_name);
@@ -27,8 +31,6 @@ namespace GM
         {
             return T_GM_CUST_FUNC_VALUE;
         }
-
-        std::string str() const override;
 
         size_t get_param_count() const { return m_param_count; }
 

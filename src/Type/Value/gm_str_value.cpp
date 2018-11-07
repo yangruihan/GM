@@ -20,7 +20,7 @@ namespace GM
                                                     GM_StrValue::__add));
     }
     
-    std::string GM_StrValue::str() const
+    std::string GM_StrValue::_str() const
     {
         return GM_Utils::format_str("%s", m_value.c_str());
     }
@@ -34,7 +34,7 @@ namespace GM
             return nullptr;
 
         return GM_Value::str_value(str_arg1->get_environment(),
-                                   str_arg1->str() + str_arg2->str());
+                                   str_arg1->_str() + str_arg2->_str());
     }
 
 }

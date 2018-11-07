@@ -20,12 +20,15 @@ namespace GM
         ~GM_DictValue () override;
 
     public:
+        GM_VALUE_STR_FUNC(GM_DictValue)
+
+        std::string _str() const override;
+
+    public:
         VALUE_TYPE get_type() const override
         {
             return T_GM_DICT_VALUE;
         }
-        
-        std::string str() const override;
 
         GM_DictValue* add_item(const std::string& key,
                                      GM_PairValue* value);

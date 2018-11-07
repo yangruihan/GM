@@ -1,4 +1,4 @@
-#include "gm_custom_function.hpp"
+#include "gm_custom_function_value.hpp"
 
 #include "../../GM.h"
 #include <sstream>
@@ -26,7 +26,7 @@ namespace GM
     
     void GM_CustomFuncValue::_init_functions() {}
 
-    std::string GM_CustomFuncValue::str() const
+    std::string GM_CustomFuncValue::_str() const
     {
         std::ostringstream stream;
         stream << "[" << m_func_name << " (";

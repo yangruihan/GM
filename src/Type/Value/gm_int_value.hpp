@@ -24,14 +24,17 @@ namespace GM
         virtual ~GM_IntValue ();
 
     public:
+        GM_VALUE_STR_FUNC(GM_IntValue)
+
+        std::string _str() const override;
+
+    public:
         VALUE_TYPE get_type() const override
         {
             return T_GM_INT_VALUE;
         }
 
         double get_value() override { return m_value; }
-
-        std::string str() const override;
     
     protected:
         int m_value;

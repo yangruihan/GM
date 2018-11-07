@@ -38,7 +38,7 @@ namespace GM
         GM_VALUE_SET_FUNCTION(FUNC_NE_OP_KEY,  2, GM_FloatValue::__ne);
     }
 
-    std::string GM_FloatValue::str() const
+    std::string GM_FloatValue::_str() const
     {
         return GM_Utils::format_str("%lf", m_value);
     }

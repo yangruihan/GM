@@ -45,7 +45,10 @@ namespace GM
             return T_GM_VALUE; 
         }
 
-        virtual std::string str() const = 0;
+    public:
+        GM_VALUE_STR_FUNC(GM_Value)
+
+        virtual std::string _str() const = 0;
 
     protected:
         virtual void _init_functions() = 0;

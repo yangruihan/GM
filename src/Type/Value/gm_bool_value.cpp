@@ -21,7 +21,7 @@ namespace GM
                                : GM_Value(env), m_value(value)
     {}
     
-    std::string GM_BoolValue::str() const
+    std::string GM_BoolValue::_str() const
     {
         return m_value ? "true" : "false";
     }
