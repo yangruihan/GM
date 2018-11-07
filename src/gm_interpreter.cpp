@@ -344,9 +344,7 @@ namespace GM
             std::cout << "\t";
         }
 
-        printf("(Token: %s, child count: %ld)",
-               node->get_token().c_str(),
-               node->get_child_count());
+        std::cout << node->str();
 
         for (size_t i = 0; i < node->get_child_count(); i++)
         {

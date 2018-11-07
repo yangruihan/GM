@@ -29,10 +29,14 @@
 #define FUNC_GE_OP_KEY  "__ge"
 #define FUNC_NE_OP_KEY  "__ne"
 
-#define GM_STATIC_FUNCTION_D(func_name) static GM_Value* (func_name)(const GM_Parameter* param)
-#define GM_FUNCTION_D(func_name) GM_Value* (func_name)(const GM_Parameter* param)
+#define GM_STATIC_FUNCTION_D(func_name) \
+static GM_Value* (func_name)(const GM_Parameter* param)
 
-#define GM_FUNCTION_I(class_name, func_name) GM_Value* class_name::func_name(const GM_Parameter* param)
+#define GM_FUNCTION_D(func_name) \
+GM_Value* (func_name)(const GM_Parameter* param)
+
+#define GM_FUNCTION_I(class_name, func_name) \
+GM_Value* class_name::func_name(const GM_Parameter* param)
 
 #define GM_VALUE_SET_FUNCTION(func_name, param_count, func) \
 GM_Value::set_func(GM_Function::create_func(func_name, \
@@ -43,6 +47,18 @@ GM_Value::set_func(GM_Function::create_func(func_name, \
 env->set_var(func_name, GM_Function::create_func(func_name, \
                                                  param_count, \
                                                  func))
+
+#define GM_STR(format, ...) \
+GM::GM_Utils::format_str(format, ##__VA_ARGS__)
+
+#define GM_STR_FUNC(format, ...) \
+std::string str() const override { return GM_STR(format, ##__VA_ARGS__); }
+
+#define GM_AST_STR_FUNC(type) \
+GM_STR_FUNC("[$%s, token:%s, child_count:%zu]", #type, m_token.c_str(), get_child_count())
+
+#define GM_VALUE_STR_FUNC(type) \
+GM_STR_FUNC("[$%s, value:%s]", #type, _str().c_str())
 
 namespace GM
 {

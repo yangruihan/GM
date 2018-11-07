@@ -13,6 +13,8 @@ namespace GM
         ~GM_AST_NULL_EXPR () override;
 
     public:
+        GM_AST_STR_FUNC(GM_AST_NULL_EXPR)
+
         size_t get_need_child_count() const override;
 
         GM_Value* eval() override;

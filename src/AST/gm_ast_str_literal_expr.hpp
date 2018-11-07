@@ -13,6 +13,8 @@ namespace GM
         ~GM_AST_STR_LITERAL_EXPR () override;
         
     public:
+        GM_AST_STR_FUNC(GM_AST_STR_LITERAL_EXPR)
+
         size_t get_need_child_count() const override;
         
         static bool check_token_valid(const std::string& token);

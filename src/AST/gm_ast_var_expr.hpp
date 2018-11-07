@@ -20,6 +20,8 @@ namespace GM
         ~GM_AST_VAR_EXPR () override;
 
     public:
+        GM_AST_STR_FUNC(GM_AST_VAR_EXPR)
+
         static GM_VarNameValue* convert_var_name_value(GM_AST_TREE* tree);
 
         size_t get_need_child_count() const override;

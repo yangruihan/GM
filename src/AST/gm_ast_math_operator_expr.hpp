@@ -15,9 +15,9 @@ namespace GM
         ~GM_AST_ADD_OPERATOR_EXPR () override {}
 
     public:
-        size_t get_need_child_count() const override { return 2; };
+        GM_AST_STR_FUNC(GM_AST_ADD_OPERATOR_EXPR)
 
-        std::string str() const override { return "+"; }
+        size_t get_need_child_count() const override { return 2; };
 
         static bool check_token_valid(const std::string& token)
         {
@@ -38,9 +38,9 @@ namespace GM
         ~GM_AST_SUB_OPERATOR_EXPR () override {}
 
     public:
-        size_t get_need_child_count() const override { return 2; };
+        GM_AST_STR_FUNC(GM_AST_SUB_OPERATOR_EXPR)
 
-        std::string str() const override { return "-"; }
+        size_t get_need_child_count() const override { return 2; };
 
         static bool check_token_valid(const std::string& token)
         {
@@ -62,9 +62,9 @@ namespace GM
         ~GM_AST_MUL_OPERATOR_EXPR () override {}
 
     public:
-        size_t get_need_child_count() const override { return 2; };
+        GM_AST_STR_FUNC(GM_AST_MUL_OPERATOR_EXPR)
 
-        std::string str() const override { return "*"; }
+        size_t get_need_child_count() const override { return 2; };
 
         static bool check_token_valid(const std::string& token)
         {
@@ -86,9 +86,9 @@ namespace GM
         ~GM_AST_DIV_OPERATOR_EXPR () override {}
 
     public:
-        size_t get_need_child_count() const override { return 2; };
+        GM_AST_STR_FUNC(GM_AST_DIV_OPERATOR_EXPR)
 
-        std::string str() const override { return "/"; }
+        size_t get_need_child_count() const override { return 2; };
 
         static bool check_token_valid(const std::string& token)
         {

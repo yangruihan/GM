@@ -27,7 +27,8 @@ namespace GM
         }
 
     public:
-        std::string str() const override { return get_token(); }
+
+        GM_AST_STR_FUNC(GM_AST_TREE)
 
         /* --- eval --- */
         virtual GM_Value* eval() = 0;
