@@ -47,6 +47,13 @@ namespace GM
         if (m_dict_params != nullptr)
             delete m_dict_params;
     }
+
+    std::string GM_Parameter::str() const
+    {
+        return GM_Utils::format_str("[$GM_Parameter\n\tlist_params:%s\n\tdict_params:%s]",
+                                    GM_Utils::vector_str(m_list_params).c_str(),
+                                    GM_Utils::dict_str(m_dict_params).c_str());
+    }
     
     std::string* GM_Parameter::_handle_param_item(GM::GM_Object *value) const
     {

@@ -22,6 +22,8 @@ namespace GM
         virtual ~GM_Parameter();
     
     public:
+        std::string str() const override;
+
         template<typename T>
         T* get_param(const size_t index) const
         {
