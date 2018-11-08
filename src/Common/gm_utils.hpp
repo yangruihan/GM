@@ -1,6 +1,7 @@
 #pragma once
 
 #include <stdio.h>
+#include <cstdlib>
 #include <iostream>
 #include <ctype.h>
 #include <string>
@@ -127,6 +128,13 @@ namespace GM
             value = std::stod(str);
         }
 
+        // ----- common utils ----- //
+        std::string get_system_env_var(const char* var_name)
+        {
+            return std::getenv(var_name);
+        }
+
+        // ----- str ----- //
         static std::string format_str(const char* format, ...)
         {
             va_list args;
@@ -136,7 +144,6 @@ namespace GM
             return std::string(m_str_buffer);
         }
 
-        // ----- str ----- //
         static std::string vector_str(const std::vector<GM_Object*>* vector);
         static std::string dict_str(const std::map<std::string, GM_Object*>* dict);
         static bool is_empty_or_all_space(const std::string& str);
@@ -161,7 +168,6 @@ namespace GM
 
         // ----- GM_Value ----- //
         static GM_Environment* set_env_for_childs(GM_AST_TREE* tree, GM_Environment* new_env);
-
         static GM_Value* get_last_value(GM_Value* value);
 
         // ----- file ----- //

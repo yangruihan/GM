@@ -15,6 +15,7 @@
 #define BUILTIN_FUNC_GE     ">="
 #define BUILTIN_FUNC_NE     "!="
 #define BUILTIN_FUNC_PAIR   ":"
+#define BUILTIN_FUNC_LOAD   "load"
 
 namespace GM
 {
@@ -48,6 +49,8 @@ namespace GM
         GM_STATIC_FUNCTION_D(__if);
 
         GM_STATIC_FUNCTION_D(__pair);
+
+        GM_STATIC_FUNCTION_D(__load);
         
     };
 

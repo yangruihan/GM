@@ -37,8 +37,12 @@ namespace GM
         (*m_var_map)[var_name] = var;
     }
     
-    GM_Object* GM_Environment::get_var(const std::string& var_name) const
+    GM_Object* GM_Environment::get_var(const std::string& var_name,
+                                       const bool& find_loaded_env) const
     {
+        if (var_name.size() == 0)
+            return nullptr;
+
         auto it = m_var_map->find(var_name);
         if (it != m_var_map->end())
         {
@@ -48,7 +52,9 @@ namespace GM
         {
             if (m_parent != nullptr)
                 return m_parent->get_var(var_name);
-            
+            else if (find_loaded_env)
+                return GM_Interpreter::instance()->get_var_from_loaded_env(var_name);
+
             return nullptr;
         }
     }

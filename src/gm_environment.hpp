@@ -22,7 +22,8 @@ namespace GM
         std::string str() const override { return "environment"; }
         
         void set_var(const std::string& var_name, GM_Object* var);
-        GM_Object* get_var(const std::string& var_name) const;
+        GM_Object* get_var(const std::string& var_name,
+                           const bool& find_loaded_env=true) const;
         GM_Object* get_current_env_var(const std::string& var_name) const;
         
         void set_parent(const GM_Environment* env) { m_parent = env; }

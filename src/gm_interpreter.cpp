@@ -8,20 +8,39 @@ if (ret != nullptr) \
     return ret;     \
 } while(0)
 
+#define C_ENV get_current_data()->m_environment
+#define C_PARSE_CURSOR get_current_data()->m_parse_cursor
+#define C_TOKEN_INDEX get_current_data()->m_current_token_index
+#define C_AST_ROOT get_current_data()->m_ast_root
+#define C_TOKEN_INDEX_STACK get_current_data()->m_token_index_stack
+#define C_PARSE_MODE get_current_data()->m_parse_mode
+
+
 namespace GM
 {
 
     GM_Interpreter::GM_Interpreter()
     {
-        m_environment = new GM_Environment();
         init();
     }
     
     GM_Interpreter::~GM_Interpreter() 
     {
-        delete m_token_index_stack;
-        delete m_environment;
-        delete m_ast_root;
+        while (m_data_stack->size() > 0)
+        {
+            auto top = m_data_stack->top();
+            m_data_stack->pop();
+            delete top;
+        }
+
+        delete m_data_stack;
+        delete m_global_environment;
+
+        for (size_t i = 0, count = m_loaded_env->size(); i < count; i++)
+        {
+            delete (*m_loaded_env)[i];
+        }
+        delete m_loaded_env;
     }
 
     GM_Interpreter* GM_Interpreter::s_ins = new GM_Interpreter();
@@ -38,24 +57,54 @@ namespace GM
 
     bool GM_Interpreter::init()
     {
-        m_token_index_stack = new std::stack<size_t>();
+        auto ret = true;
 
-        m_environment->set_var(GM_INTERPRETER_RUN_FLAG,
-                               GM_Value::bool_value(m_environment, true));
+        m_global_environment = GM_Environment::create(nullptr);
+        m_global_environment->set_var(GM_INTERPRETER_RUN_FLAG,
+                                         GM_Value::bool_value(m_global_environment, true));
 
-        auto ret = GM_BuiltinFunc::init(m_environment);
+        ret = GM_BuiltinFunc::init(m_global_environment);
+        if (!ret)
+            return false;
+
+        m_loaded_env = new std::vector<GM_Environment*>();
+
+        m_data_stack = new std::stack<GM_Interpreter::GM_InterpreterData*>();
+
         return ret;
+    }
+
+    bool GM_Interpreter::_create_data(const size_t &parse_mode)
+    {
+        GM_Interpreter::GM_InterpreterData* data;
+        auto ret = GM_Interpreter::GM_InterpreterData::create(data,
+                                                              m_global_environment,
+                                                              parse_mode);
+
+        m_data_stack->push(data);
+
+        return ret;
+    }
+
+    bool GM_Interpreter::_clear_data() const
+    {
+        m_loaded_env->push_back(C_ENV);
+        auto data = get_current_data();
+        m_data_stack->pop();
+        delete data;
+
+        return true;
     }
 
     bool GM_Interpreter::get_running_flag() const
     {
-        auto flag = m_environment->get_var(GM_INTERPRETER_RUN_FLAG);
+        auto flag = C_ENV->get_var(GM_INTERPRETER_RUN_FLAG);
         return dynamic_cast<GM_BoolValue*>(flag)->get_value();
     }
 
     int GM_Interpreter::repl()
     {
-        set_parse_mode(GM_INTERPRETER_REPL_MODE);
+        _create_data(GM_INTERPRETER_REPL_MODE);
 
         std::string command;
         int ret = 0;
@@ -72,12 +121,14 @@ namespace GM
             running_flag = get_running_flag();
         }
 
+        _clear_data();
+
         return ret;
     }
 
     int GM_Interpreter::parse_file(const std::string &file_path)
     {
-        set_parse_mode(GM_INTERPRETER_FILE_MODE);
+        _create_data(GM_INTERPRETER_FILE_MODE);
 
         int ret = 0;
         if (GM_Utils::str_ends_with(file_path, GM_SOURCE_FILE_SUFFIX))
@@ -85,7 +136,9 @@ namespace GM
             std::string file_content;
             if (GM_Utils::read_file(file_path.c_str(), file_content))
             {
-                DEBUG_LOG_F("File content: %s", file_content.c_str());
+                DEBUG_LOG_F("File: %s\n%s",
+                            file_path.c_str(),
+                            file_content.c_str());
 
                 ret = parse_and_eval(file_content);
             }
@@ -96,17 +149,19 @@ namespace GM
             }
         }
 
+        _clear_data();
+
         return ret;
     }
 
     int GM_Interpreter::parse_and_eval(const std::string& command)
     {
-        m_start_pos = 0;
+        C_PARSE_CURSOR = 0;
 
         auto command_len = command.size();
         auto ret = 0;
 
-        while (m_start_pos < command_len - 1)
+        while (C_PARSE_CURSOR < command_len - 1)
         {
             ret = this->parse(command);
 
@@ -131,7 +186,7 @@ namespace GM
                     DEBUG_LOG_F("- Result: %s", result->str().c_str());
                     DEBUG_LOG_F("--------------------");
 #else
-                    if (m_parse_mode == GM_INTERPRETER_REPL_MODE)
+                    if (C_PARSE_MODE == GM_INTERPRETER_REPL_MODE)
                         std::cout << result->str().c_str() << std::endl;
 #endif
                 }
@@ -165,11 +220,11 @@ namespace GM
 
     int GM_Interpreter::parse(const std::string& command)
     {
-        m_current_token_index = 0;
+        C_TOKEN_INDEX = 0;
 
-        m_ast_root = _parse(command, m_environment);
+        C_AST_ROOT = _parse(command, C_ENV);
 
-        if (m_ast_root == nullptr)
+        if (C_AST_ROOT == nullptr)
             return -1;
 
         return 0;
@@ -178,7 +233,7 @@ namespace GM
     GM_AST_TREE* GM_Interpreter::_parse(const std::string& command,
                                         GM_Environment* env)
     {
-        if (m_start_pos >= command.size())
+        if (C_PARSE_CURSOR >= command.size())
             return nullptr;
 
         GM_AST_TREE* ret = nullptr;
@@ -188,8 +243,8 @@ namespace GM
         {
             DEBUG_LOG_F("Get Token %s (%zu, %zu)",
                         token.c_str(),
-                        m_token_index_stack->size(),
-                        m_current_token_index);
+                        C_TOKEN_INDEX_STACK->size(),
+                        C_TOKEN_INDEX);
 
             ret = _get_ast_tree_from_token(token);
 
@@ -200,16 +255,16 @@ namespace GM
             else
             {
                 // set token index for AST Node
-                ret->set_token_index(m_current_token_index);
+                ret->set_token_index(C_TOKEN_INDEX);
 
-                if (command[m_start_pos - 1] == ')')
+                if (command[C_PARSE_CURSOR - 1] == ')')
                 {
-                    m_current_token_index = m_token_index_stack->top();
-                    m_token_index_stack->pop();
+                    C_TOKEN_INDEX = C_TOKEN_INDEX_STACK->top();
+                    C_TOKEN_INDEX_STACK->pop();
                 }
                 else
                 {
-                    m_current_token_index ++;
+                    C_TOKEN_INDEX ++;
                 }
 
                 auto new_env = ret->set_environment(env);
@@ -225,23 +280,23 @@ namespace GM
                 {
                     if (is_func)
                     {
-                        auto parentheses_count = m_token_index_stack->size();
+                        auto parentheses_count = C_TOKEN_INDEX_STACK->size();
                         auto command_len = command.size();
-                        while (m_start_pos < command_len
-                               && m_token_index_stack->size() >= parentheses_count)
+                        while (C_PARSE_CURSOR < command_len
+                               && C_TOKEN_INDEX_STACK->size() >= parentheses_count)
                         {
                             ret->add_child(_parse(command, new_env));
 
-                            while (command[m_start_pos] == ')'
-                                   || GM_Utils::is_space(command[m_start_pos]))
+                            while (command[C_PARSE_CURSOR] == ')'
+                                   || GM_Utils::is_space(command[C_PARSE_CURSOR]))
                             {
-                                if (command[m_start_pos] == ')')
+                                if (command[C_PARSE_CURSOR] == ')')
                                 {
-                                    m_current_token_index = m_token_index_stack->top();
-                                    m_token_index_stack->pop();
+                                    C_TOKEN_INDEX = C_TOKEN_INDEX_STACK->top();
+                                    C_TOKEN_INDEX_STACK->pop();
                                 }
 
-                                m_start_pos++;
+                                C_PARSE_CURSOR++;
                             }
                         }
                     }
@@ -254,16 +309,16 @@ namespace GM
                         ret->add_child(_parse(command, new_env));
                     }
 
-                    while (command[m_start_pos] == ')'
-                           || GM_Utils::is_space(command[m_start_pos]))
+                    while (command[C_PARSE_CURSOR] == ')'
+                           || GM_Utils::is_space(command[C_PARSE_CURSOR]))
                     {
-                        if (command[m_start_pos] == ')')
+                        if (command[C_PARSE_CURSOR] == ')')
                         {
-                            m_current_token_index = m_token_index_stack->top();
-                            m_token_index_stack->pop();
+                            C_TOKEN_INDEX = C_TOKEN_INDEX_STACK->top();
+                            C_TOKEN_INDEX_STACK->pop();
                         }
 
-                        m_start_pos++;
+                        C_PARSE_CURSOR++;
                     }
                 }
             }
@@ -313,8 +368,8 @@ namespace GM
             return false;
         }
 
-        auto start_pos = m_start_pos;
-        auto end_pos = m_start_pos;
+        auto start_pos = C_PARSE_CURSOR;
+        auto end_pos = C_PARSE_CURSOR;
         
         auto left_parentheses = false;
         auto quotation_mark = false;
@@ -328,14 +383,14 @@ namespace GM
                 if (left_parentheses)
                 {
                     PRINT_ERROR("Syntax Error: no matching right parenthesis");
-                    m_start_pos = command_len;
+                    C_PARSE_CURSOR = command_len;
                     return false;
                 }
                 else
                 {
                     token = command.substr(start_pos, end_pos - start_pos);
                     DEBUG_LOG_F("%s sub (%ld, %ld)", command.c_str(), start_pos, end_pos);
-                    m_start_pos = end_pos + 1;
+                    C_PARSE_CURSOR = end_pos + 1;
                     return true;
                 }
             }
@@ -344,13 +399,13 @@ namespace GM
                 if (left_parentheses)
                 {
                     PRINT_ERROR("Syntax Error: double left parenthesis");
-                    m_start_pos = command_len;
+                    C_PARSE_CURSOR = command_len;
                     return false;
                 }
                 else
                 {
-                    m_token_index_stack->push(m_current_token_index);
-                    m_current_token_index = 0;
+                    C_TOKEN_INDEX_STACK->push(C_TOKEN_INDEX);
+                    C_TOKEN_INDEX = 0;
 
                     left_parentheses = true;
                     is_func = true;
@@ -361,16 +416,16 @@ namespace GM
             }
             else if (c == ')')
             {
-                if (m_token_index_stack->size() == 0)
+                if (C_TOKEN_INDEX_STACK->size() == 0)
                 {
                     PRINT_ERROR("Syntax Error: no matching left parenthesis");
-                    m_start_pos = command_len;
+                    C_PARSE_CURSOR = command_len;
                     return false;
                 }
 
                 if (command[end_pos - 1] == '(')
                 {
-                    m_start_pos = end_pos + 1;
+                    C_PARSE_CURSOR = end_pos + 1;
                     token = "";
                     return true;
                 }
@@ -383,7 +438,7 @@ namespace GM
 
                 token = command.substr(start_pos, end_pos - start_pos);
                 DEBUG_LOG_F("%s sub (%ld, %ld)", command.c_str(), start_pos, end_pos);
-                m_start_pos = end_pos + 1;
+                C_PARSE_CURSOR = end_pos + 1;
                 return true;
             }
             else if (GM_Utils::is_space(c))
@@ -399,7 +454,7 @@ namespace GM
                 {
                     token = command.substr(start_pos, end_pos - start_pos);
                     DEBUG_LOG_F("%s sub (%ld, %ld)", command.c_str(), start_pos, end_pos);
-                    m_start_pos = end_pos + 1;
+                    C_PARSE_CURSOR = end_pos + 1;
                     return true;
                 }
             }
@@ -412,6 +467,31 @@ namespace GM
         }
 
         return false;
+    }
+
+    GM_Object* GM_Interpreter::get_var_from_loaded_env(const std::string &var_name)
+    {
+        for (size_t i = 0, count = m_loaded_env->size(); i < count; i++)
+        {
+            auto env = (*m_loaded_env)[i];
+            auto value = env->get_var(var_name, false);
+            if (value != nullptr)
+                return value;
+        }
+
+        return nullptr;
+    }
+
+    // ----- GM_InterpreterData ----- //
+    bool GM_Interpreter::GM_InterpreterData::create(GM_Interpreter::GM_InterpreterData*& instance,
+                                                    GM_Environment* env,
+                                                    const size_t& parse_mode)
+    {
+        instance = new GM_Interpreter::GM_InterpreterData();
+        instance->m_environment = GM_Environment::create(env);
+        instance->m_parse_mode = parse_mode;
+
+        return true;
     }
 
 #ifdef DEBUG

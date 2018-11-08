@@ -49,6 +49,7 @@ namespace GM
         GM_ENV_SET_FUNCTION(BUILTIN_FUNC_DEF,   3, GM_BuiltinFunc::__def);
         GM_ENV_SET_FUNCTION(BUILTIN_FUNC_IF,    3, GM_BuiltinFunc::__if);
         GM_ENV_SET_FUNCTION(BUILTIN_FUNC_PAIR,  2, GM_BuiltinFunc::__pair);
+        GM_ENV_SET_FUNCTION(BUILTIN_FUNC_LOAD,  1, GM_BuiltinFunc::__load);
 
         return true;
     }
@@ -309,4 +310,19 @@ namespace GM
                                     var_value);
     }
 
+    GM_FUNCTION_I(GM_BuiltinFunc, __load)
+    {
+        GET_PARAM(ast_tree, GM_AST_STR_LITERAL_EXPR, 0);
+
+        auto str_value = dynamic_cast<GM_StrValue*>(ast_tree->eval());
+        if (str_value == nullptr)
+        {
+            PRINT_ERROR("SyntaxError: file path statement not return a str value");
+            return GM_Value::null_value();
+        }
+
+        auto ret = GM_Interpreter::instance()->parse_file(str_value->get_value());
+
+        return GM_Value::bool_value(param->get_environment(), ret == 0);
+    }
 }
