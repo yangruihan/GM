@@ -49,7 +49,7 @@ namespace GM
         GM_ENV_SET_FUNCTION(BUILTIN_FUNC_DEF,   3, GM_BuiltinFunc::__def);
         GM_ENV_SET_FUNCTION(BUILTIN_FUNC_IF,    3, GM_BuiltinFunc::__if);
         GM_ENV_SET_FUNCTION(BUILTIN_FUNC_PAIR,  2, GM_BuiltinFunc::__pair);
-        GM_ENV_SET_FUNCTION(BUILTIN_FUNC_LOAD,  1, GM_BuiltinFunc::__load);
+        GM_ENV_SET_FUNCTION(BUILTIN_FUNC_LOAD,  1, GM_BuiltinFunc::__import);
 
         return true;
     }
@@ -310,7 +310,7 @@ namespace GM
                                     var_value);
     }
 
-    GM_FUNCTION_I(GM_BuiltinFunc, __load)
+    GM_FUNCTION_I(GM_BuiltinFunc, __import)
     {
         GET_PARAM(ast_tree, GM_AST_STR_LITERAL_EXPR, 0);
 

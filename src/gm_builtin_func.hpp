@@ -15,7 +15,7 @@
 #define BUILTIN_FUNC_GE     ">="
 #define BUILTIN_FUNC_NE     "!="
 #define BUILTIN_FUNC_PAIR   ":"
-#define BUILTIN_FUNC_LOAD   "load"
+#define BUILTIN_FUNC_LOAD   "import"
 
 namespace GM
 {
@@ -50,7 +50,7 @@ namespace GM
 
         GM_STATIC_FUNCTION_D(__pair);
 
-        GM_STATIC_FUNCTION_D(__load);
+        GM_STATIC_FUNCTION_D(__import);
         
     };
 
