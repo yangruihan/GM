@@ -21,6 +21,9 @@ namespace GM
 
     std::string GM_ListValue::_str() const
     {
+        if (m_items->size() == 0)
+            return "[]";
+
         std::ostringstream stream;
         stream << "[";
         

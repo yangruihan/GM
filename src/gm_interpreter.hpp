@@ -119,7 +119,7 @@ namespace GM
 
         GM_AST_TREE* _get_ast_tree_from_token(const std::string& token) const;
 
-        bool _take_token(const std::string& command, std::string& token, bool& is_func);
+        bool _take_token(const std::string& command, std::string& token);
     
     private:
         std::stack<GM_InterpreterData*>* m_data_stack;

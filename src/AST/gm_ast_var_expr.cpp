@@ -35,34 +35,49 @@ namespace GM
         if (func != nullptr)
         {
             auto count = get_child_count();
-            auto list_param = new std::vector<GM_Object*>(count);
-            for (size_t i = 0; i < count; i++)
+
+            if (count == 0)
             {
-                (*list_param)[i] = (get_child(i));
+                GM_Value::var_name_value(get_environment(), m_token);
             }
-            auto parameter = new GM_Parameter(get_environment(),
-                                              list_param, nullptr);
-            return func->eval(parameter);
+            else
+            {
+                auto list_param = new std::vector<GM_Object*>(count);
+                for (size_t i = 0; i < count; i++)
+                {
+                    (*list_param)[i] = (get_child(i));
+                }
+                auto parameter = new GM_Parameter(get_environment(),
+                                                  list_param, nullptr);
+                return func->eval(parameter);
+            }
         }
 
         auto cust_func = dynamic_cast<GM_CustomFuncValue*>(object);
         if (cust_func != nullptr)
         {
-            auto env = GM_Environment::create(cust_func->get_environment());
-
-            // prepare parameters
-            for (size_t i = 0, count = cust_func->get_param_count(); i < count; i++)
+            if (get_child_count() == 0)
             {
-                auto value = get_child(i)->eval();
-                env->set_var(cust_func->get_param_name(i), value);
+                return cust_func;
             }
+            else
+            {
+                auto env = GM_Environment::create(cust_func->get_environment());
 
-            GM_Utils::set_env_for_childs(cust_func->get_func_body(), env);
-            auto ret = cust_func->eval();
-            GM_Utils::set_env_for_childs(cust_func->get_func_body(),
-                                         cust_func->get_environment());
+                // prepare parameters
+                for (size_t i = 0, count = cust_func->get_param_count(); i < count; i++)
+                {
+                    auto value = get_child(i)->eval();
+                    env->set_var(cust_func->get_param_name(i), value);
+                }
 
-            return ret;
+                GM_Utils::set_env_for_childs(cust_func->get_func_body(), env);
+                auto ret = cust_func->eval();
+                GM_Utils::set_env_for_childs(cust_func->get_func_body(),
+                                             cust_func->get_environment());
+
+                return ret;
+            }
         }
 
         auto value = GM_Value::convert_to_value(object);

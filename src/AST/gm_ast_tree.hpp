@@ -72,13 +72,13 @@ namespace GM
 
         std::vector<GM_AST_TREE*>* get_childs() const { return m_childs; }
 
-        void add_child(GM_AST_TREE* child) 
+        bool add_child(GM_AST_TREE* child)
         {
             if (child == nullptr)
             {
                 PRINT_ERROR_F("NullptrError: AST_NODE(%s) add child error, child is nullptr",
                               get_token().c_str());
-                return;
+                return false;
             }
 
             m_childs->push_back(child);
@@ -86,6 +86,8 @@ namespace GM
             DEBUG_LOG_F("Current AST_NODE(%s) add child AST_NODE(%s)",
                         str().c_str(),
                         child->str().c_str());
+
+            return true;
         }
 
         /* --- environment --- */

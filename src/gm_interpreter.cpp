@@ -238,8 +238,7 @@ namespace GM
 
         GM_AST_TREE* ret = nullptr;
         std::string token;
-        bool is_func;
-        if (_take_token(command, token, is_func))
+        if (_take_token(command, token))
         {
             DEBUG_LOG_F("Get Token %s (%zu, %zu)",
                         token.c_str(),
@@ -275,17 +274,36 @@ namespace GM
 
                 auto child_count = ret->get_need_child_count();
 
+                auto parentheses_count = C_TOKEN_INDEX_STACK->size();
+                auto command_len = command.size();
+
+                if (command[C_PARSE_CURSOR - 1] == ')')
+                {
+                    if (child_count != GM_AST_VARIADIC_PARAMS_FLAG && child_count > 0)
+                    {
+                        PRINT_ERROR_F("SyntaxError: %s need %zu child but no one found",
+                                      ret->str().c_str(),
+                                      child_count);
+                        return nullptr;
+                    }
+
+                    return ret;
+                }
+
                 // variadic parameter
                 if (child_count == GM_AST_VARIADIC_PARAMS_FLAG)
                 {
-                    if (is_func)
+                    if (ret->get_token_index() == 0)
                     {
-                        auto parentheses_count = C_TOKEN_INDEX_STACK->size();
-                        auto command_len = command.size();
                         while (C_PARSE_CURSOR < command_len
                                && C_TOKEN_INDEX_STACK->size() >= parentheses_count)
                         {
-                            ret->add_child(_parse(command, new_env));
+                            auto child = _parse(command, new_env);
+                            if (child == nullptr)
+                                return nullptr;
+
+                            if (!ret->add_child(child))
+                                return nullptr;
 
                             while (command[C_PARSE_CURSOR] == ')'
                                    || GM_Utils::is_space(command[C_PARSE_CURSOR]))
@@ -306,7 +324,12 @@ namespace GM
                 {
                     for (size_t i = 0; i < child_count; i++)
                     {
-                        ret->add_child(_parse(command, new_env));
+                        auto child = _parse(command, new_env);
+                        if (child == nullptr)
+                            return nullptr;
+
+                        if (!ret->add_child(child))
+                            return nullptr;
                     }
 
                     while (command[C_PARSE_CURSOR] == ')'
@@ -359,7 +382,7 @@ namespace GM
         return nullptr;
     }
 
-    bool GM_Interpreter::_take_token(const std::string& command, std::string& token, bool& is_func)
+    bool GM_Interpreter::_take_token(const std::string& command, std::string& token)
     {
         auto command_len = command.size();
         if (command_len == 0)
@@ -408,7 +431,6 @@ namespace GM
                     C_TOKEN_INDEX = 0;
 
                     left_parentheses = true;
-                    is_func = true;
                     start_pos++;
                     end_pos++;
                     continue;
@@ -437,7 +459,12 @@ namespace GM
                 }
 
                 token = command.substr(start_pos, end_pos - start_pos);
-                DEBUG_LOG_F("%s sub (%ld, %ld)", command.c_str(), start_pos, end_pos);
+                DEBUG_LOG_F("%s sub (%ld, %ld) -> %s",
+                            command.c_str(),
+                            start_pos,
+                            end_pos,
+                            token.c_str());
+
                 C_PARSE_CURSOR = end_pos + 1;
                 return true;
             }

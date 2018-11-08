@@ -2,3 +2,21 @@
     (list x)
     (* x x)
 )
+
+(def max
+    (list x y)
+    (if 
+        (< x y)
+        (y)
+        (x)
+    )
+)
+
+(def min
+    (list x y)
+    (if
+        (< x y)
+        (x)
+        (y)
+    )
+)
