@@ -2,21 +2,6 @@
 
 #include "gm_common_header.h"
 
-#define BUILTIN_FUNC_PRINT  "print"
-#define BUILTIN_FUNC_EXIT   "exit"
-#define BUILTIN_FUNC_LET    "let"
-#define BUILTIN_FUNC_FOR    "for"
-#define BUILTIN_FUNC_DEF    "def"
-#define BUILTIN_FUNC_IF     "if"
-#define BUILTIN_FUNC_LS     "<"
-#define BUILTIN_FUNC_EQ     "="
-#define BUILTIN_FUNC_GT     ">"
-#define BUILTIN_FUNC_LE     "<="
-#define BUILTIN_FUNC_GE     ">="
-#define BUILTIN_FUNC_NE     "!="
-#define BUILTIN_FUNC_PAIR   ":"
-#define BUILTIN_FUNC_LOAD   "import"
-
 namespace GM
 {
     class GM_Value;
@@ -31,11 +16,8 @@ namespace GM
 
     private:
         GM_STATIC_FUNCTION_D(__print);
-
         GM_STATIC_FUNCTION_D(__exit);
-
         GM_STATIC_FUNCTION_D(__let);
-
         GM_STATIC_FUNCTION_D(__for);
 
         GM_STATIC_FUNCTION_D(__ls);     // <
@@ -47,10 +29,11 @@ namespace GM
 
         GM_STATIC_FUNCTION_D(__def);
         GM_STATIC_FUNCTION_D(__if);
-
         GM_STATIC_FUNCTION_D(__pair);
-
         GM_STATIC_FUNCTION_D(__import);
+
+        GM_STATIC_FUNCTION_D(__get);
+        GM_STATIC_FUNCTION_D(__set);
         
     };
 

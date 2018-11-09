@@ -3,42 +3,6 @@
 
 #include <iostream>
 
-// ----- get param without check ----- //
-#define GET_PARAM_WITHOUT_CHECK(var_name, type, index) \
-type* var_name = nullptr; \
-if (index < param->get_list_param_count()) \
-{ var_name = param->get_param<type>(index); }
-
-#define GET_AST_TREE_WITHOUT_CHECK(var_name, index) GET_PARAM_WITHOUT_CHECK(var_name, GM_AST_TREE, index)
-
-// ----- get param with check nullptr ----- //
-#define GET_PARAM(var_name, type, index) \
-auto var_name = param->get_param<type>(index); \
-if (var_name == nullptr) \
-{ \
-    PRINT_ERROR_F("GetParamError: param(%d) type not mathcing type(%s) or value is nullptr", index, #type); \
-    return GM_Value::null_value(); \
-}
-
-#define GET_AST_TREE(var_name, index) GET_PARAM(var_name, GM_AST_TREE, index)
-
-// ----- get func with check nullptr ----- //
-#define GET_FUNC(var_name, value, func_name) \
-auto var_name = value->get_func(func_name); \
-if (var_name == nullptr) \
-{ \
-    PRINT_ERROR_F("GetFuncError: func(%s) not found", func_name); \
-    return GM_Value::null_value(); \
-}
-
-#define GET_CUR_ENV_FUNC(var_name, value, func_name) \
-auto var_name = value->get_cur_env_func(func_name); \
-if (var_name == nullptr) \
-{ \
-    PRINT_ERROR_F("GetFuncError: func(%s) not found", func_name); \
-    return GM_Value::null_value(); \
-}
-
 namespace GM
 {
 
@@ -58,6 +22,8 @@ namespace GM
         GM_ENV_SET_FUNCTION(BUILTIN_FUNC_IF,    3, GM_BuiltinFunc::__if);
         GM_ENV_SET_FUNCTION(BUILTIN_FUNC_PAIR,  2, GM_BuiltinFunc::__pair);
         GM_ENV_SET_FUNCTION(BUILTIN_FUNC_LOAD,  1, GM_BuiltinFunc::__import);
+        GM_ENV_SET_FUNCTION(BUILTIN_FUNC_GET,   2, GM_BuiltinFunc::__get);
+        GM_ENV_SET_FUNCTION(BUILTIN_FUNC_SET,   3, GM_BuiltinFunc::__set);
 
         return true;
     }
@@ -333,4 +299,49 @@ namespace GM
 
         return GM_Value::bool_value(param->get_environment(), ret == 0);
     }
+
+    GM_FUNCTION_I(GM_BuiltinFunc, __get)
+    {
+        GET_PARAM(container_node, GM_AST_VAR_EXPR,         0);
+        GET_PARAM(index_node, GM_AST_NUMBER_LITERAL_EXPR, 1);
+
+        if (index_node->is_float())
+        {
+            PRINT_ERROR_F("IndexError: index(%s) must be an integer",
+                          index_node->str().c_str());
+            return GM_Value::null_value();
+        }
+
+        auto container = GM_Value::convert_to_value(container_node->eval());
+        auto index = GM_Value::convert_to_value(index_node->eval());
+
+        GET_CUR_ENV_FUNC(func, container, FUNC_GET_OP_KEY);
+
+        return func->eval(new GM_Parameter(param->get_environment(),
+                                           2, container, index));
+    }
+
+    GM_FUNCTION_I(GM_BuiltinFunc, __set)
+    {
+        GET_PARAM(container_node, GM_AST_VAR_EXPR,         0);
+        GET_PARAM(index_node, GM_AST_NUMBER_LITERAL_EXPR, 1);
+        GET_AST_TREE(value_node, 2);
+
+        if (index_node->is_float())
+        {
+            PRINT_ERROR_F("IndexError: index(%s) must be an integer",
+                          index_node->str().c_str());
+            return GM_Value::null_value();
+        }
+
+        auto container = GM_Value::convert_to_value(container_node->eval());
+        auto index = GM_Value::convert_to_value(index_node->eval());
+        auto value = value_node->eval();
+
+        GET_CUR_ENV_FUNC(func, container, FUNC_SET_OP_KEY);
+
+        return func->eval(new GM_Parameter(param->get_environment(),
+                                           3, container, index, value));
+    }
+
 }

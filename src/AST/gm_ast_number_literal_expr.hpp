@@ -22,6 +22,8 @@ namespace GM
 
         GM_Value* eval() override;
 
+        bool is_float() const { return m_is_float; }
+
     protected:
         bool _check_childs_valid() const override;
 

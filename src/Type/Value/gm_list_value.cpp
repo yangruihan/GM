@@ -21,6 +21,8 @@ namespace GM
     {
         GM_VALUE_SET_SELF_FUNCTION(FUNC_ADD_OP_KEY, 2, GM_ListValue::__add);
         GM_VALUE_SET_SELF_FUNCTION(FUNC_SUB_OP_KEY, 2, GM_ListValue::__sub);
+        GM_VALUE_SET_SELF_FUNCTION(FUNC_GET_OP_KEY, 2, GM_ListValue::__get);
+        GM_VALUE_SET_SELF_FUNCTION(FUNC_SET_OP_KEY, 3, GM_ListValue::__set);
     }
 
     std::string GM_ListValue::_str() const
@@ -67,16 +69,34 @@ namespace GM
         return this;
     }
 
+    GM_ListValue* GM_ListValue::set_item(const size_t &index, GM_Value *value)
+    {
+        if (index >= m_items->size())
+        {
+            PRINT_ERROR_F("IndexError: index(%zu) is out of range(%zu)", index, m_items->size());
+            return this;
+        }
+
+        (*m_items)[index] = value;
+
+        return this;
+    }
+
+    GM_Value* GM_ListValue::get_item(const size_t &index) const
+    {
+        return (*this)[index];
+    }
+
     size_t GM_ListValue::get_item_count() const
     {
         return m_items->size();
     }
 
-    GM_Value* GM_ListValue::operator[] (int index) const
+    GM_Value* GM_ListValue::operator[] (const size_t& index) const
     {
-        if (index < 0 || index >= get_item_count())
+        if (index >= get_item_count())
         {
-            PRINT_ERROR_F("IndexError: index(%d) out of range(%ld)", index, get_item_count());
+            PRINT_ERROR_F("IndexError: index(%zu) out of range(%ld)", index, get_item_count());
             return nullptr;
         }
 
@@ -85,28 +105,41 @@ namespace GM
 
     GM_FUNCTION_I(GM_ListValue, __add)
     {
-        auto self = param->get_param<GM_ListValue>(0);
-        auto value = param->get_param<GM_Value>(1);
+        GET_PARAM(self, GM_ListValue, 0);
+        GET_VALUE_PARAM(value, 1);
 
-        if (self != nullptr && value != nullptr)
-        {
-            self->add_item(value);
-        }
+        self->add_item(value);
 
         return self;
     }
 
     GM_FUNCTION_I(GM_ListValue, __sub)
     {
-        auto self = param->get_param<GM_ListValue>(0);
-        auto value = param->get_param<GM_IntValue>(1);
+        GET_PARAM(self, GM_ListValue, 0);
+        GET_PARAM(index, GM_IntValue, 1);
 
-        if (self != nullptr && value != nullptr)
-        {
-            self->remove_item((size_t)value->get_value());
-        }
+        self->remove_item((size_t)index->get_value());
 
         return self;
+    }
+
+    GM_FUNCTION_I(GM_ListValue, __set)
+    {
+        GET_PARAM(self, GM_ListValue, 0);
+        GET_PARAM(index, GM_IntValue, 1);
+        GET_VALUE_PARAM(value, 2);
+
+        self->set_item((size_t)index->get_value(), value);
+
+        return self;
+    }
+
+    GM_FUNCTION_I(GM_ListValue, __get)
+    {
+        GET_PARAM(self, GM_ListValue, 0);
+        GET_PARAM(index, GM_IntValue, 1);
+
+        return self->get_item((size_t)index->get_value());
     }
 
 }

@@ -32,10 +32,12 @@ namespace GM
 
         GM_ListValue* add_item(GM_Value* value);
         GM_ListValue* remove_item(const size_t& index);
+        GM_ListValue* set_item(const size_t& index, GM_Value* value);
+        GM_Value* get_item(const size_t& index) const;
 
         size_t get_item_count() const;
 
-        GM_Value* operator[] (int index) const;
+        GM_Value* operator[] (const size_t& index) const;
 
     protected:
         void _init_functions() override;
@@ -46,6 +48,8 @@ namespace GM
     private:
         GM_STATIC_FUNCTION_D(__add);
         GM_STATIC_FUNCTION_D(__sub);
+        GM_STATIC_FUNCTION_D(__set);
+        GM_STATIC_FUNCTION_D(__get);
     };
 
 }
