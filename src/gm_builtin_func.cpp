@@ -31,6 +31,14 @@ if (var_name == nullptr) \
     return GM_Value::null_value(); \
 }
 
+#define GET_CUR_ENV_FUNC(var_name, value, func_name) \
+auto var_name = value->get_cur_env_func(func_name); \
+if (var_name == nullptr) \
+{ \
+    PRINT_ERROR_F("GetFuncError: func(%s) not found", func_name); \
+    return GM_Value::null_value(); \
+}
+
 namespace GM
 {
 
@@ -138,7 +146,7 @@ namespace GM
         auto arg1 = GM_Value::convert_to_value(ast_tree1->eval());
         auto arg2 = GM_Value::convert_to_value(ast_tree2->eval());
 
-        GET_FUNC(func, arg1, FUNC_LS_OP_KEY);
+        GET_CUR_ENV_FUNC(func, arg1, FUNC_LS_OP_KEY);
 
         return func->eval(new GM_Parameter(param->get_environment(),
                                            2, arg1, arg2));
@@ -152,7 +160,7 @@ namespace GM
         auto arg1 = GM_Value::convert_to_value(ast_tree1->eval());
         auto arg2 = GM_Value::convert_to_value(ast_tree2->eval());
 
-        GET_FUNC(func, arg1, FUNC_EQ_OP_KEY);
+        GET_CUR_ENV_FUNC(func, arg1, FUNC_EQ_OP_KEY);
 
         return func->eval(new GM_Parameter(param->get_environment(),
                                            2, arg1, arg2));
@@ -166,7 +174,7 @@ namespace GM
         auto arg1 = GM_Value::convert_to_value(ast_tree1->eval());
         auto arg2 = GM_Value::convert_to_value(ast_tree2->eval());
 
-        GET_FUNC(func, arg1, FUNC_GT_OP_KEY);
+        GET_CUR_ENV_FUNC(func, arg1, FUNC_GT_OP_KEY);
 
         return func->eval(new GM_Parameter(param->get_environment(),
                                            2, arg1, arg2));
@@ -180,7 +188,7 @@ namespace GM
         auto arg1 = dynamic_cast<GM_Value*>(ast_tree1->eval());
         auto arg2 = dynamic_cast<GM_Value*>(ast_tree2->eval());
 
-        GET_FUNC(func, arg1, FUNC_LE_OP_KEY);
+        GET_CUR_ENV_FUNC(func, arg1, FUNC_LE_OP_KEY);
 
         return func->eval(new GM_Parameter(param->get_environment(),
                                            2, arg1, arg2));
@@ -194,7 +202,7 @@ namespace GM
         auto arg1 = GM_Value::convert_to_value(ast_tree1->eval());
         auto arg2 = GM_Value::convert_to_value(ast_tree2->eval());
 
-        GET_FUNC(func, arg1, FUNC_GE_OP_KEY);
+        GET_CUR_ENV_FUNC(func, arg1, FUNC_GE_OP_KEY);
 
         return func->eval(new GM_Parameter(param->get_environment(),
                                            2, arg1, arg2));
@@ -208,7 +216,7 @@ namespace GM
         auto arg1 = GM_Value::convert_to_value(ast_tree1->eval());
         auto arg2 = GM_Value::convert_to_value(ast_tree2->eval());
 
-        GET_FUNC(func, arg1, FUNC_NE_OP_KEY);
+        GET_CUR_ENV_FUNC(func, arg1, FUNC_NE_OP_KEY);
 
         return func->eval(new GM_Parameter(param->get_environment(),
                                            2, arg1, arg2));

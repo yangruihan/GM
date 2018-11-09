@@ -16,7 +16,7 @@ namespace GM
 
         if (left_value != nullptr && right_value != nullptr)
         {
-            auto func = left_value->get_func(FUNC_ADD_OP_KEY);
+            auto func = left_value->get_cur_env_func(FUNC_ADD_OP_KEY);
             if (func == nullptr)
             {
                 PRINT_ERROR_F("FunctionError: %s not found", FUNC_ADD_OP_KEY);
@@ -57,7 +57,7 @@ namespace GM
 
         if (left_value != nullptr && right_value != nullptr)
         {
-            auto func = left_value->get_func(FUNC_SUB_OP_KEY);
+            auto func = left_value->get_cur_env_func(FUNC_SUB_OP_KEY);
             if (func == nullptr)
             {
                 PRINT_ERROR_F("FunctionError: %s not found", FUNC_SUB_OP_KEY);
@@ -98,7 +98,7 @@ namespace GM
 
         if (left_value != nullptr && right_value != nullptr)
         {
-            auto func = left_value->get_func(FUNC_MUL_OP_KEY);
+            auto func = left_value->get_cur_env_func(FUNC_MUL_OP_KEY);
             if (func == nullptr)
             {
                 PRINT_ERROR_F("FunctionError: %s not found", FUNC_MUL_OP_KEY);
@@ -139,7 +139,7 @@ namespace GM
 
         if (left_value != nullptr && right_value != nullptr)
         {
-            auto func = left_value->get_func(FUNC_DIV_OP_KEY);
+            auto func = left_value->get_cur_env_func(FUNC_DIV_OP_KEY);
             if (func == nullptr)
             {
                 PRINT_ERROR_F("FunctionError: %s not found", FUNC_DIV_OP_KEY);

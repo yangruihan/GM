@@ -37,7 +37,9 @@ namespace GM
 
         GM_Environment* get_environment() const { return m_environment; }
 
-        GM_Function* get_func(std::string func_name) const;
+        GM_Function* get_func(const std::string& func_name) const;
+
+        GM_Function* get_cur_env_func(const std::string& func_name) const;
 
         void set_func(GM_Function* func);
 

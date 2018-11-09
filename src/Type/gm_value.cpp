@@ -22,13 +22,20 @@ namespace GM
         return dynamic_cast<GM_Value*>(var_obj);
     }
 
-    GM_Function* GM_Value::get_func(std::string func_name) const
+    GM_Function* GM_Value::get_func(const std::string& func_name) const
     {
         auto func = m_environment->get_var(func_name);
         if (func != nullptr)
-        {
             return dynamic_cast<GM_Function*>(func);
-        }
+
+        return nullptr;
+    }
+
+    GM_Function* GM_Value::get_cur_env_func(const std::string &func_name) const
+    {
+        auto func = m_environment->get_current_env_var(func_name);
+        if (func != nullptr)
+            return dynamic_cast<GM_Function*>(func);
 
         return nullptr;
     }
