@@ -8,6 +8,8 @@ namespace GM
     GM_ListValue::GM_ListValue(GM_Environment* env): GM_Value(env)
     {
         m_items = new std::vector<GM_Value*>();
+
+        _init_functions();
     }
     
     GM_ListValue::~GM_ListValue ()
@@ -17,6 +19,8 @@ namespace GM
 
     void GM_ListValue::_init_functions()
     {
+        GM_VALUE_SET_SELF_FUNCTION(FUNC_ADD_OP_KEY, 2, GM_ListValue::__add);
+        GM_VALUE_SET_SELF_FUNCTION(FUNC_SUB_OP_KEY, 2, GM_ListValue::__sub);
     }
 
     std::string GM_ListValue::_str() const
@@ -29,10 +33,10 @@ namespace GM
         
         for (size_t i = 0; i < m_items->size() - 1; i++)
         {
-            stream << m_items->at(i)->_str() << ", ";
+            stream << m_items->at(i)->str() << ", ";
         }
 
-        stream << m_items->at(m_items->size() - 1)->_str() << "]";
+        stream << m_items->at(m_items->size() - 1)->str() << "]";
 
         return stream.str();
     }
@@ -42,10 +46,23 @@ namespace GM
         if (value == nullptr)
         {
             PRINT_ERROR_F("Nullptr Error: list value add nullptr item");
-            return nullptr;
+            return this;
         }
 
         m_items->push_back(value);
+
+        return this;
+    }
+
+    GM_ListValue* GM_ListValue::remove_item(const size_t &index)
+    {
+        if (index >= m_items->size())
+        {
+            PRINT_ERROR_F("IndexError: index(%zu) is out of range(%zu)", index, m_items->size());
+            return this;
+        }
+
+        m_items->erase(m_items->begin() + index);
 
         return this;
     }
@@ -64,6 +81,32 @@ namespace GM
         }
 
         return m_items->at(index);
+    }
+
+    GM_FUNCTION_I(GM_ListValue, __add)
+    {
+        auto self = param->get_param<GM_ListValue>(0);
+        auto value = param->get_param<GM_Value>(1);
+
+        if (self != nullptr && value != nullptr)
+        {
+            self->add_item(value);
+        }
+
+        return self;
+    }
+
+    GM_FUNCTION_I(GM_ListValue, __sub)
+    {
+        auto self = param->get_param<GM_ListValue>(0);
+        auto value = param->get_param<GM_IntValue>(1);
+
+        if (self != nullptr && value != nullptr)
+        {
+            self->remove_item((size_t)value->get_value());
+        }
+
+        return self;
     }
 
 }

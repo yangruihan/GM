@@ -7,7 +7,7 @@ namespace GM
 
     GM_PairValue::GM_PairValue (GM_Environment* env,
                                 const std::string& key,
-                                GM_Object* value)
+                                GM_Value* value)
         : GM_Value(env), m_key(key), m_value(value)
     { }
 

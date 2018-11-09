@@ -52,7 +52,7 @@ namespace GM
         virtual std::string _str() const = 0;
 
     protected:
-        virtual void _init_functions() = 0;
+        virtual void _init_functions() {};
 
     protected:
         GM_Environment* m_environment;
@@ -87,7 +87,7 @@ namespace GM
 
         static GM_PairValue* pair_value (GM_Environment* env,
                                          const std::string& key,
-                                         GM_Object* value);
+                                         GM_Value* value);
 
         static GM_DictValue* dict_value (GM_Environment* env);
 

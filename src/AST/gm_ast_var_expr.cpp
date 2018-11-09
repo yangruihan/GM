@@ -101,7 +101,7 @@ namespace GM
         return GM_Value::var_name_value(m_environment, m_token);
     }
 
-    GM_Object* GM_AST_VAR_EXPR::get_value() const
+    GM_Value* GM_AST_VAR_EXPR::get_value() const
     {
         return m_environment->get_var(m_token);
     }

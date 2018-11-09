@@ -32,7 +32,7 @@ namespace GM
 
         GM_VarNameValue* get_var_name_value() const;
 
-        GM_Object* get_value() const;
+        GM_Value* get_value() const;
 
     protected:
         bool _check_childs_valid() const override;

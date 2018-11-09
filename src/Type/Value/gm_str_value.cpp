@@ -15,9 +15,7 @@ namespace GM
     
     void GM_StrValue::_init_functions()
     {
-        GM_Value::set_func(GM_Function::create_func(FUNC_ADD_OP_KEY,
-                                                    2,
-                                                    GM_StrValue::__add));
+        GM_VALUE_SET_SELF_FUNCTION(FUNC_ADD_OP_KEY, 2, GM_StrValue::__add);
     }
     
     std::string GM_StrValue::_str() const

@@ -84,7 +84,7 @@ namespace GM
         GET_AST_TREE(ast_tree2, 1);
 
         auto var_key = ast_tree1->get_var_name_value();
-        GM_Object* var_value = nullptr;
+        GM_Value* var_value = nullptr;
 
         auto value_var_expr = dynamic_cast<GM_AST_VAR_EXPR*>(ast_tree2);
         if (value_var_expr != nullptr && value_var_expr->get_token_index() != 0)
@@ -291,7 +291,7 @@ namespace GM
             return GM_Value::null_value();
         }
 
-        GM_Object* var_value = nullptr;
+        GM_Value* var_value = nullptr;
 
         auto value_var_expr = dynamic_cast<GM_AST_VAR_EXPR*>(ast_value);
         if (value_var_expr != nullptr && value_var_expr->get_token_index() != 0)

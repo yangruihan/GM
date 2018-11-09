@@ -496,7 +496,7 @@ namespace GM
         return false;
     }
 
-    GM_Object* GM_Interpreter::get_var_from_loaded_env(const std::string &var_name)
+    GM_Value* GM_Interpreter::get_var_from_loaded_env(const std::string &var_name)
     {
         for (size_t i = 0, count = m_loaded_env->size(); i < count; i++)
         {

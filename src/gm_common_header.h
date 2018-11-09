@@ -39,18 +39,33 @@ GM_Value* (func_name)(const GM_Parameter* param)
 #define GM_FUNCTION_I(class_name, func_name) \
 GM_Value* class_name::func_name(const GM_Parameter* param)
 
-#define GM_VALUE_SET_FUNCTION(func_name, param_count, func) \
-GM_Value::set_func(GM_Function::create_func(func_name, \
+#define GM_VALUE_SET_FUNCTION(env, func_name, param_count, func) \
+GM_Value::set_func(GM_Function::create_func(env, \
+                                            func_name, \
+                                            param_count, \
+                                            func))
+
+#define GM_VALUE_SET_GLOBAL_FUNCTION(func_name, param_count, func) \
+GM_Value::set_func(GM_Function::create_func(GM_Interpreter::instance()->get_global_env(), \
+                                            func_name, \
+                                            param_count, \
+                                            func))
+
+#define GM_VALUE_SET_SELF_FUNCTION(func_name, param_count, func) \
+GM_Value::set_func(GM_Function::create_func(get_environment(), \
+                                            func_name, \
                                             param_count, \
                                             func))
 
 #define GM_ENV_SET_FUNCTION(func_name, param_count, func) \
-env->set_var(func_name, GM_Function::create_func(func_name, \
+env->set_var(func_name, GM_Function::create_func(env, \
+                                                 func_name, \
                                                  param_count, \
                                                  func))
 
 #define GM_ENV_ALIAS_FUNCTION(func_name, origin_func_name, param_count, func) \
-env->set_var(func_name, GM_Function::create_func(func_name, \
+env->set_var(func_name, GM_Function::create_func(env, \
+                                                 func_name, \
                                                  param_count, \
                                                  func))
 

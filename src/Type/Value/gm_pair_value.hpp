@@ -9,7 +9,6 @@
 namespace GM
 {
     class GM_Value;
-    class GM_Object;
     class GM_Environment;
 
     class GM_PairValue : extends(GM_Value)
@@ -17,7 +16,7 @@ namespace GM
     public:
         GM_PairValue (GM_Environment* env,
                       const std::string& key,
-                      GM_Object* value);
+                      GM_Value* value);
         virtual ~GM_PairValue ();
 
     public:
@@ -33,7 +32,7 @@ namespace GM
 
         std::string get_key() const { return m_key; }
 
-        GM_Object* get_value() const { return m_value; }
+        GM_Value* get_value() const { return m_value; }
 
         std::string get_value_str() const { return m_value->str(); }
     
@@ -42,7 +41,7 @@ namespace GM
 
     protected:
         std::string m_key;
-        GM_Object* m_value;
+        GM_Value* m_value;
 
     };
     

@@ -9,6 +9,7 @@
 namespace GM
 {
     class GM_Value;
+    class GM_Object;
     class GM_Environment;
 
     class GM_ListValue : extends(GM_Value)
@@ -30,6 +31,7 @@ namespace GM
         }
 
         GM_ListValue* add_item(GM_Value* value);
+        GM_ListValue* remove_item(const size_t& index);
 
         size_t get_item_count() const;
 
@@ -41,6 +43,9 @@ namespace GM
     protected:
         std::vector<GM_Value*>* m_items;
 
+    private:
+        GM_STATIC_FUNCTION_D(__add);
+        GM_STATIC_FUNCTION_D(__sub);
     };
 
 }

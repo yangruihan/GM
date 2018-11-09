@@ -6,13 +6,13 @@ namespace GM
 
     GM_Environment::GM_Environment ()
     {
-        m_var_map = new std::map<std::string, GM_Object*>();
+        m_var_map = new std::map<std::string, GM_Value*>();
         set_parent(nullptr);
     }
     
     GM_Environment::GM_Environment (GM_Environment* parent)
     {
-        m_var_map = new std::map<std::string, GM_Object*>();
+        m_var_map = new std::map<std::string, GM_Value*>();
         set_parent(parent);
     }
         
@@ -26,7 +26,7 @@ namespace GM
         return new GM_Environment(parent);
     }
     
-    void GM_Environment::set_var(const std::string& var_name, GM_Object *var)
+    void GM_Environment::set_var(const std::string& var_name, GM_Value *var)
     {
         if (var == nullptr)
         {
@@ -37,7 +37,7 @@ namespace GM
         (*m_var_map)[var_name] = var;
     }
     
-    GM_Object* GM_Environment::get_var(const std::string& var_name,
+    GM_Value* GM_Environment::get_var(const std::string& var_name,
                                        const bool& find_loaded_env) const
     {
         if (var_name.size() == 0)
@@ -59,7 +59,7 @@ namespace GM
         }
     }
 
-    GM_Object* GM_Environment::get_current_env_var(const std::string& var_name) const
+    GM_Value* GM_Environment::get_current_env_var(const std::string& var_name) const
     {
         auto it = m_var_map->find(var_name);
         if (it != m_var_map->end())

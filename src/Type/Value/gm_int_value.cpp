@@ -30,16 +30,16 @@ namespace GM
 
     void GM_IntValue::_init_functions()
     {
-        GM_VALUE_SET_FUNCTION(FUNC_ADD_OP_KEY, 2, GM_IntValue::__add);
-        GM_VALUE_SET_FUNCTION(FUNC_SUB_OP_KEY, 2, GM_IntValue::__sub);
-        GM_VALUE_SET_FUNCTION(FUNC_MUL_OP_KEY, 2, GM_IntValue::__mul);
-        GM_VALUE_SET_FUNCTION(FUNC_DIV_OP_KEY, 2, GM_IntValue::__div);
-        GM_VALUE_SET_FUNCTION(FUNC_LS_OP_KEY,  2, GM_IntValue::__ls);
-        GM_VALUE_SET_FUNCTION(FUNC_EQ_OP_KEY,  2, GM_IntValue::__eq);
-        GM_VALUE_SET_FUNCTION(FUNC_GT_OP_KEY,  2, GM_IntValue::__gt);
-        GM_VALUE_SET_FUNCTION(FUNC_LE_OP_KEY,  2, GM_IntValue::__le);
-        GM_VALUE_SET_FUNCTION(FUNC_GE_OP_KEY,  2, GM_IntValue::__ge);
-        GM_VALUE_SET_FUNCTION(FUNC_NE_OP_KEY,  2, GM_IntValue::__ne);
+        GM_VALUE_SET_SELF_FUNCTION(FUNC_ADD_OP_KEY, 2, GM_IntValue::__add);
+        GM_VALUE_SET_SELF_FUNCTION(FUNC_SUB_OP_KEY, 2, GM_IntValue::__sub);
+        GM_VALUE_SET_SELF_FUNCTION(FUNC_MUL_OP_KEY, 2, GM_IntValue::__mul);
+        GM_VALUE_SET_SELF_FUNCTION(FUNC_DIV_OP_KEY, 2, GM_IntValue::__div);
+        GM_VALUE_SET_SELF_FUNCTION(FUNC_LS_OP_KEY,  2, GM_IntValue::__ls);
+        GM_VALUE_SET_SELF_FUNCTION(FUNC_EQ_OP_KEY,  2, GM_IntValue::__eq);
+        GM_VALUE_SET_SELF_FUNCTION(FUNC_GT_OP_KEY,  2, GM_IntValue::__gt);
+        GM_VALUE_SET_SELF_FUNCTION(FUNC_LE_OP_KEY,  2, GM_IntValue::__le);
+        GM_VALUE_SET_SELF_FUNCTION(FUNC_GE_OP_KEY,  2, GM_IntValue::__ge);
+        GM_VALUE_SET_SELF_FUNCTION(FUNC_NE_OP_KEY,  2, GM_IntValue::__ne);
     }
 
     std::string GM_IntValue::_str() const

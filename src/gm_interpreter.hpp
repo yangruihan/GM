@@ -93,7 +93,9 @@ namespace GM
 
         bool get_running_flag() const;
 
-        GM_Object* get_var_from_loaded_env(const std::string& var_name);
+        GM_Value* get_var_from_loaded_env(const std::string& var_name);
+
+        GM_Environment* get_global_env() const { return m_global_environment; }
 
     private:
         void set_parse_mode(const size_t& mode)

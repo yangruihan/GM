@@ -9,21 +9,26 @@
 namespace GM
 {
 
-    class GM_Function : extends(GM_Object)
+    class GM_Value;
+    class GM_Environment;
+
+    class GM_Function : extends(GM_Value)
     {
 
     public:
-        GM_Function (const std::string func_name,
+        GM_Function (GM_Environment* env,
+                     const std::string func_name,
                      const int& param_count,
                      const GM_FUNCTION_PTR func);
         virtual ~GM_Function ();
     
     public:
-        static GM_Function* create_func(const std::string name,
+        static GM_Function* create_func(GM_Environment* env,
+                                        const std::string name,
                                          const int& param_count,
                                          const GM_FUNCTION_PTR func);
 
-        std::string str() const override
+        std::string _str() const override
         {
             return GM_Utils::format_str("[$GM_Function, name:%s]",
                                         get_name().c_str());
