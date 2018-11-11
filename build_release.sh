@@ -8,6 +8,10 @@ if [ ! -d "bin/Release" ]; then
     mkdir -p bin/Release
 fi
 
+if [ ! -d "bin/Test" ]; then
+    mkdir -p bin/Test
+fi
+
 if [ "$1" = "-d" ]; then
     cd build/CMake/Release && cmake -DCMAKE_BUILD_TYPE=Release -DDEBUG=ON ../../../ && make -j
 else

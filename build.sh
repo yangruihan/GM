@@ -8,4 +8,8 @@ if [ ! -d "bin/Debug" ]; then
     mkdir -p bin/Debug
 fi
 
+if [ ! -d "bin/Test" ]; then
+    mkdir -p bin/Test
+fi
+
 cd build/CMake/Debug && cmake -DCMAKE_BUILD_TYPE=Debug -DDEBUG=ON ../../../ && make -j

@@ -24,3 +24,5 @@ add_subdirectory(src/Common)
 add_subdirectory(src/Core)
 add_subdirectory(src/Type)
 add_subdirectory(src/Type/Value)
+
+add_subdirectory(test)
