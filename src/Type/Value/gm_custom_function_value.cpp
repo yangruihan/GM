@@ -1,6 +1,6 @@
 #include "gm_custom_function_value.hpp"
 
-#include "../../GM.h"
+#include "GM.h"
 #include <sstream>
 
 namespace GM

@@ -1,8 +1,8 @@
 #pragma once
 
 #include "gm_object.hpp"
-#include "Common/gm_errors.hpp"
-#include "Common/gm_utils.hpp"
+#include "../Common/gm_errors.hpp"
+#include "../Common/gm_utils.hpp"
 
 #include <cstdint>
 

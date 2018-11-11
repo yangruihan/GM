@@ -1,5 +1,5 @@
 #include "gm_float_value.hpp"
-#include "../../GM.h"
+#include "GM.h"
 
 namespace GM
 {

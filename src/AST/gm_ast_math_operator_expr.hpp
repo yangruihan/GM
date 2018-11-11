@@ -1,6 +1,6 @@
 #pragma once
 
-#include "../gm_common_header.h"
+#include "../Core/gm_common_header.h"
 #include "gm_ast_binary_expr.hpp"
 
 namespace GM

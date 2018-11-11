@@ -1,6 +1,6 @@
 #include "gm_bool_value.hpp"
 
-#include "../../GM.h"
+#include "GM.h"
 
 namespace GM
 {

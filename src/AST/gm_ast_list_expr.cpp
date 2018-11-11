@@ -1,6 +1,6 @@
 #include "gm_ast_list_expr.hpp"
 
-#include "../GM.h"
+#include "GM.h"
 #include <sstream>
 
 namespace GM

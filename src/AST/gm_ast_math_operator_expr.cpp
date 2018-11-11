@@ -1,5 +1,5 @@
 #include "gm_ast_math_operator_expr.hpp"
-#include "../GM.h"
+#include "GM.h"
 
 namespace GM
 {

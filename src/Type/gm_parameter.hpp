@@ -4,7 +4,7 @@
 #include <vector>
 #include <map>
 
-#include "../gm_common_header.h"
+#include "../Core/gm_common_header.h"
 
 namespace GM
 {

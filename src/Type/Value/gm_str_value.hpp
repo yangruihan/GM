@@ -2,7 +2,7 @@
 
 #include <string>
 
-#include "../../gm_common_header.h"
+#include "../../Core/gm_common_header.h"
 #include "../gm_value.hpp"
 #include "../gm_types.h"
 #include "../gm_parameter.hpp"

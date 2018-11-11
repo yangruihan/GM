@@ -1,5 +1,5 @@
 #include "gm_ast_var_expr.hpp"
-#include "../GM.h"
+#include "GM.h"
 
 #include <vector>
 

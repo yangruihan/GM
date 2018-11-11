@@ -1,5 +1,5 @@
 #include "gm_ast_str_literal_expr.hpp"
-#include "../GM.h"
+#include "GM.h"
 
 namespace GM
 {

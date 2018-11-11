@@ -4,7 +4,7 @@
 #include <stack>
 #include <sstream>
 #include <fstream>
-#include "../GM.h"
+#include "GM.h"
 
 namespace GM
 {

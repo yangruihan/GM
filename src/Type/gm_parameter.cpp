@@ -2,7 +2,7 @@
 
 #include <cstdarg>
 
-#include "../GM.h"
+#include "GM.h"
 
 namespace GM
 {

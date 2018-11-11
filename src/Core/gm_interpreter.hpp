@@ -5,8 +5,8 @@
 
 #include "gm_common_header.h"
 #include "gm_environment.hpp"
-#include "AST/gm_ast_header.h"
-#include "Type/gm_types_header.h"
+#include "../AST/gm_ast_header.h"
+#include "../Type/gm_types_header.h"
 
 //#define GM_TOKEN_C_ENDLINE  100     // \0
 //#define GM_TOKEN_C_LEFT_P   101     // (

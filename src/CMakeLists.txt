@@ -22,8 +22,9 @@ add_executable(
 
 target_link_libraries(
     GM
-    AST
+    Core
     Common
+    AST
     Type
     Type_Value
 )

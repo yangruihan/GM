@@ -3,9 +3,9 @@
 #include <vector>
 #include <string>
 
-#include "../gm_common_header.h"
+#include "../Core/gm_common_header.h"
 #include "../Type/gm_value.hpp"
-#include "../gm_environment.hpp"
+#include "../Core/gm_environment.hpp"
 
 namespace GM
 {

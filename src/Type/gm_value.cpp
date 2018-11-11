@@ -1,7 +1,7 @@
 #include "gm_value.hpp"
 #include "gm_function.hpp"
 
-#include "../GM.h"
+#include "GM.h"
 
 namespace GM
 {

@@ -1,5 +1,5 @@
 #include "gm_dict_value.hpp"
-#include "../../GM.h"
+#include "GM.h"
 
 #include <sstream>
 

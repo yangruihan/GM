@@ -1,6 +1,6 @@
 #include "gm_ast_literal_expr.hpp"
 
-#include "../GM.h"
+#include "GM.h"
 
 namespace GM
 {
