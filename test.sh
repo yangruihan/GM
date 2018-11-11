@@ -1,4 +1,4 @@
 #!/usr/bin/env bash
 
-bash build.sh $* \
+bash build_release.sh $* \
 && ./bin/Test/GM_test
