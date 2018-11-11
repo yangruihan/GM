@@ -1,7 +1,7 @@
 aux_source_directory(. SRC_FILES)
 
-file(GLOB GM_HEADERS_PLUS ./*.hpp)
-file(GLOB GM_HEADERS ./*.h)
+file(GLOB GM_HEADERS_PLUS "${PROJECT_SOURCE_DIR}/include/GM/Type/*.hpp")
+file(GLOB GM_HEADERS "${PROJECT_SOURCE_DIR}/include/GM/Type/*.h")
 
 source_group("Headers" FILES ${GM_HEADERS_PLUS})
 source_group("Headers" FILES ${GM_HEADERS})
