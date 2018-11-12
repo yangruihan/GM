@@ -36,7 +36,7 @@ namespace GM
         {
             auto count = get_child_count();
 
-            if (count == 0)
+            if (count == 0 && func->get_param_count() > 0)
             {
                 GM_Value::var_name_value(get_environment(), m_token);
             }
