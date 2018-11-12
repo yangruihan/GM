@@ -31,6 +31,9 @@ namespace GM
         }
         
         std::string get_value() { return m_value; }
+
+        std::string get(const size_t& index) const;
+        GM_StrValue* set(const size_t& index, const char& value);
     
     protected:
         std::string m_value;
@@ -39,6 +42,8 @@ namespace GM
         
     private:
         
-        static GM_Value* __add(const GM_Parameter* param);
+        GM_STATIC_FUNCTION_D(__add);
+        GM_STATIC_FUNCTION_D(__set);
+        GM_STATIC_FUNCTION_D(__get);
     };
 }
