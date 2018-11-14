@@ -46,7 +46,7 @@ namespace GM
                 m_current_token_index = 0;
             }
 
-            ~GM_InterpreterData()
+            virtual ~GM_InterpreterData()
             {
                 delete m_token_index_stack;
             }
