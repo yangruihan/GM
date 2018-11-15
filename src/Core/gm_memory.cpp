@@ -214,4 +214,32 @@ namespace GM
         _free(p);
         return alloc_ret;
     }
+
+    LEGACY_MEMORY_POOL_FH(void)::dump(std::ostream &os)
+    {
+        auto ptr = m_b_head;
+        os << GM_Utils::format_str("Memory Info | available: %zu\n", m_b_free_size);
+        if (ptr->next == ptr)
+        {
+            if (_block_get_f(ptr) == block_flag::BLOCK_USING)
+                _dump_block(ptr, os);
+            else
+                os << "Memory Info | All Free." << std::endl;
+        }
+        else
+        {
+            _dump_block(ptr, os);
+            ptr = ptr->next;
+            while (ptr != m_b_head)
+            {
+                _dump_block(ptr, os);
+                ptr = ptr->next;
+            }
+        }
+    }
+
+    LEGACY_MEMORY_POOL_FH(void)::_dump_block(GM_LegacyMemoryPool::block *blk, std::ostream &os)
+    {
+        os << GM_Utils::format_str("Memory Info | [%p-%p] Size: %8zu, State: %s\n", blk, blk + blk->size, blk->size, (_block_get_f(blk) ? "Free" : "Using"));
+    }
 }

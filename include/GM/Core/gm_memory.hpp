@@ -1,6 +1,7 @@
 #pragma once
 
 #include "gm_common_header.h"
+#include <iostream>
 
 #define C_DEFAULT_ALLOC_BLOCK_SIZE 0x10000
 
@@ -128,6 +129,8 @@ namespace GM
         size_t available() const { return m_b_free_size; }
         void clear() { _init(); }
 
+        void dump(std::ostream& os);
+        
     private:
         Allocator m_allocator;
         block* m_b_head = nullptr;
@@ -155,5 +158,65 @@ namespace GM
         void* _alloc_cur_block(const size_t& size);
         bool _verify_address(const block* b, const block_flag& flag);
 
+        static void _dump_block(block* blk, std::ostream& os);
     };
+
+    /**
+     * MemoryPool Allocator
+     *
+     */
+    template<class Allocator = GM_DefaultAllocator, size_t DefaultSize = C_DEFAULT_ALLOC_BLOCK_SIZE>
+    class GM_LegacyMemoryPoolAllocator : extends(GM_Object)
+    {
+    public:
+        static const size_t DEFAULT_ALLOC_BLOCK_SIZE = DefaultSize - 2;
+
+        template<class T>
+        T* alloc()
+        {
+            return m_memory_pool.template alloc<T>();
+        }
+
+        template<class T>
+        T* alloc_arr(const size_t& count)
+        {
+            return m_memory_pool.template alloc_arr<T>(count);
+        }
+
+        template<class T, class ... TArgs>
+        T* alloc_args(const TArgs &&... args)
+        {
+            return m_memory_pool.template alloc_args<T>(std::forward(args)...);
+        }
+
+        template<class T, class ... TArgs>
+        T* alloc_arr_args(const size_t& count, const TArgs &&... args)
+        {
+            return m_memory_pool.template alloc_arr_args<T>(count, std::forward(args)...);
+        }
+
+        template<class T>
+        T* realloc(T* t, const size_t& new_size)
+        {
+            return m_memory_pool.template realloc(t, new_size);
+        }
+
+        template<class T>
+        bool free(T* t)
+        {
+            return m_memory_pool.free(t);
+        }
+
+        template<class T>
+        bool free_arr(T* t)
+        {
+            return m_memory_pool.free_array(t);
+        }
+
+    private:
+        GM_LegacyMemoryPool<Allocator, DefaultSize> m_memory_pool;
+    };
+
+    template<size_t DefaultSize = C_DEFAULT_ALLOC_BLOCK_SIZE>
+    using GM_MemoryPool = GM_LegacyMemoryPool<GM_LegacyMemoryPoolAllocator<GM_DefaultAllocator, DefaultSize>>;
 }
