@@ -18,6 +18,7 @@ RUN echo "*** Installing gcc (4.9->8) and clang (3.8->6) ***" \
   && apt-get install -y clang++-4.0 \
   && apt-get install -y clang++-5.0 \
   && apt-get install -y clang++-6.0 \
+  && apt-get install -y gdb \
   && apt-get autoremove --purge -y \
   && apt-get autoclean -y \
   && rm -rf /var/cache/apt/* /tmp/* \
