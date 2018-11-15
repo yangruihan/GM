@@ -273,8 +273,8 @@ namespace GM
             }
 
             // merge neighbor block
-            auto prev_b_mask = _block_get_f(blk->prev) && blk->prev < blk;
-            auto next_b_mask = _block_get_f(blk->next) && blk < blk->next;
+            auto prev_b_mask = (_block_get_f(blk->prev) == block_flag::BLOCK_FREE) && blk->prev < blk;
+            auto next_b_mask = (_block_get_f(blk->next) == block_flag::BLOCK_FREE) && blk < blk->next;
             auto mask = (prev_b_mask << 1) + next_b_mask;
             auto prev_b = blk->prev;
             auto next_b = blk->next;
