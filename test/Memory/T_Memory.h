@@ -4,14 +4,14 @@
 namespace GM_Test
 {
 
-    class T_Interpreter : extends(::testing::Test)
+    class T_Memory : extends(::testing::Test)
     {
     protected:
         void SetUp() override;
         void TearDown() override;
 
     protected:
-        GM::GM_Interpreter* m_interpreter;
+        GM::GM_MemoryPool<10>* m_mem_pool;
     };
 
 }
