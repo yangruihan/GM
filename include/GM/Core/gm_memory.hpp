@@ -135,6 +135,7 @@ namespace GM
         void dump(std::ostream& os)
         {
             auto ptr = m_b_head;
+            os << "\n--------------------------------------------------" << std::endl;
             os << GM_Utils::format_str("Memory Info | available: %zu\n", m_b_free_size);
             if (ptr->next == ptr)
             {
@@ -153,6 +154,7 @@ namespace GM
                     ptr = ptr->next;
                 }
             }
+            os << "--------------------------------------------------\n" << std::endl;
         }
         
     private:
@@ -197,7 +199,7 @@ namespace GM
         {
             next->next->prev = curt;
             curt->next = next->next;
-            curt->size += next->size + 1;
+            curt->size += next->size;
             return curt->size;
         }
 
@@ -246,11 +248,11 @@ namespace GM
             auto blk = m_b_curt;
             do
             {
-                if (_block_get_f(blk) == block_flag::BLOCK_FREE
+                if ((_block_get_f(blk) == block_flag::BLOCK_FREE)
                     && blk->size >= aligned_size + 1)
                 {
                     m_b_curt = blk;
-                    return _alloc_free_block(size);
+                    return _alloc_free_block(aligned_size);
                 }
                 blk = blk->next;
             } while (blk != m_b_curt);
@@ -274,36 +276,38 @@ namespace GM
 
             // merge neighbor block
             auto prev_b_mask = (_block_get_f(blk->prev) == block_flag::BLOCK_FREE) && blk->prev < blk;
-            auto next_b_mask = (_block_get_f(blk->next) == block_flag::BLOCK_FREE) && blk < blk->next;
+            auto next_b_mask = (_block_get_f(blk->prev) == block_flag::BLOCK_FREE) && blk < blk->next;
             auto mask = (prev_b_mask << 1) + next_b_mask;
             auto prev_b = blk->prev;
             auto next_b = blk->next;
 
+            blk->size++;
+            m_b_free_size += blk->size;
+
             switch (mask)
             {
                 case 0:
-                    m_b_free_size += blk->size + 1;
                     _block_set_f(blk, block_flag::BLOCK_FREE);
                     break;
 
                 case 1:
                     if (m_b_curt == next_b)
                         m_b_curt = blk;
-                    m_b_free_size += _block_merge(blk, next_b);
+                    _block_merge(blk, next_b);
                     _block_set_f(blk, block_flag::BLOCK_FREE);
                     break;
 
                 case 2:
                     if (m_b_curt == blk)
                         m_b_curt = prev_b;
-                    m_b_free_size += _block_merge(prev_b, prev_b->next);
+                    _block_merge(prev_b, prev_b->next);
                     break;
 
                 case 3:
                     if (m_b_curt == blk->next)
                         m_b_curt = blk->prev;
-                    m_b_free_size += _block_merge(prev_b, blk);
-                    m_b_free_size += _block_merge(prev_b, next_b);
+                    _block_merge(prev_b, blk);
+                    _block_merge(prev_b, next_b);
                     break;
             }
 
@@ -368,7 +372,11 @@ namespace GM
 
         static void _dump_block(block* blk, std::ostream& os)
         {
-            os << GM_Utils::format_str("Memory Info | [%p-%p] Size: %8zu, State: %s\n", blk, blk + blk->size, blk->size, (_block_get_f(blk) ? "Free" : "Using"));
+            os << GM_Utils::format_str("Memory Info | [%p-%p] Size: %8zu, State: %s\n",
+                                       blk,
+                                       blk + blk->size,
+                                       blk->size,
+                                       (_block_get_f(blk) == block_flag::BLOCK_USING ? "USING" : "FREE"));
         }
     };
 
@@ -384,62 +392,63 @@ namespace GM
     template<class Allocator, size_t DefaultSize>
     const size_t GM_LegacyMemoryPool<Allocator, DefaultSize>::DEFAULT_ALLOC_MEMORY_SIZE;
 
-    /**
-     * MemoryPool Allocator
-     *
-     */
-    template<class Allocator = GM_DefaultAllocator<>, size_t DefaultSize = Allocator::DEFAULT_ALLOC_BLOCK_SIZE>
-    class GM_LegacyMemoryPoolAllocator : extends(GM_Object)
-    {
-    public:
-        static const size_t DEFAULT_ALLOC_BLOCK_SIZE = DefaultSize - 2;
-
-        template<class T>
-        T* alloc()
-        {
-            return m_memory_pool.template alloc<T>();
-        }
-
-        template<class T>
-        T* alloc_arr(const size_t& count)
-        {
-            return m_memory_pool.template alloc_arr<T>(count);
-        }
-
-        template<class T, class ... TArgs>
-        T* alloc_args(const TArgs &&... args)
-        {
-            return m_memory_pool.template alloc_args<T>(std::forward(args)...);
-        }
-
-        template<class T, class ... TArgs>
-        T* alloc_arr_args(const size_t& count, const TArgs &&... args)
-        {
-            return m_memory_pool.template alloc_arr_args<T>(count, std::forward(args)...);
-        }
-
-        template<class T>
-        T* realloc(T* t, const size_t& new_size)
-        {
-            return m_memory_pool.template realloc(t, new_size);
-        }
-
-        template<class T>
-        bool free(T* t)
-        {
-            return m_memory_pool.free(t);
-        }
-
-        template<class T>
-        bool free_arr(T* t)
-        {
-            return m_memory_pool.free_array(t);
-        }
-
-    private:
-        GM_LegacyMemoryPool<Allocator, DefaultSize> m_memory_pool;
-    };
+//    /**
+//     * MemoryPool Allocator
+//     *
+//     */
+//    template<class Allocator = GM_DefaultAllocator<>, size_t DefaultSize = Allocator::DEFAULT_ALLOC_BLOCK_SIZE>
+//    class GM_LegacyMemoryPoolAllocator : extends(GM_Object)
+//    {
+//    public:
+//        static const size_t DEFAULT_ALLOC_BLOCK_SIZE = DefaultSize - 2;
+//
+//        template<class T>
+//        T* alloc()
+//        {
+//            return m_memory_pool.template alloc<T>();
+//        }
+//
+//        template<class T>
+//        T* alloc_arr(const size_t& count)
+//        {
+//            PRINT_ERROR_F("--- pool allocator %zu", count);
+//            return m_memory_pool.template alloc_arr<T>(count);
+//        }
+//
+//        template<class T, class ... TArgs>
+//        T* alloc_args(const TArgs &&... args)
+//        {
+//            return m_memory_pool.template alloc_args<T>(std::forward(args)...);
+//        }
+//
+//        template<class T, class ... TArgs>
+//        T* alloc_arr_args(const size_t& count, const TArgs &&... args)
+//        {
+//            return m_memory_pool.template alloc_arr_args<T>(count, std::forward(args)...);
+//        }
+//
+//        template<class T>
+//        T* realloc(T* t, const size_t& new_size)
+//        {
+//            return m_memory_pool.template realloc(t, new_size);
+//        }
+//
+//        template<class T>
+//        bool free(T* t)
+//        {
+//            return m_memory_pool.free(t);
+//        }
+//
+//        template<class T>
+//        bool free_arr(T* t)
+//        {
+//            return m_memory_pool.free_array(t);
+//        }
+//
+//    private:
+//        GM_LegacyMemoryPool<Allocator, DefaultSize> m_memory_pool;
+//    };
 
     template<size_t DefaultSize = GM_DefaultAllocator<>::DEFAULT_ALLOC_BLOCK_SIZE>
-    using GM_MemoryPool = GM_LegacyMemoryPool<GM_LegacyMemoryPoolAllocator<GM_DefaultAllocator<DefaultSize>, DefaultSize>>;
+    using GM_MemoryPool = GM_LegacyMemoryPool<GM_DefaultAllocator<DefaultSize>>;
 }
