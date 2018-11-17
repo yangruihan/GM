@@ -1,5 +1,6 @@
 #include "gtest/gtest.h"
 #include "GM.h"
+#include "estd/memory_pool.hpp"
 
 namespace GM_Test
 {
@@ -11,7 +12,7 @@ namespace GM_Test
         void TearDown() override;
 
     protected:
-        GM::GM_MemoryPool<10>* m_mem_pool;
+        estd::memory_pool<>* m_mem_pool;
     };
 
 }

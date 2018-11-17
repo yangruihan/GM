@@ -6,7 +6,6 @@
 #include "Core/gm_environment.hpp"
 #include "Core/gm_interpreter.hpp"
 #include "Core/gm_interpreter_utils.hpp"
-#include "Core/gm_memory.hpp"
 
 #include "Type/gm_types.h"
 #include "Type/gm_types_header.h"

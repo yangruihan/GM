@@ -6,7 +6,7 @@ namespace GM_Test
 
     void T_Memory::SetUp()
     {
-        m_mem_pool = new GM::GM_MemoryPool<10>();
+        m_mem_pool = new estd::memory_pool<>();
     }
 
     void T_Memory::TearDown()
@@ -32,9 +32,13 @@ namespace GM_Test
         ASSERT_EQ(*j, 52);
         ASSERT_EQ(*j + *i, 80);
         auto k = m_mem_pool->alloc<int>();
-        ASSERT_EQ(0x40, (j - i) * sizeof(int));
-        ASSERT_EQ(0x40, (k - j) * sizeof(int));
-        m_mem_pool->alloc<int>();
+        ASSERT_EQ(m_mem_pool->block_size() * 2, (j - i) * sizeof(int));
+        ASSERT_EQ(m_mem_pool->block_size() * 2, (k - j) * sizeof(int));
+        ASSERT_TRUE(m_mem_pool->free(i));
+        ASSERT_TRUE(m_mem_pool->free(j));
+        ASSERT_TRUE(m_mem_pool->free(k));
+        for (size_t i = 0; i < (4096 / m_mem_pool->block_size() / 2); i++)
+            m_mem_pool->alloc<int>();
         ASSERT_EQ(nullptr, m_mem_pool->alloc<int>());
     }
 
@@ -43,7 +47,7 @@ namespace GM_Test
         int* i[] =
         {
             m_mem_pool->alloc<int>(),
-            m_mem_pool->alloc_arr<int>(32),
+            m_mem_pool->alloc_arr<int>(3960 / sizeof(int)),
             m_mem_pool->alloc<int>(),
         };
         *(i[0]) = 1;
@@ -53,7 +57,7 @@ namespace GM_Test
         ASSERT_EQ(nullptr, m_mem_pool->alloc_arr<int>(32));
         ASSERT_TRUE(m_mem_pool->free(i[1]));
         ASSERT_TRUE(m_mem_pool->free(i[2]));
-        i[1] = m_mem_pool->alloc_arr<int>(32);
+        i[1] = m_mem_pool->alloc_arr<int>(3960 / sizeof(int));
         *(i[1] + 2) = 100;
         ASSERT_EQ(100, *(i[1] + 2));
         ASSERT_NE(nullptr, i[1]);
