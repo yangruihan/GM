@@ -10,7 +10,6 @@
 #define implements(class_name) public class_name
 
 
-
 // --------------- Common conversion --------------- //
 #define GM_SOURCE_FILE_SUFFIX ".gm"
 #define GM_INTERPRETER_RUN_FLAG "__GM__INTERPRETER_RUN_FLAG__"
@@ -21,6 +20,7 @@
 
 #define GM_AST_VARIADIC_PARAMS_FLAG SIZE_MAX
 
+#define GM_DEFAULT_MEMORY_CHUNK_SIZE 4096
 
 
 // --------------- Function Key Define --------------- //
@@ -54,7 +54,6 @@
 #define BUILTIN_FUNC_LOAD   "import"
 #define BUILTIN_FUNC_SET    "set"
 #define BUILTIN_FUNC_GET    "get"
-
 
 
 // --------------- Common Macro --------------- //
