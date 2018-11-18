@@ -4,7 +4,7 @@
 #include "estd/memory_pool.hpp"
 
 #include <vector>
-#include <forward_list>
+#include <utility>
 
 namespace GM
 {
@@ -57,6 +57,7 @@ namespace GM
 
             auto chunk = _get_enough_size_chunk(size, m_curt_memory_idx);
             T* ret = chunk->self->alloc<T>();
+            new (ret) T();
             static_cast<GM_Object*>(ret)->m_memory_chunk_idx = m_curt_memory_idx;
             return ret;
         }
@@ -70,31 +71,35 @@ namespace GM
             auto chunk = _get_enough_size_chunk(size, m_curt_memory_idx);
             T* ret = chunk->self->alloc_arr<T>(count);
             for (size_t i = 0; i < count; i++)
-                static_cast<GM_Object*>(ret + i)->m_memory_chunk_idx = m_curt_memory_idx;
+            {
+                auto gm_obj = static_cast<GM_Object*>(ret + i);
+                new (ret + i) T();
+                gm_obj->m_memory_chunk_idx = m_curt_memory_idx;
+            }
             return ret;
         }
 
         template<class T = GM_Object, class ...TArgs>
-        T* alloc_args(const TArgs &&... args)
+        T* alloc_args(TArgs &&... args)
         {
             auto size = sizeof(T);
             if (size >= m_max_alloc_size)
                 return nullptr;
 
             auto chunk = _get_enough_size_chunk(size, m_curt_memory_idx);
-            T* ret = chunk->self->alloc_args<T>(std::forward(args)...);
+            T* ret = chunk->self->alloc_args<T>(std::forward<TArgs>(args)...);
             static_cast<GM_Object*>(ret)->m_memory_chunk_idx = m_curt_memory_idx;
             return ret;
         }
 
         template<class T = GM_Object, class ...TArgs>
-        T* alloc_arr_args(const size_t& count, const TArgs &&... args)
+        T* alloc_arr_args(const size_t& count, TArgs &&... args)
         {
             auto size = sizeof(T) * count;
             if (size >= m_max_alloc_size)
                 return nullptr;
             auto chunk = _get_enough_size_chunk(size, m_curt_memory_idx);
-            T* ret = chunk->self->alloc_arr_args<T>(count, std::forward(args)...);
+            T* ret = chunk->self->alloc_arr_args<T>(count, std::forward<TArgs>(args)...);
             for (size_t i = 0; i < count; i++)
                 static_cast<GM_Object*>(ret + i)->m_memory_chunk_idx = m_curt_memory_idx;
             return ret;

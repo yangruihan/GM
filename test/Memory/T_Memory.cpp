@@ -1,5 +1,7 @@
 #include "T_Memory.h"
+
 #include <iostream>
+#include <string>
 
 namespace GM_Test
 {
@@ -7,15 +9,18 @@ namespace GM_Test
     void T_Memory::SetUp()
     {
         m_mem_pool = new estd::memory_pool<>();
+        m_mem_ma = new GM::GM_MemoryManager();
     }
 
     void T_Memory::TearDown()
     {
         delete m_mem_pool;
+        delete m_mem_ma;
     }
 
     TEST_F(T_Memory, BaseTypeAllocAndFree)
     {
+        ASSERT_NE(nullptr, m_mem_pool);
         int* i = m_mem_pool->alloc<int>();
         *i = 100;
         ASSERT_EQ(*i, 100);
@@ -50,6 +55,7 @@ namespace GM_Test
 
     TEST_F(T_Memory, ComTypeAllocAndFree)
     {
+        ASSERT_NE(nullptr, m_mem_pool);
         int* i[] =
         {
             m_mem_pool->alloc<int>(),
@@ -80,5 +86,16 @@ namespace GM_Test
         ASSERT_NE(nullptr, j);
         *j = 500;
         ASSERT_EQ(500, *j);
+    }
+
+    TEST_F(T_Memory, GM_MemoryManagerBaseTypeAllocAndFree)
+    {
+        ASSERT_NE(nullptr, m_mem_ma);
+        GM::GM_Environment* env = m_mem_ma->alloc<GM::GM_Environment>();
+        ASSERT_NE(nullptr, env);
+        ASSERT_EQ(nullptr, env->get_parent());
+        GM::GM_StrValue* strValue = m_mem_ma->alloc_args<GM::GM_StrValue>(env, "hello world");
+        ASSERT_NE(nullptr, strValue);
+        ASSERT_STREQ(strValue->get_value().c_str(), "hello world");
     }
 }

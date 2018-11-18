@@ -13,6 +13,7 @@ namespace GM_Test
 
     protected:
         estd::memory_pool<>* m_mem_pool;
+        GM::GM_MemoryManager* m_mem_ma;
     };
 
 }
