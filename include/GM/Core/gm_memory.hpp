@@ -14,22 +14,27 @@ namespace GM
     private:
         struct memory_chunk
         {
-            estd::memory_pool<GM_DEFAULT_MEMORY_CHUNK_SIZE>* self;
+            estd::memory_pool<GM_DEFAULT_MEMORY_CHUNK_SIZE>* pool;
             memory_chunk* next;
 
             memory_chunk()
             {
-                self = new estd::memory_pool<GM_DEFAULT_MEMORY_CHUNK_SIZE>();
+                pool = new estd::memory_pool<GM_DEFAULT_MEMORY_CHUNK_SIZE>();
             }
 
             ~memory_chunk()
             {
-                delete self;
+                delete pool;
             }
 
             size_t free_size() const
             {
-                return self->available();
+                return pool->available();
+            }
+
+            void dump(std::ostream& os) const
+            {
+                pool->dump(os);
             }
         };
 
@@ -56,7 +61,7 @@ namespace GM
                 return nullptr;
 
             auto chunk = _get_enough_size_chunk(size, m_curt_memory_idx);
-            T* ret = chunk->self->alloc<T>();
+            T* ret = chunk->pool->alloc<T>();
             new (ret) T();
             static_cast<GM_Object*>(ret)->m_memory_chunk_idx = m_curt_memory_idx;
             return ret;
@@ -69,7 +74,7 @@ namespace GM
             if (size >= m_max_alloc_size)
                 return nullptr;
             auto chunk = _get_enough_size_chunk(size, m_curt_memory_idx);
-            T* ret = chunk->self->alloc_arr<T>(count);
+            T* ret = chunk->pool->alloc_arr<T>(count);
             for (size_t i = 0; i < count; i++)
             {
                 auto gm_obj = static_cast<GM_Object*>(ret + i);
@@ -87,7 +92,7 @@ namespace GM
                 return nullptr;
 
             auto chunk = _get_enough_size_chunk(size, m_curt_memory_idx);
-            T* ret = chunk->self->alloc_args<T>(std::forward<TArgs>(args)...);
+            T* ret = chunk->pool->alloc_args<T>(std::forward<TArgs>(args)...);
             static_cast<GM_Object*>(ret)->m_memory_chunk_idx = m_curt_memory_idx;
             return ret;
         }
@@ -99,7 +104,7 @@ namespace GM
             if (size >= m_max_alloc_size)
                 return nullptr;
             auto chunk = _get_enough_size_chunk(size, m_curt_memory_idx);
-            T* ret = chunk->self->alloc_arr_args<T>(count, std::forward<TArgs>(args)...);
+            T* ret = chunk->pool->alloc_arr_args<T>(count, std::forward<TArgs>(args)...);
             for (size_t i = 0; i < count; i++)
                 static_cast<GM_Object*>(ret + i)->m_memory_chunk_idx = m_curt_memory_idx;
             return ret;
@@ -111,32 +116,63 @@ namespace GM
             // TODO if chunk size is not enough, change a chunk
             auto memory_chunk_idx = static_cast<GM_Object*>(obj)->m_memory_chunk_idx;
             auto chunk = chunks[memory_chunk_idx];
-            return chunk->self->realloc<T, Y>(obj);
+            return chunk->pool->realloc<T, Y>(obj);
         }
 
         template<class T>
-        bool free(T* obj)
+        bool free(T*& obj)
         {
             auto memory_chunk_idx = static_cast<GM_Object*>(obj)->m_memory_chunk_idx;
             auto chunk = chunks[memory_chunk_idx];
-            return chunk->self->free(obj);
+            auto ret = chunk->pool->free(obj);
+            obj = nullptr;
+            return ret;
         }
 
         template<class T>
-        bool free_arr(T* obj)
+        bool free_arr(T*& obj)
         {
             auto memory_chunk_idx = static_cast<GM_Object*>(obj)->m_memory_chunk_idx;
             auto chunk = chunks[memory_chunk_idx];
-            return chunk->self->free_arr(obj);
+            auto ret = chunk->pool->free_arr(obj);
+            obj = nullptr;
+            return ret;
+        }
+
+    public:
+        void dump(std::ostream& os) const
+        {
+            os << "\n----------------------------------------------------------------------------------------" << std::endl;
+            os << "--- Memory Manager Info ---" << std::endl;
+            os << GM_Utils::format_str("- Memory | sum: \t\t%zuB\n", (GM_DEFAULT_MEMORY_CHUNK_SIZE * chunks.size()));
+            os << GM_Utils::format_str("- Memory | available: \t\t%zuB\n", available_size());
+            os << GM_Utils::format_str("- Memory | chunk count: \t%zu\n", chunks.size());
+            os << "----------------------------------------------------------------------------------------" << std::endl;
+            for (size_t i = 0, count = chunks.size(); i < count; i++)
+            {
+                os << "\n*** Chunk " << i << " ***\n";
+                chunks[i]->dump(os);
+            }
+            os << "----------------------------------------------------------------------------------------" << std::endl;
+        }
+
+        size_t available_size() const
+        {
+            size_t ret = 0;
+            for (auto chunk : chunks)
+                ret += chunk->free_size();
+
+            return ret;
+        }
+
+        uint16_t get_object_memory_chunk_idx(GM_Object* obj) const
+        {
+            return obj->m_memory_chunk_idx;
         }
 
     private:
         memory_chunk* _get_enough_size_chunk(const size_t& size, uint16_t& memory_chunk_idx)
         {
-            for (auto chunk : chunks)
-                if (chunk->free_size() >= size)
-                    return chunk;
-
             auto count = chunks.size();
             for (size_t idx = 0; idx < count; idx++)
             {
@@ -158,6 +194,7 @@ namespace GM
             return new_chunk;
         }
 
+    private:
         std::vector<memory_chunk*> chunks;
         size_t m_max_alloc_size;
         uint16_t m_curt_memory_idx;

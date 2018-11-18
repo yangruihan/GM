@@ -93,9 +93,46 @@ namespace GM_Test
         ASSERT_NE(nullptr, m_mem_ma);
         GM::GM_Environment* env = m_mem_ma->alloc<GM::GM_Environment>();
         ASSERT_NE(nullptr, env);
+        GM::GM_IntValue* intValue = m_mem_ma->alloc_args<GM::GM_IntValue>(env, "100");
+        ASSERT_NE(nullptr, intValue);
+        ASSERT_EQ(100, (int)intValue->get_value());
         ASSERT_EQ(nullptr, env->get_parent());
         GM::GM_StrValue* strValue = m_mem_ma->alloc_args<GM::GM_StrValue>(env, "hello world");
         ASSERT_NE(nullptr, strValue);
         ASSERT_STREQ(strValue->get_value().c_str(), "hello world");
+        m_mem_ma->free(intValue);
+        ASSERT_EQ(nullptr, intValue);
+        intValue = m_mem_ma->alloc_args<GM::GM_IntValue>(env, 250);
+        ASSERT_EQ(250, (int)intValue->get_value());
+        ASSERT_EQ(0, m_mem_ma->get_object_memory_chunk_idx(intValue));
+
+        m_mem_ma->free(intValue);
+        m_mem_ma->free(strValue);
+        ASSERT_EQ(m_mem_ma->available_size(), GM_DEFAULT_MEMORY_CHUNK_SIZE - estd::BLOCK_SIZE - sizeof(GM::GM_Environment));
+
+        GM::GM_IntValue* intValues = m_mem_ma->alloc_arr_args<GM::GM_IntValue>(125, env, 1);
+        ASSERT_NE(nullptr, intValues);
+        ASSERT_EQ(1, (int)intValues->get_value());
+        ASSERT_EQ(1, (int)(intValues + 5)->get_value());
+        ASSERT_EQ(1, (int)(intValues + 50)->get_value());
+        ASSERT_EQ(1, (int)(intValues + 124)->get_value());
+        auto intValue_5 =(GM::GM_Object*)(intValues + 5);
+        ASSERT_FALSE(m_mem_ma->free(intValue_5));
+        ASSERT_EQ(m_mem_ma->available_size(), 0);
+
+        GM::GM_IntValue* intValue2 = m_mem_ma->alloc_args<GM::GM_IntValue>(env, 20);
+        ASSERT_NE(nullptr, intValue2);
+        ASSERT_EQ(20, (int)intValue2->get_value());
+        ASSERT_EQ(1, m_mem_ma->get_object_memory_chunk_idx(intValue2));
+        ASSERT_EQ(m_mem_ma->available_size(), GM_DEFAULT_MEMORY_CHUNK_SIZE - estd::BLOCK_SIZE - sizeof(GM::GM_IntValue));
+
+        ASSERT_TRUE(m_mem_ma->free(intValues));
+
+        GM::GM_IntValue* intValue3 = m_mem_ma->alloc_args<GM::GM_IntValue>(env, 36);
+        ASSERT_EQ(36, (int)intValue3->get_value());
+        ASSERT_EQ(0, m_mem_ma->get_object_memory_chunk_idx(intValue3));
+        ASSERT_TRUE(m_mem_ma->free(intValue3));
+        ASSERT_EQ(nullptr, intValue3);
     }
+    
 }
