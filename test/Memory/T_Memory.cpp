@@ -47,7 +47,7 @@ namespace GM_Test
         int* i[] =
         {
             m_mem_pool->alloc<int>(),
-            m_mem_pool->alloc_arr<int>(3960 / sizeof(int)),
+            m_mem_pool->alloc_arr<int>(123 * m_mem_pool->block_size() / sizeof(int)),
             m_mem_pool->alloc<int>(),
         };
         *(i[0]) = 1;
@@ -57,7 +57,7 @@ namespace GM_Test
         ASSERT_EQ(nullptr, m_mem_pool->alloc_arr<int>(32));
         ASSERT_TRUE(m_mem_pool->free(i[1]));
         ASSERT_TRUE(m_mem_pool->free(i[2]));
-        i[1] = m_mem_pool->alloc_arr<int>(3960 / sizeof(int));
+        i[1] = m_mem_pool->alloc_arr<int>(123 * m_mem_pool->block_size() / sizeof(int));
         *(i[1] + 2) = 100;
         ASSERT_EQ(100, *(i[1] + 2));
         ASSERT_NE(nullptr, i[1]);

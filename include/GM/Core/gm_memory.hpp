@@ -29,7 +29,7 @@ namespace GM
 
             size_t free_size() const
             {
-                return self->free_size();
+                return self->available();
             }
         };
 
