@@ -18,9 +18,9 @@ namespace GM
         GM_IntValue (GM_Environment* env,
                      const std::string& token);
         GM_IntValue (GM_Environment* env,
-                     int value);
+                     const int& value);
         GM_IntValue (GM_Environment* env,
-                     double value);
+                     const double& value);
         virtual ~GM_IntValue ();
 
     public:

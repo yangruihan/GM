@@ -69,11 +69,11 @@ namespace GM
     { return new GM_IntValue(env, token); }
 
     GM_IntValue* GM_Value::int_value (GM_Environment* env,
-                                      int value)
+                                      const int& value)
     { return new GM_IntValue(env, value); }
 
     GM_IntValue* GM_Value::int_value (GM_Environment* env,
-                                      double value)
+                                      const double& value)
     { return new GM_IntValue(env, value); }
 
     GM_FloatValue* GM_Value::float_value (GM_Environment* env,

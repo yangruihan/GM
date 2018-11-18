@@ -6,7 +6,7 @@
 namespace GM_Test
 {
 
-    class T_BoolValue : extends(::testing::Test)
+    class T_IntValue : extends(::testing::Test)
     {
     };
 

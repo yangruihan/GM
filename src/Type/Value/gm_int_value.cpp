@@ -15,13 +15,13 @@ namespace GM
     }
 
     GM_IntValue::GM_IntValue(GM_Environment* env,
-                             int value): GM_NumberValue(env), m_value(value)
+                             const int& value): GM_NumberValue(env), m_value(value)
     {
         _init_functions();
     }
 
     GM_IntValue::GM_IntValue(GM_Environment* env,
-                             double value): GM_NumberValue(env), m_value(static_cast<int>(value))
+                             const double& value): GM_NumberValue(env), m_value(static_cast<int>(value))
     {
         _init_functions();
     }

@@ -74,9 +74,9 @@ namespace GM
         static GM_IntValue* int_value (GM_Environment* env,
                                        const std::string& token);
         static GM_IntValue* int_value (GM_Environment* env,
-                                       int value);
+                                       const int& value);
         static GM_IntValue* int_value (GM_Environment* env,
-                                       double value);
+                                       const double& value);
 
         static GM_FloatValue* float_value (GM_Environment* env,
                                            const std::string& token);

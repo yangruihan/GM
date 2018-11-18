@@ -12,11 +12,11 @@ namespace GM
     {
 
     public:
-        GM_BoolValue (GM_Environment*& env,
+        GM_BoolValue (GM_Environment* env,
                       const std::string& token);
-        GM_BoolValue (GM_Environment*& env,
+        GM_BoolValue (GM_Environment* env,
                       const char* token);
-        GM_BoolValue (GM_Environment*& env,
+        GM_BoolValue (GM_Environment* env,
                       const bool& value);
         ~GM_BoolValue() override {}
 
