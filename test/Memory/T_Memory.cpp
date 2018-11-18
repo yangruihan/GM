@@ -32,12 +32,18 @@ namespace GM_Test
         ASSERT_EQ(*j, 52);
         ASSERT_EQ(*j + *i, 80);
         auto k = m_mem_pool->alloc<int>();
-        ASSERT_EQ(m_mem_pool->block_size() * 2, (j - i) * sizeof(int));
-        ASSERT_EQ(m_mem_pool->block_size() * 2, (k - j) * sizeof(int));
+        // align 8
+        auto size_int = 0;
+        if (sizeof(int) & 0x7 == 0)
+            size_int = sizeof(int);
+        else
+            size_int = ((sizeof(int) >> 3) + 1) << 3;
+        ASSERT_EQ(estd::BLOCK_SIZE + size_int, (j - i) * sizeof(int));
+        ASSERT_EQ(estd::BLOCK_SIZE + size_int, (k - j) * sizeof(int));
         ASSERT_TRUE(m_mem_pool->free(i));
         ASSERT_TRUE(m_mem_pool->free(j));
         ASSERT_TRUE(m_mem_pool->free(k));
-        for (size_t i = 0; i < (4096 / m_mem_pool->block_size() / 2); i++)
+        for (size_t i = 0; i < (4096 / (estd::BLOCK_SIZE + size_int)); i++)
             m_mem_pool->alloc<int>();
         ASSERT_EQ(nullptr, m_mem_pool->alloc<int>());
     }
@@ -47,22 +53,22 @@ namespace GM_Test
         int* i[] =
         {
             m_mem_pool->alloc<int>(),
-            m_mem_pool->alloc_arr<int>(123 * m_mem_pool->block_size() / sizeof(int)),
+            m_mem_pool->alloc_arr<int>(500),
             m_mem_pool->alloc<int>(),
         };
         *(i[0]) = 1;
         *(i[1]) = 2;
         *(i[2]) = 3;
         ASSERT_EQ(1, *(i[0]));
-        ASSERT_EQ(nullptr, m_mem_pool->alloc_arr<int>(32));
+        ASSERT_EQ(nullptr, m_mem_pool->alloc_arr<int>(500));
         ASSERT_TRUE(m_mem_pool->free(i[1]));
         ASSERT_TRUE(m_mem_pool->free(i[2]));
-        i[1] = m_mem_pool->alloc_arr<int>(123 * m_mem_pool->block_size() / sizeof(int));
+        i[1] = m_mem_pool->alloc_arr<int>(500);
         *(i[1] + 2) = 100;
         ASSERT_EQ(100, *(i[1] + 2));
         ASSERT_NE(nullptr, i[1]);
         ASSERT_EQ(2, *(i[1]));
-        i[2] = m_mem_pool->alloc_arr<int>(8);
+        i[2] = m_mem_pool->alloc_arr<int>(489);
         ASSERT_NE(nullptr, i[2]);
         ASSERT_EQ(3, *(i[2]));
         i[3] = m_mem_pool->alloc<int>();

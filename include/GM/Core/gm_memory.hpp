@@ -37,7 +37,7 @@ namespace GM
         GM_MemoryManager()
         {
             _new_chunk();
-            m_max_alloc_size = GM_DEFAULT_MEMORY_CHUNK_SIZE - chunks[0]->self->block_size();
+            m_max_alloc_size = GM_DEFAULT_MEMORY_CHUNK_SIZE - estd::BLOCK_SIZE;
         }
 
         virtual ~GM_MemoryManager()
@@ -57,7 +57,7 @@ namespace GM
 
             auto chunk = _get_enough_size_chunk(size, m_curt_memory_idx);
             T* ret = chunk->self->alloc<T>();
-            ((GM_Object*)ret)->m_memory_chunk_idx = m_curt_memory_idx;
+            static_cast<GM_Object*>(ret)->m_memory_chunk_idx = m_curt_memory_idx;
             return ret;
         }
 
@@ -70,7 +70,7 @@ namespace GM
             auto chunk = _get_enough_size_chunk(size, m_curt_memory_idx);
             T* ret = chunk->self->alloc_arr<T>(count);
             for (size_t i = 0; i < count; i++)
-                ((GM_Object*)(ret + i))->m_memory_chunk_idx = m_curt_memory_idx;
+                static_cast<GM_Object*>(ret + i)->m_memory_chunk_idx = m_curt_memory_idx;
             return ret;
         }
 
@@ -83,7 +83,7 @@ namespace GM
 
             auto chunk = _get_enough_size_chunk(size, m_curt_memory_idx);
             T* ret = chunk->self->alloc_args<T>(std::forward(args)...);
-            ((GM_Object*)ret)->m_memory_chunk_idx = m_curt_memory_idx;
+            static_cast<GM_Object*>(ret)->m_memory_chunk_idx = m_curt_memory_idx;
             return ret;
         }
 
@@ -96,7 +96,7 @@ namespace GM
             auto chunk = _get_enough_size_chunk(size, m_curt_memory_idx);
             T* ret = chunk->self->alloc_arr_args<T>(count, std::forward(args)...);
             for (size_t i = 0; i < count; i++)
-                ((GM_Object*)(ret + i))->m_memory_chunk_idx = m_curt_memory_idx;
+                static_cast<GM_Object*>(ret + i)->m_memory_chunk_idx = m_curt_memory_idx;
             return ret;
         }
 
@@ -104,7 +104,7 @@ namespace GM
         Y* realloc(T* obj)
         {
             // TODO if chunk size is not enough, change a chunk
-            auto memory_chunk_idx = ((GM_Object*)obj)->m_memory_chunk_idx;
+            auto memory_chunk_idx = static_cast<GM_Object*>(obj)->m_memory_chunk_idx;
             auto chunk = chunks[memory_chunk_idx];
             return chunk->self->realloc<T, Y>(obj);
         }
@@ -112,7 +112,7 @@ namespace GM
         template<class T>
         bool free(T* obj)
         {
-            auto memory_chunk_idx = ((GM_Object*)obj)->m_memory_chunk_idx;
+            auto memory_chunk_idx = static_cast<GM_Object*>(obj)->m_memory_chunk_idx;
             auto chunk = chunks[memory_chunk_idx];
             return chunk->self->free(obj);
         }
@@ -120,7 +120,7 @@ namespace GM
         template<class T>
         bool free_arr(T* obj)
         {
-            auto memory_chunk_idx = ((GM_Object*)obj)->m_memory_chunk_idx;
+            auto memory_chunk_idx = static_cast<GM_Object*>(obj)->m_memory_chunk_idx;
             auto chunk = chunks[memory_chunk_idx];
             return chunk->self->free_arr(obj);
         }
