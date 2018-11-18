@@ -1,6 +1,7 @@
 aux_source_directory(. SRC_FILES)
 aux_source_directory(./Interpreter T_INTERPRETER_SRC)
 aux_source_directory(./Memory T_MEMORY_SRC)
+aux_source_directory(./Value T_VALUE_SRC)
 
 file(GLOB_RECURSE GM_HEADERS_PLUS ./*.hpp)
 file(GLOB_RECURSE GM_HEADERS ./*.h)
@@ -29,6 +30,7 @@ add_executable(
     ${SRC_FILES}
     ${T_INTERPRETER_SRC}
     ${T_MEMORY_SRC}
+    ${T_VALUE_SRC}
     ${GM_HEADERS_PLUS}
     ${GM_HEADERS}
     ${GM_GTEST_HEADERS}
