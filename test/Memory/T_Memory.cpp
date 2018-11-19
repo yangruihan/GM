@@ -119,7 +119,6 @@ namespace GM_Test
         ASSERT_EQ(1, (int)(intValues + 5)->get_value());
         ASSERT_EQ(1, (int)(intValues + 50)->get_value());
         ASSERT_EQ(1, (int)(intValues + 124)->get_value());
-        m_mem_ma->dump(std::cout);
         auto intValue_5 =(GM::GM_Object*)(intValues + 5);
         ASSERT_FALSE(m_mem_ma->free(intValue_5));
         ASSERT_EQ(m_mem_ma->available_size(), 0);
