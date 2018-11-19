@@ -11,32 +11,18 @@ if(DEBUG)
     add_definitions(-DDEBUG)
 endif(DEBUG)
 
-function(find_library_in_proj LIB_NAME SUB_FOLDER OUT)
-
+function(get_static_lib_path SUB_FOLDER LIB_NAME DEBUG_OUT RELEASE_OUT)
     if (WIN32 OR MSVC)
-        set(CMAKE_FIND_LIBRARY_SUFFIXES ".lib" ".dll")
+        set(${DEBUG_OUT} "${PROJECT_SOURCE_DIR}/libs/${SUB_FOLDER}/win32/debug/${LIB_NAME}.lib" PARENT_SCOPE)
+        set(${RELEASE_OUT} "${PROJECT_SOURCE_DIR}/libs/${SUB_FOLDER}/win32/release/${LIB_NAME}.lib" PARENT_SCOPE)
+        message(STATUS "Get static lib debug: ${DEBUG_OUT}")
+        message(STATUS "Get static lib release: ${RELEASE_OUT}")
     elseif (UNIX)
-        set(CMAKE_FIND_LIBRARY_SUFFIXES ".a" ".so")
-    endif()      
-
-    find_library(FOUND_${LIB_NAME}_STATIC
-        NAMES 
-        ${LIB_NAME}
-        HINTS
-        "${PROJECT_SOURCE_DIR}/*"
-        "${PROJECT_SOURCE_DIR}/libs/*"
-        "${PROJECT_SOURCE_DIR}/libs/${SUB_FOLDER}/*"
-        "${PROJECT_SOURCE_DIR}/libs/${SUB_FOLDER}/*/*"
-    )
-
-    if (FOUND_${LIB_NAME}_STATIC)
-        get_filename_component(ABS_FILE ${FOUND_${LIB_NAME}_STATIC} ABSOLUTE)
-    else()
-        message(SEND_ERROR "Unable to find library ${LIB_NAME}")
+        set(${DEBUG_OUT} "${PROJECT_SOURCE_DIR}/libs/${SUB_FOLDER}/unix/debug/${LIB_NAME}.a" PARENT_SCOPE)
+        set(${RELEASE_OUT} "${PROJECT_SOURCE_DIR}/libs/${SUB_FOLDER}/unix/release/${LIB_NAME}.a" PARENT_SCOPE)
+        message(STATUS "Get static lib debug: ${DEBUG_OUT}")
+        message(STATUS "Get static lib release: ${RELEASE_OUT}")
     endif()
-
-    set(${OUT} ${ABS_FILE} PARENT_SCOPE)
-
 endfunction()
 
 include_directories("${PROJECT_SOURCE_DIR}/include/GM")

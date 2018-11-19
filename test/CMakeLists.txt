@@ -39,18 +39,15 @@ add_executable(
     ${GM_ESTD_HEADERS_PLUS}
 )
 
-find_library_in_proj(gmock gtest GMOCK_LIB)
-find_library_in_proj(gmock_main gtest GMOCK_MAIN_LIB)
-find_library_in_proj(gtest gtest GTEST_LIB)
-find_library_in_proj(gtest_main gtest GTEST_MAIN_LIB)
+get_static_lib_path(gtest gmock GMOCKD_LIB GMOCK_LIB)
+get_static_lib_path(gtest gtest GTESTD_LIB GTEST_LIB)
+
+message(STATUS "GMOCKD_LIB: ${GMOCKD_LIB}")
+message(STATUS "GMOCK_LIB: ${GMOCK_LIB}")
+message(STATUS "GTESTD_LIB: ${GTESTD_LIB}")
+message(STATUS "GTEST_LIB: ${GTEST_LIB}")
 
 if (WIN32 OR MSVC)
-
-    find_library_in_proj(gmockd gtest GMOCKD_LIB)
-    find_library_in_proj(gmock_maind gtest GMOCK_MAIND_LIB)
-    find_library_in_proj(gtestd gtest GTESTD_LIB)
-    find_library_in_proj(gtest_maind gtest GTEST_MAIND_LIB)
-
     target_link_libraries(
         GM_test
         Core
@@ -59,12 +56,9 @@ if (WIN32 OR MSVC)
         Type
         Type_Value
         debug ${GMOCKD_LIB} optimized ${GMOCK_LIB}
-        debug ${GMOCK_MAIND_LIB} optimized ${GMOCK_MAIN_LIB}
         debug ${GTESTD_LIB} optimized ${GTEST_LIB}
-        debug ${GTEST_MAIND_LIB} optimized ${GTEST_MAIN_LIB}
     )
 else()
-    
     target_link_libraries(
         GM_test
         Core
@@ -72,11 +66,8 @@ else()
         AST
         Type
         Type_Value
-        ${GMOCK_LIB}
-        ${GMOCK_MAIN_LIB}
-        ${GTEST_LIB}
-        ${GTEST_MAIN_LIB}
+        debug ${GMOCKD_LIB} optimized ${GMOCK_LIB}
+        debug ${GTESTD_LIB} optimized ${GTEST_LIB}
         pthread
     )
-
 endif()
