@@ -39,16 +39,18 @@ add_executable(
     ${GM_ESTD_HEADERS_PLUS}
 )
 
+find_library_in_proj(gmock gtest GMOCK_LIB)
+find_library_in_proj(gtest gtest GTEST_LIB)
+
 target_link_libraries(
     GM_test
+    optimized
     Core
     Common
     AST
     Type
     Type_Value
-    ${PROJECT_SOURCE_DIR}/libs/gtest/libgmock_main.a
-    ${PROJECT_SOURCE_DIR}/libs/gtest/libgmock.a
-    ${PROJECT_SOURCE_DIR}/libs/gtest/libgtest_main.a
-    ${PROJECT_SOURCE_DIR}/libs/gtest/libgtest.a
+    ${GMOCK_LIB}
+    ${GTEST_LIB}
     pthread
 )
