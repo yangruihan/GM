@@ -40,17 +40,43 @@ add_executable(
 )
 
 find_library_in_proj(gmock gtest GMOCK_LIB)
+find_library_in_proj(gmock_main gtest GMOCK_MAIN_LIB)
 find_library_in_proj(gtest gtest GTEST_LIB)
+find_library_in_proj(gtest_main gtest GTEST_MAIN_LIB)
 
-target_link_libraries(
-    GM_test
-    optimized
-    Core
-    Common
-    AST
-    Type
-    Type_Value
-    ${GMOCK_LIB}
-    ${GTEST_LIB}
-    pthread
-)
+if (WIN32 OR MSVC)
+
+    find_library_in_proj(gmockd gtest GMOCKD_LIB)
+    find_library_in_proj(gmock_maind gtest GMOCK_MAIND_LIB)
+    find_library_in_proj(gtestd gtest GTESTD_LIB)
+    find_library_in_proj(gtest_maind gtest GTEST_MAIND_LIB)
+
+    target_link_libraries(
+        GM_test
+        Core
+        Common
+        AST
+        Type
+        Type_Value
+        debug ${GMOCKD_LIB} optimized ${GMOCK_LIB}
+        debug ${GMOCK_MAIND_LIB} optimized ${GMOCK_MAIN_LIB}
+        debug ${GTESTD_LIB} optimized ${GTEST_LIB}
+        debug ${GTEST_MAIND_LIB} optimized ${GTEST_MAIN_LIB}
+    )
+else()
+    
+    target_link_libraries(
+        GM_test
+        Core
+        Common
+        AST
+        Type
+        Type_Value
+        ${GMOCK_LIB}
+        ${GMOCK_MAIN_LIB}
+        ${GTEST_LIB}
+        ${GTEST_MAIN_LIB}
+        pthread
+    )
+
+endif()

@@ -26,6 +26,7 @@ function(find_library_in_proj LIB_NAME SUB_FOLDER OUT)
         "${PROJECT_SOURCE_DIR}/*"
         "${PROJECT_SOURCE_DIR}/libs/*"
         "${PROJECT_SOURCE_DIR}/libs/${SUB_FOLDER}/*"
+        "${PROJECT_SOURCE_DIR}/libs/${SUB_FOLDER}/*/*"
     )
 
     if (FOUND_${LIB_NAME}_STATIC)

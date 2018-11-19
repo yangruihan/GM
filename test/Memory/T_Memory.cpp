@@ -77,8 +77,8 @@ namespace GM_Test
         i[2] = m_mem_pool->alloc_arr<int>(489);
         ASSERT_NE(nullptr, i[2]);
         ASSERT_EQ(3, *(i[2]));
-        i[3] = m_mem_pool->alloc<int>();
-        ASSERT_EQ(nullptr, i[3]);
+        auto k = m_mem_pool->alloc<int>();
+        ASSERT_EQ(nullptr, k);
         ASSERT_TRUE(m_mem_pool->free(i[0]));
         ASSERT_TRUE(m_mem_pool->free(i[2]));
         ASSERT_TRUE(m_mem_pool->free(i[1]));
@@ -86,6 +86,7 @@ namespace GM_Test
         ASSERT_NE(nullptr, j);
         *j = 500;
         ASSERT_EQ(500, *j);
+        ASSERT_TRUE(m_mem_pool->free(j));
     }
 
     TEST_F(T_Memory, GM_MemoryManagerBaseTypeAllocAndFree)
@@ -100,7 +101,7 @@ namespace GM_Test
         GM::GM_StrValue* strValue = m_mem_ma->alloc_args<GM::GM_StrValue>(env, "hello world");
         ASSERT_NE(nullptr, strValue);
         ASSERT_STREQ(strValue->get_value().c_str(), "hello world");
-        m_mem_ma->free(intValue);
+        ASSERT_TRUE(m_mem_ma->free(intValue));
         ASSERT_EQ(nullptr, intValue);
         intValue = m_mem_ma->alloc_args<GM::GM_IntValue>(env, 250);
         ASSERT_EQ(250, (int)intValue->get_value());
@@ -110,12 +111,15 @@ namespace GM_Test
         m_mem_ma->free(strValue);
         ASSERT_EQ(m_mem_ma->available_size(), GM_DEFAULT_MEMORY_CHUNK_SIZE - estd::BLOCK_SIZE - sizeof(GM::GM_Environment));
 
-        GM::GM_IntValue* intValues = m_mem_ma->alloc_arr_args<GM::GM_IntValue>(125, env, 1);
+        auto count = (GM_DEFAULT_MEMORY_CHUNK_SIZE - estd::BLOCK_SIZE * 2 - sizeof(GM::GM_Environment)) / sizeof(GM::GM_IntValue);
+
+        GM::GM_IntValue* intValues = m_mem_ma->alloc_arr_args<GM::GM_IntValue>(count, env, 1);
         ASSERT_NE(nullptr, intValues);
         ASSERT_EQ(1, (int)intValues->get_value());
         ASSERT_EQ(1, (int)(intValues + 5)->get_value());
         ASSERT_EQ(1, (int)(intValues + 50)->get_value());
         ASSERT_EQ(1, (int)(intValues + 124)->get_value());
+        m_mem_ma->dump(std::cout);
         auto intValue_5 =(GM::GM_Object*)(intValues + 5);
         ASSERT_FALSE(m_mem_ma->free(intValue_5));
         ASSERT_EQ(m_mem_ma->available_size(), 0);

@@ -7,7 +7,6 @@ namespace GM_Test
     {
         auto env = new GM::GM_Environment();
         ASSERT_NE(nullptr, env);
-        ASSERT_TRUE("false" == "false");
 
         auto value = new GM::GM_BoolValue(env, "false");
         ASSERT_NE(nullptr, value);

@@ -28,7 +28,6 @@ add_executable(
 
 target_link_libraries(
     GM
-    optimized
     Core
     Common
     AST
