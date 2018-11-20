@@ -3,6 +3,7 @@
 #include "./Value/T_BoolValue.h"
 #include "./Value/T_IntValue.h"
 #include "./Value/T_FloatValue.h"
+#include "./Memory/T_GC.h"
  
 int main(int argc, char **argv)
 {

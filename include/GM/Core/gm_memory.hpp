@@ -293,8 +293,12 @@ namespace GM
         {
             const auto ref = static_cast<GM_Object*>(obj);
             if (ref->m_ref_cnt == 0)
+            {
+                PRINT_ERROR("GCFatal: obj ref count is already 0");
                 return false;
-            dec_ref(ref);
+            }
+            if (dec_ref(ref) == 0)
+                obj = nullptr;
             return true;
         }
 
@@ -310,10 +314,23 @@ namespace GM
             return obj->m_ref_cnt;
         }
 
-        static uint64_t dec_ref(void* ref)
+        static uint64_t dec_ref(void* ref, bool delay_free = false)
         {
-            const auto obj = static_cast<GM_Object*>(ref);
+            auto obj = static_cast<GM_Object*>(ref);
             obj->m_ref_cnt--;
+            if (!delay_free && obj->m_ref_cnt == 0)
+            {
+                GM_MemoryManager::free(obj);
+                const auto it = std::find(s_ins.m_objs.begin(), s_ins.m_objs.end(), obj);
+                if (it != s_ins.m_objs.end())
+                    s_ins.m_objs.erase(it);
+                return 0;
+            }
+            return obj->m_ref_cnt;
+        }
+
+        static uint64_t get_ref_cnt(GM_Object* obj)
+        {
             return obj->m_ref_cnt;
         }
 
