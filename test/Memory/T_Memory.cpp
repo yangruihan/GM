@@ -9,13 +9,11 @@ namespace GM_Test
     void T_Memory::SetUp()
     {
         m_mem_pool = new estd::memory_pool<>();
-        m_mem_ma = new GM::GM_MemoryManager();
     }
 
     void T_Memory::TearDown()
     {
         delete m_mem_pool;
-        delete m_mem_ma;
     }
 
     TEST_F(T_Memory, BaseTypeAllocAndFree)
@@ -91,50 +89,49 @@ namespace GM_Test
 
     TEST_F(T_Memory, GM_MemoryManagerBaseTypeAllocAndFree)
     {
-        ASSERT_NE(nullptr, m_mem_ma);
-        GM::GM_Environment* env = m_mem_ma->alloc<GM::GM_Environment>();
+        GM::GM_Environment* env = GM_MEM::alloc<GM::GM_Environment>();
         ASSERT_NE(nullptr, env);
-        GM::GM_IntValue* intValue = m_mem_ma->alloc_args<GM::GM_IntValue>(env, "100");
+        GM::GM_IntValue* intValue = GM_MEM::alloc_args<GM::GM_IntValue>(env, "100");
         ASSERT_NE(nullptr, intValue);
         ASSERT_EQ(100, (int)intValue->get_value());
         ASSERT_EQ(nullptr, env->get_parent());
-        GM::GM_StrValue* strValue = m_mem_ma->alloc_args<GM::GM_StrValue>(env, "hello world");
+        GM::GM_StrValue* strValue = GM_MEM::alloc_args<GM::GM_StrValue>(env, "hello world");
         ASSERT_NE(nullptr, strValue);
         ASSERT_STREQ(strValue->get_value().c_str(), "hello world");
-        ASSERT_TRUE(m_mem_ma->free(intValue));
+        ASSERT_TRUE(GM_MEM::free(intValue));
         ASSERT_EQ(nullptr, intValue);
-        intValue = m_mem_ma->alloc_args<GM::GM_IntValue>(env, 250);
+        intValue = GM_MEM::alloc_args<GM::GM_IntValue>(env, 250);
         ASSERT_EQ(250, (int)intValue->get_value());
-        ASSERT_EQ(0, m_mem_ma->get_object_memory_chunk_idx(intValue));
+        ASSERT_EQ(0, GM_MEM::get_object_memory_chunk_idx(intValue));
 
-        m_mem_ma->free(intValue);
-        m_mem_ma->free(strValue);
-        ASSERT_EQ(m_mem_ma->available_size(), GM_DEFAULT_MEMORY_CHUNK_SIZE - estd::BLOCK_SIZE - sizeof(GM::GM_Environment));
+        GM_MEM::free(intValue);
+        GM_MEM::free(strValue);
+        ASSERT_EQ(GM_MEM::available_size(), GM_DEFAULT_MEMORY_CHUNK_SIZE - estd::BLOCK_SIZE - sizeof(GM::GM_Environment));
 
         auto count = (GM_DEFAULT_MEMORY_CHUNK_SIZE - estd::BLOCK_SIZE * 2 - sizeof(GM::GM_Environment)) / sizeof(GM::GM_IntValue);
 
-        GM::GM_IntValue* intValues = m_mem_ma->alloc_arr_args<GM::GM_IntValue>(count, env, 1);
+        GM::GM_IntValue* intValues = GM_MEM::alloc_arr_args<GM::GM_IntValue>(count, env, 1);
         ASSERT_NE(nullptr, intValues);
         ASSERT_EQ(1, (int)intValues->get_value());
         ASSERT_EQ(1, (int)(intValues + 5)->get_value());
         ASSERT_EQ(1, (int)(intValues + 50)->get_value());
         ASSERT_EQ(1, (int)(intValues + 124)->get_value());
         auto intValue_5 =(GM::GM_Object*)(intValues + 5);
-        ASSERT_FALSE(m_mem_ma->free(intValue_5));
-        ASSERT_EQ(m_mem_ma->available_size(), 0);
+        ASSERT_FALSE(GM_MEM::free(intValue_5));
+        ASSERT_EQ(GM_MEM::available_size(), 0);
 
-        GM::GM_IntValue* intValue2 = m_mem_ma->alloc_args<GM::GM_IntValue>(env, 20);
+        GM::GM_IntValue* intValue2 = GM_MEM::alloc_args<GM::GM_IntValue>(env, 20);
         ASSERT_NE(nullptr, intValue2);
         ASSERT_EQ(20, (int)intValue2->get_value());
-        ASSERT_EQ(1, m_mem_ma->get_object_memory_chunk_idx(intValue2));
-        ASSERT_EQ(m_mem_ma->available_size(), GM_DEFAULT_MEMORY_CHUNK_SIZE - estd::BLOCK_SIZE - sizeof(GM::GM_IntValue));
+        ASSERT_EQ(1, GM_MEM::get_object_memory_chunk_idx(intValue2));
+        ASSERT_EQ(GM_MEM::available_size(), GM_DEFAULT_MEMORY_CHUNK_SIZE - estd::BLOCK_SIZE - sizeof(GM::GM_IntValue));
 
-        ASSERT_TRUE(m_mem_ma->free(intValues));
+        ASSERT_TRUE(GM_MEM::free(intValues));
 
-        GM::GM_IntValue* intValue3 = m_mem_ma->alloc_args<GM::GM_IntValue>(env, 36);
+        GM::GM_IntValue* intValue3 = GM_MEM::alloc_args<GM::GM_IntValue>(env, 36);
         ASSERT_EQ(36, (int)intValue3->get_value());
-        ASSERT_EQ(0, m_mem_ma->get_object_memory_chunk_idx(intValue3));
-        ASSERT_TRUE(m_mem_ma->free(intValue3));
+        ASSERT_EQ(0, GM_MEM::get_object_memory_chunk_idx(intValue3));
+        ASSERT_TRUE(GM_MEM::free(intValue3));
         ASSERT_EQ(nullptr, intValue3);
     }
     

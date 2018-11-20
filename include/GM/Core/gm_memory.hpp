@@ -9,6 +9,15 @@
 namespace GM
 {
 
+    /**
+      * Memory Manager for GM
+      *
+      * ------   ------   ------
+      * | 4K | - | 4K | - | 4K |
+      * ------   ------   ------
+      * chunk    chunk    chunk
+      *
+      */
     class GM_MemoryManager : extends(GM_Object)
     {
     private:
@@ -37,8 +46,69 @@ namespace GM
                 pool->dump(os);
             }
         };
-
+    
     public:
+        template<class T = GM_Object>
+        static T* alloc()
+        {
+            return s_ins._alloc<T>();
+        }
+        
+        template<class T = GM_Object>
+        static T* alloc_arr(const size_t& count)
+        {
+            return s_ins._alloc_arr<T>(count);
+        }
+        
+        template<class T = GM_Object, class ...TArgs>
+        static T* alloc_args(TArgs &&... args)
+        {
+            return s_ins._alloc_args<T>(std::forward<TArgs>(args)...);
+        }
+
+        template<class T = GM_Object, class ...TArgs>
+        static T* alloc_arr_args(const size_t& count, TArgs &&... args)
+        {
+            return s_ins._alloc_arr_args<T>(count, std::forward<TArgs>(args)...);
+        }
+        
+        template<class T = GM_Object, class Y = GM_Object>
+        static Y* realloc(T* obj)
+        {
+            return s_ins._realloc<T, Y>(obj);
+        }
+
+        template<class T>
+        static bool free(T*& obj)
+        {
+            return s_ins._free(obj);
+        }
+
+        template<class T>
+        static bool free_arr(T*& obj)
+        {
+            return s_ins._free_arr(obj);
+        }
+        
+        static void dump(std::ostream& os)
+        {
+            s_ins._dump(os);
+        }
+        
+        static size_t available_size()
+        {
+            return s_ins._available_size();
+        }
+        
+        static uint16_t get_object_memory_chunk_idx(GM_Object* obj)
+        {
+            return s_ins._get_object_memory_chunk_idx(obj);
+        }
+        
+    private:
+        static GM_MemoryManager s_ins;
+
+    private:
         GM_MemoryManager()
         {
             _new_chunk();
@@ -47,14 +117,14 @@ namespace GM
 
         virtual ~GM_MemoryManager()
         {
-            for (auto chunk : chunks)
+            for (auto chunk : m_chunks)
                 delete chunk;
         }
 
         GM_MemoryManager(const GM_MemoryManager& other) = delete;
 
         template<class T = GM_Object>
-        T* alloc()
+        T* _alloc()
         {
             auto size = sizeof(T);
             if (size >= m_max_alloc_size)
@@ -68,7 +138,7 @@ namespace GM
         }
 
         template<class T = GM_Object>
-        T* alloc_arr(const size_t& count)
+        T* _alloc_arr(const size_t& count)
         {
             auto size = sizeof(T) * count;
             if (size >= m_max_alloc_size)
@@ -85,7 +155,7 @@ namespace GM
         }
 
         template<class T = GM_Object, class ...TArgs>
-        T* alloc_args(TArgs &&... args)
+        T* _alloc_args(TArgs &&... args)
         {
             auto size = sizeof(T);
             if (size >= m_max_alloc_size)
@@ -98,7 +168,7 @@ namespace GM
         }
 
         template<class T = GM_Object, class ...TArgs>
-        T* alloc_arr_args(const size_t& count, TArgs &&... args)
+        T* _alloc_arr_args(const size_t& count, TArgs &&... args)
         {
             auto size = sizeof(T) * count;
             if (size >= m_max_alloc_size)
@@ -111,75 +181,75 @@ namespace GM
         }
 
         template<class T = GM_Object, class Y = GM_Object>
-        Y* realloc(T* obj)
+        Y* _realloc(T* obj)
         {
             // TODO if chunk size is not enough, change a chunk
             auto memory_chunk_idx = static_cast<GM_Object*>(obj)->m_memory_chunk_idx;
-            auto chunk = chunks[memory_chunk_idx];
+            auto chunk = m_chunks[memory_chunk_idx];
             return chunk->pool->realloc<T, Y>(obj);
         }
 
         template<class T>
-        bool free(T*& obj)
+        bool _free(T*& obj)
         {
             auto memory_chunk_idx = static_cast<GM_Object*>(obj)->m_memory_chunk_idx;
-            auto chunk = chunks[memory_chunk_idx];
+            auto chunk = m_chunks[memory_chunk_idx];
             auto ret = chunk->pool->free(obj);
             obj = nullptr;
             return ret;
         }
 
         template<class T>
-        bool free_arr(T*& obj)
+        bool _free_arr(T*& obj)
         {
             auto memory_chunk_idx = static_cast<GM_Object*>(obj)->m_memory_chunk_idx;
-            auto chunk = chunks[memory_chunk_idx];
+            auto chunk = m_chunks[memory_chunk_idx];
             auto ret = chunk->pool->free_arr(obj);
             obj = nullptr;
             return ret;
         }
 
-    public:
-        void dump(std::ostream& os) const
+    private:
+        void _dump(std::ostream& os) const
         {
             os << "\n----------------------------------------------------------------------------------------" << std::endl;
             os << "--- Memory Manager Info ---" << std::endl;
-            os << GM_Utils::format_str("- Memory | sum: \t\t%zuB\n", (GM_DEFAULT_MEMORY_CHUNK_SIZE * chunks.size()));
-            os << GM_Utils::format_str("- Memory | available: \t\t%zuB\n", available_size());
-            os << GM_Utils::format_str("- Memory | chunk count: \t%zu\n", chunks.size());
+            os << GM_Utils::format_str("- Memory | sum: \t\t%zuB\n", (GM_DEFAULT_MEMORY_CHUNK_SIZE * m_chunks.size()));
+            os << GM_Utils::format_str("- Memory | available: \t\t%zuB\n", _available_size());
+            os << GM_Utils::format_str("- Memory | chunk count: \t%zu\n", m_chunks.size());
             os << "----------------------------------------------------------------------------------------" << std::endl;
-            for (size_t i = 0, count = chunks.size(); i < count; i++)
+            for (size_t i = 0, count = m_chunks.size(); i < count; i++)
             {
                 os << "\n*** Chunk " << i << " ***\n";
-                chunks[i]->dump(os);
+                m_chunks[i]->dump(os);
             }
             os << "----------------------------------------------------------------------------------------" << std::endl;
         }
 
-        size_t available_size() const
+        size_t _available_size() const
         {
             size_t ret = 0;
-            for (auto chunk : chunks)
+            for (auto chunk : m_chunks)
                 ret += chunk->free_size();
 
             return ret;
         }
 
-        uint16_t get_object_memory_chunk_idx(GM_Object* obj) const
+        uint16_t _get_object_memory_chunk_idx(GM_Object* obj) const
         {
             return obj->m_memory_chunk_idx;
         }
-
+    
     private:
         memory_chunk* _get_enough_size_chunk(const size_t& size, uint16_t& memory_chunk_idx)
         {
-            auto count = chunks.size();
+            auto count = m_chunks.size();
             for (size_t idx = 0; idx < count; idx++)
             {
-                if (chunks[idx]->free_size() >= size)
+                if (m_chunks[idx]->free_size() >= size)
                 {
                     memory_chunk_idx = idx;
-                    return chunks[idx];
+                    return m_chunks[idx];
                 }
             }
 
@@ -190,14 +260,16 @@ namespace GM
         memory_chunk* _new_chunk()
         {
             auto new_chunk = new memory_chunk();
-            chunks.push_back(new_chunk);
+            m_chunks.push_back(new_chunk);
             return new_chunk;
         }
 
     private:
-        std::vector<memory_chunk*> chunks;
+        std::vector<memory_chunk*> m_chunks;
         size_t m_max_alloc_size;
         uint16_t m_curt_memory_idx;
     };
 
 }
+
+using GM_MEM = GM::GM_MemoryManager;
