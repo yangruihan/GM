@@ -113,9 +113,9 @@ namespace GM_Test
         GM::GM_IntValue* intValues = GM_MEM::alloc_arr_args<GM::GM_IntValue>(count, env, 1);
         ASSERT_NE(nullptr, intValues);
         ASSERT_EQ(1, (int)intValues->get_value());
-        ASSERT_EQ(1, (int)(intValues + 5)->get_value());
-        ASSERT_EQ(1, (int)(intValues + 50)->get_value());
-        ASSERT_EQ(1, (int)(intValues + 124)->get_value());
+        ASSERT_EQ(1, (int)(intValues + 1)->get_value());
+        ASSERT_EQ(1, (int)(intValues + (count / 2))->get_value());
+        ASSERT_EQ(1, (int)(intValues + (count - 1))->get_value());
         auto intValue_5 =(GM::GM_Object*)(intValues + 5);
         ASSERT_FALSE(GM_MEM::free(intValue_5));
         ASSERT_EQ(GM_MEM::available_size(), 0);
