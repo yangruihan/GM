@@ -2,6 +2,16 @@
 
 namespace GM_Test
 {
+   
+    void T_FloatValue::SetUp()
+    {
+        GM_GC::init();
+    }
+
+    void T_FloatValue::TearDown()
+    {
+        GM_GC::destroy();
+    }
     
     TEST_F(T_FloatValue, Base)
     {
@@ -54,7 +64,7 @@ namespace GM_Test
         ASSERT_NE(nullptr, ret);
         ASSERT_FLOAT_EQ(379.6, ret->get_value());
         delete op;
-        delete ret;
+        GM_GC::free(ret);
 
         op = value->get_cur_env_func(FUNC_SUB_OP_KEY);
         ASSERT_NE(nullptr, op);
@@ -62,7 +72,7 @@ namespace GM_Test
         ASSERT_NE(nullptr, ret);
         ASSERT_FLOAT_EQ(-133.2, ret->get_value());
         delete op;
-        delete ret;
+        GM_GC::free(ret);
 
         op = value->get_cur_env_func(FUNC_MUL_OP_KEY);
         ASSERT_NE(nullptr, op);
@@ -70,7 +80,7 @@ namespace GM_Test
         ASSERT_NE(nullptr, ret);
         ASSERT_FLOAT_EQ(31588.48, ret->get_value());
         delete op;
-        delete ret;
+        GM_GC::free(ret);
 
         op = value->get_cur_env_func(FUNC_DIV_OP_KEY);
         ASSERT_NE(nullptr, op);
@@ -78,7 +88,7 @@ namespace GM_Test
         ASSERT_NE(nullptr, ret);
         ASSERT_FLOAT_EQ(0.480499219968799f, ret->get_value());
         delete op;
-        delete ret;
+        GM_GC::free(ret);
 
         op = value->get_cur_env_func(FUNC_EQ_OP_KEY);
         ASSERT_NE(nullptr, op);
@@ -86,7 +96,7 @@ namespace GM_Test
         ASSERT_NE(nullptr, bret);
         ASSERT_EQ(false, bret->get_value());
         delete op;
-        delete bret;
+        GM_GC::free(bret);
 
         op = value->get_cur_env_func(FUNC_LS_OP_KEY);
         ASSERT_NE(nullptr, op);
@@ -94,7 +104,7 @@ namespace GM_Test
         ASSERT_NE(nullptr, bret);
         ASSERT_EQ(true, bret->get_value());
         delete op;
-        delete bret;
+        GM_GC::free(bret);
 
         op = value->get_cur_env_func(FUNC_LE_OP_KEY);
         ASSERT_NE(nullptr, op);
@@ -102,7 +112,7 @@ namespace GM_Test
         ASSERT_NE(nullptr, bret);
         ASSERT_EQ(true, bret->get_value());
         delete op;
-        delete bret;
+        GM_GC::free(bret);
 
         op = value->get_cur_env_func(FUNC_GT_OP_KEY);
         ASSERT_NE(nullptr, op);
@@ -110,7 +120,7 @@ namespace GM_Test
         ASSERT_NE(nullptr, bret);
         ASSERT_EQ(false, bret->get_value());
         delete op;
-        delete bret;
+        GM_GC::free(bret);
 
         op = value->get_cur_env_func(FUNC_GE_OP_KEY);
         ASSERT_NE(nullptr, op);
@@ -118,7 +128,7 @@ namespace GM_Test
         ASSERT_NE(nullptr, bret);
         ASSERT_EQ(false, bret->get_value());
         delete op;
-        delete bret;
+        GM_GC::free(bret);
     }
 
 }

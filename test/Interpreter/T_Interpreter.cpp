@@ -5,12 +5,16 @@ namespace GM_Test
 
     void T_Interpreter::SetUp()
     {
+        GM_GC::init();
+        GM::GM_Interpreter::init();
         m_interpreter = GM::GM_Interpreter::instance();
     }
 
     void T_Interpreter::TearDown()
     {
+        GM_GC::gc();
         GM::GM_Interpreter::destory();
+        GM_GC::destroy();
     }
 
     TEST_F(T_Interpreter, InterpreterInstance)

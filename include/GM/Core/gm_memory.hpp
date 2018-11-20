@@ -36,9 +36,14 @@ namespace GM
                 delete pool;
             }
 
+            size_t available_size() const
+            {
+                return pool->available_size();
+            }
+
             size_t free_size() const
             {
-                return pool->available();
+                return pool->free_size();
             }
 
             void dump(std::ostream& os) const
@@ -48,56 +53,73 @@ namespace GM
         };
     
     public:
+        static void init()
+        {
+            if (s_ins == nullptr)
+                s_ins = new GM_MemoryManager();
+        }
+
+        static void destory()
+        {
+            delete s_ins;
+            s_ins = nullptr;
+        }
+
         template<class T = GM_Object>
         static T* alloc()
         {
-            return s_ins._alloc<T>();
+            return s_ins->_alloc<T>();
         }
         
         template<class T = GM_Object>
         static T* alloc_arr(const size_t& count)
         {
-            return s_ins._alloc_arr<T>(count);
+            return s_ins->_alloc_arr<T>(count);
         }
         
         template<class T = GM_Object, class ...TArgs>
         static T* alloc_args(TArgs &&... args)
         {
-            return s_ins._alloc_args<T>(std::forward<TArgs>(args)...);
+            return s_ins->_alloc_args<T>(std::forward<TArgs>(args)...);
         }
 
         template<class T = GM_Object, class ...TArgs>
         static T* alloc_arr_args(const size_t& count, TArgs &&... args)
         {
-            return s_ins._alloc_arr_args<T>(count, std::forward<TArgs>(args)...);
+            return s_ins->_alloc_arr_args<T>(count, std::forward<TArgs>(args)...);
         }
         
         template<class T = GM_Object, class Y = GM_Object>
         static Y* realloc(T* obj)
         {
-            return s_ins._realloc<T, Y>(obj);
+            return s_ins->_realloc<T, Y>(obj);
         }
 
         template<class T>
         static bool free(T*& obj)
         {
-            return s_ins._free(obj);
+            return s_ins->_free(obj);
         }
 
         template<class T>
         static bool free_arr(T*& obj)
         {
-            return s_ins._free_arr(obj);
+            return s_ins->_free_arr(obj);
         }
         
         static void dump(std::ostream& os)
         {
-            s_ins._dump(os);
+            s_ins->_dump(os);
         }
         
         static size_t available_size()
         {
-            return s_ins._available_size();
+            return s_ins->_available_size();
+        }
+
+        static size_t free_size()
+        {
+            return s_ins->_free_size();
         }
         
         static uint16_t get_object_memory_chunk_idx(GM_Object* obj)
@@ -106,7 +128,7 @@ namespace GM
         }
         
     private:
-        static GM_MemoryManager s_ins;
+        static GM_MemoryManager* s_ins;
 
     public:
         GM_MemoryManager(const GM_MemoryManager& other) = delete;
@@ -232,6 +254,15 @@ namespace GM
         {
             size_t ret = 0;
             for (auto chunk : m_chunks)
+                ret += chunk->available_size();
+
+            return ret;
+        }
+
+        size_t _free_size() const
+        {
+            size_t ret = 0;
+            for (auto chunk : m_chunks)
                 ret += chunk->free_size();
 
             return ret;
@@ -243,7 +274,7 @@ namespace GM
             const auto count = m_chunks.size();
             for (size_t idx = 0; idx < count; idx++)
             {
-                if (m_chunks[idx]->free_size() >= size)
+                if (m_chunks[idx]->available_size() >= size)
                 {
                     memory_chunk_idx = idx;
                     return m_chunks[idx];
@@ -263,19 +294,34 @@ namespace GM
 
     private:
         std::vector<memory_chunk*> m_chunks;
-        size_t m_max_alloc_size;
-        uint16_t m_curt_memory_idx;
+        size_t                     m_max_alloc_size;
+        uint16_t                   m_curt_memory_idx;
     };
 
     class GM_GarbageCollector : extends(GM_Object)
     {
     public:
+        static void init()
+        {
+            GM_MemoryManager::init();
+
+            if (s_ins == nullptr)
+                s_ins = new GM_GarbageCollector();
+        }
+
+        static void destroy()
+        {
+            GM_MemoryManager::destory();
+            delete s_ins;
+            s_ins = nullptr;
+        }
+
         template<class T = GM_Object>
         static T* alloc()
         {
             auto obj = GM_MemoryManager::alloc<T>();
             inc_ref(obj);
-            s_ins.m_objs.push_back(obj);
+            s_ins->m_objs.push_back(obj);
             return obj;
         }
 
@@ -284,7 +330,7 @@ namespace GM
         {
             auto obj = GM_MemoryManager::alloc_args<T>(std::forward<TArgs>(args)...);
             inc_ref(obj);
-            s_ins.m_objs.push_back(obj);
+            s_ins->m_objs.push_back(obj);
             return obj;
         }
         
@@ -321,9 +367,9 @@ namespace GM
             if (!delay_free && obj->m_ref_cnt == 0)
             {
                 GM_MemoryManager::free(obj);
-                const auto it = std::find(s_ins.m_objs.begin(), s_ins.m_objs.end(), obj);
-                if (it != s_ins.m_objs.end())
-                    s_ins.m_objs.erase(it);
+                const auto it = std::find(s_ins->m_objs.begin(), s_ins->m_objs.end(), obj);
+                if (it != s_ins->m_objs.end())
+                    s_ins->m_objs.erase(it);
                 return 0;
             }
             return obj->m_ref_cnt;
@@ -336,19 +382,19 @@ namespace GM
 
         static void gc()
         {
-            for (int i = s_ins.m_objs.size() - 1; i >= 0; i--)
+            for (int i = s_ins->m_objs.size() - 1; i >= 0; i--)
             {
-                auto obj = s_ins.m_objs[i];
+                auto obj = s_ins->m_objs[i];
                 if (obj->m_ref_cnt == 0)
                 {
                     GM_MemoryManager::free(obj);
-                    s_ins.m_objs.erase(s_ins.m_objs.begin() + i);
+                    s_ins->m_objs.erase(s_ins->m_objs.begin() + i);
                 }
             }
         }
 
     private:
-        static GM_GarbageCollector s_ins;
+        static GM_GarbageCollector* s_ins;
         
         std::vector<GM_Object*> m_objs;
 

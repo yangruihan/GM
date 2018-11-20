@@ -8,6 +8,9 @@ namespace GM_Test
     
     class T_FloatValue : extends(::testing::Test)
     {
+    protected:
+        void SetUp() override;
+        void TearDown() override;
     };
 
 }

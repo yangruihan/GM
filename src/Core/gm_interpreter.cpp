@@ -8,12 +8,12 @@ if (ret != nullptr) \
     return ret;     \
 } while(0)
 
-#define C_ENV get_current_data()->m_environment
-#define C_PARSE_CURSOR get_current_data()->m_parse_cursor
-#define C_TOKEN_INDEX get_current_data()->m_current_token_index
-#define C_AST_ROOT get_current_data()->m_ast_root
-#define C_TOKEN_INDEX_STACK get_current_data()->m_token_index_stack
-#define C_PARSE_MODE get_current_data()->m_parse_mode
+#define C_ENV _get_current_data()->m_environment
+#define C_PARSE_CURSOR _get_current_data()->m_parse_cursor
+#define C_TOKEN_INDEX _get_current_data()->m_current_token_index
+#define C_AST_ROOT _get_current_data()->m_ast_root
+#define C_TOKEN_INDEX_STACK _get_current_data()->m_token_index_stack
+#define C_PARSE_MODE _get_current_data()->m_parse_mode
 
 
 namespace GM
@@ -21,7 +21,7 @@ namespace GM
 
     GM_Interpreter::GM_Interpreter()
     {
-        init();
+        _init();
     }
     
     GM_Interpreter::~GM_Interpreter() 
@@ -34,7 +34,7 @@ namespace GM
         }
 
         delete m_data_stack;
-        delete m_global_environment;
+        GM_GC::free(m_global_environment);
 
         for (size_t i = 0, count = m_loaded_env->size(); i < count; i++)
         {
@@ -43,14 +43,17 @@ namespace GM
         delete m_loaded_env;
     }
 
-    GM_Interpreter* GM_Interpreter::s_ins = new GM_Interpreter();
+    GM_Interpreter* GM_Interpreter::s_ins;
 
     GM_Interpreter* GM_Interpreter::instance()
     {
+        return s_ins;
+    }
+
+    void GM_Interpreter::init()
+    {
         if (s_ins == nullptr)
             s_ins = GM_GC::alloc<GM_Interpreter>();
-
-        return s_ins;
     }
 
     void GM_Interpreter::destory()
@@ -58,7 +61,7 @@ namespace GM
         GM_GC::free(s_ins);
     }
 
-    bool GM_Interpreter::init()
+    bool GM_Interpreter::_init()
     {
         auto ret = true;
 
@@ -92,7 +95,7 @@ namespace GM
     bool GM_Interpreter::_clear_data() const
     {
         m_loaded_env->push_back(C_ENV);
-        auto data = get_current_data();
+        auto data = _get_current_data();
         m_data_stack->pop();
         delete data;
 

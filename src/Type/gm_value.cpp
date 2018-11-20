@@ -53,59 +53,59 @@ namespace GM
 
     /* ----- create value ----- */
     GM_NullValue* GM_Value::null_value()
-    { return GM_NullValue::instance; }
+    { return &GM_NullValue::instance; }
 
     GM_BoolValue* GM_Value::bool_value(GM_Environment* env, const std::string &token)
-    { return new GM_BoolValue(env, token); }
+    { return GM_GC::alloc_args<GM_BoolValue>(env, token); }
 
     GM_BoolValue* GM_Value::bool_value(GM_Environment* env, const bool &value)
-    { return new GM_BoolValue(env, value); }
+    { return GM_GC::alloc_args<GM_BoolValue>(env, value); }
 
     GM_StrValue* GM_Value::str_value(GM_Environment *env, const std::string &token)
-    { return new GM_StrValue(env, token);}
+    { return GM_GC::alloc_args<GM_StrValue>(env, token); }
 
     GM_IntValue* GM_Value::int_value (GM_Environment* env,
                                       const std::string& token)
-    { return new GM_IntValue(env, token); }
+    { return GM_GC::alloc_args<GM_IntValue>(env, token); }
 
     GM_IntValue* GM_Value::int_value (GM_Environment* env,
                                       const int& value)
-    { return new GM_IntValue(env, value); }
+    { return GM_GC::alloc_args<GM_IntValue>(env, value); }
 
     GM_IntValue* GM_Value::int_value (GM_Environment* env,
                                       const double& value)
-    { return new GM_IntValue(env, value); }
+    { return GM_GC::alloc_args<GM_IntValue>(env, value); }
 
     GM_FloatValue* GM_Value::float_value (GM_Environment* env,
                                           const std::string& token)
-    { return new GM_FloatValue(env, token); }
+    { return GM_GC::alloc_args<GM_FloatValue>(env, token); }
 
     GM_FloatValue* GM_Value::float_value (GM_Environment* env,
                                           int value)
-    { return new GM_FloatValue(env, value); }
+    { return GM_GC::alloc_args<GM_FloatValue>(env, value); }
 
     GM_FloatValue* GM_Value::float_value (GM_Environment* env,
                                           double value)
-    { return new GM_FloatValue(env, value); }
+    { return GM_GC::alloc_args<GM_FloatValue>(env, value); }
 
     GM_ListValue* GM_Value::list_value(GM_Environment *env)
-    { return new GM_ListValue(env); }
+    { return GM_GC::alloc_args<GM_ListValue>(env); }
 
     GM_PairValue* GM_Value::pair_value (GM_Environment* env,
                                         const std::string& key,
                                         GM_Value* value)
-    { return new GM_PairValue(env, key, value); }
+    { return GM_GC::alloc_args<GM_PairValue>(env, key, value); }
 
     GM_DictValue* GM_Value::dict_value(GM_Environment *env)
-    { return new GM_DictValue(env); }
+    { return GM_GC::alloc_args<GM_DictValue>(env); }
 
     GM_VarNameValue* GM_Value::var_name_value(GM_Environment *env, const std::string &var_name)
-    { return new GM_VarNameValue(env, var_name); }
+    { return GM_GC::alloc_args<GM_VarNameValue>(env, var_name); }
 
     GM_CustomFuncValue *GM_Value::cust_func_value(GM_Environment *env,
                                                   const std::string& func_name,
                                                   const size_t& param_count,
                                                   const std::vector<std::string>* param_list,
                                                   GM_AST_TREE *func_body)
-    { return new GM_CustomFuncValue(env, func_name, param_count, param_list, func_body); }
+    { return GM_GC::alloc_args<GM_CustomFuncValue>(env, func_name, param_count, param_list, func_body); }
 }

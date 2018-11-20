@@ -28,7 +28,7 @@ int main(int argc, char* argv[])
     DEBUG_LOG("- GM parameters ---");
 
 #ifdef DEBUG
-    for (size_t i = 0; i < argc; i++)
+    for (auto i = 0; i < argc; i++)
     {
         DEBUG_LOG_F("- %zu: %s", i, argv[i]);
     }
@@ -37,8 +37,11 @@ int main(int argc, char* argv[])
     DEBUG_LOG("-------------------");
 
     DEBUG_LOG_F("----- GM Interpreter [Version %d.%d.%d]-----", 0, 0, 1);
-
-    GM_Interpreter* interpreter = GM_Interpreter::instance();
+    
+    GM_GC::init();
+    GM_Interpreter::init();
+    
+    const auto interpreter = GM_Interpreter::instance();
 
     if (argc == 1)
         repl(interpreter);
@@ -46,6 +49,13 @@ int main(int argc, char* argv[])
         parse_files(argc, argv, interpreter);
 
     GM_Interpreter::destory();
+    
+    GM_GC::gc();
+    GM_GC::dump(std::cout);
+    GM_GC::destroy();
+
+    int pause;
+    std::cin >> pause;
 
     return 0;
 }

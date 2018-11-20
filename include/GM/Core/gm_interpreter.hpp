@@ -70,6 +70,7 @@ namespace GM
 
         static GM_Interpreter* instance();
 
+        static void init();
         static void destory();
 
     private:
@@ -85,7 +86,6 @@ namespace GM
         GM_Value* eval() const;
 
     public:
-        bool init();
 
         std::string str() const override { return "interpreter"; }
 
@@ -101,17 +101,19 @@ namespace GM
         GM_Environment* get_global_env() const { return m_global_environment; }
 
     private:
-        void set_parse_mode(const size_t& mode)
+        bool _init();
+
+        void _set_parse_mode(const size_t& mode)
         {
             m_data_stack->top()->m_parse_mode = mode;
         }
 
-        size_t get_parse_mode() const
+        size_t _get_parse_mode() const
         {
              return m_data_stack->top()->m_parse_mode;
         }
 
-        GM_InterpreterData* get_current_data() const
+        GM_InterpreterData* _get_current_data() const
         {
             return m_data_stack->top();
         }

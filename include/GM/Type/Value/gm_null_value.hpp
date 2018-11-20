@@ -31,7 +31,7 @@ namespace GM
         void _init_functions() override;
 
     public:
-        static GM_NullValue* instance;
+        static GM_NullValue instance;
 
     };
 

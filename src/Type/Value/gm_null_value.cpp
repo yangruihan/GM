@@ -7,9 +7,10 @@ namespace GM
 
     GM_NullValue::GM_NullValue(GM_Environment* env): GM_Value(env) {}
 
-    GM_NullValue::~GM_NullValue() {}
+    GM_NullValue::~GM_NullValue() = default;
 
     void GM_NullValue::_init_functions() {}
 
-    GM_NullValue* GM_NullValue::instance = new GM_NullValue(nullptr);
+    GM_NullValue GM_NullValue::instance = GM_NullValue(nullptr);
+
 }

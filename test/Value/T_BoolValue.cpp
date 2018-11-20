@@ -3,6 +3,16 @@
 namespace GM_Test
 {
 
+    void T_BoolValue::SetUp()
+    {
+        GM_GC::init();
+    }
+
+    void T_BoolValue::TearDown()
+    {
+        GM_GC::destroy();
+    }
+
     TEST_F(T_BoolValue, Base)
     {
         auto env = new GM::GM_Environment();

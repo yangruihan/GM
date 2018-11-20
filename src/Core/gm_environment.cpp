@@ -23,7 +23,7 @@ namespace GM
 
     GM_Environment* GM_Environment::create(GM_Environment *parent)
     {
-        return new GM_Environment(parent);
+        return GM_GC::alloc_args<GM_Environment>(parent);
     }
     
     void GM_Environment::set_var(const std::string& var_name, GM_Value *var)

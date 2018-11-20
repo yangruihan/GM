@@ -1,8 +1,5 @@
 #include "T_Memory.h"
 
-#include <iostream>
-#include <string>
-
 namespace GM_Test
 {
 
@@ -89,6 +86,7 @@ namespace GM_Test
 
     TEST_F(T_Memory, GM_MemoryManagerBaseTypeAllocAndFree)
     {
+        GM_MEM::init();
         GM::GM_Environment* env = GM_MEM::alloc<GM::GM_Environment>();
         ASSERT_NE(nullptr, env);
         GM::GM_IntValue* intValue = GM_MEM::alloc_args<GM::GM_IntValue>(env, "100");
@@ -106,7 +104,7 @@ namespace GM_Test
 
         GM_MEM::free(intValue);
         GM_MEM::free(strValue);
-        ASSERT_EQ(GM_MEM::available_size(), GM_DEFAULT_MEMORY_CHUNK_SIZE - estd::BLOCK_SIZE - sizeof(GM::GM_Environment));
+        ASSERT_EQ(GM_MEM::free_size(), GM_DEFAULT_MEMORY_CHUNK_SIZE - estd::BLOCK_SIZE - sizeof(GM::GM_Environment));
 
         auto count = (GM_DEFAULT_MEMORY_CHUNK_SIZE - estd::BLOCK_SIZE * 2 - sizeof(GM::GM_Environment)) / sizeof(GM::GM_IntValue);
 
@@ -118,13 +116,13 @@ namespace GM_Test
         ASSERT_EQ(1, (int)(intValues + (count - 1))->get_value());
         auto intValue_5 =(GM::GM_Object*)(intValues + 5);
         ASSERT_FALSE(GM_MEM::free(intValue_5));
-        ASSERT_EQ(GM_MEM::available_size(), 0);
+        ASSERT_EQ(GM_MEM::free_size(), 0);
 
         GM::GM_IntValue* intValue2 = GM_MEM::alloc_args<GM::GM_IntValue>(env, 20);
         ASSERT_NE(nullptr, intValue2);
         ASSERT_EQ(20, (int)intValue2->get_value());
         ASSERT_EQ(1, GM_MEM::get_object_memory_chunk_idx(intValue2));
-        ASSERT_EQ(GM_MEM::available_size(), GM_DEFAULT_MEMORY_CHUNK_SIZE - estd::BLOCK_SIZE - sizeof(GM::GM_IntValue));
+        ASSERT_EQ(GM_MEM::free_size(), GM_DEFAULT_MEMORY_CHUNK_SIZE - estd::BLOCK_SIZE - sizeof(GM::GM_IntValue));
 
         ASSERT_TRUE(GM_MEM::free(intValues));
 
@@ -133,6 +131,7 @@ namespace GM_Test
         ASSERT_EQ(0, GM_MEM::get_object_memory_chunk_idx(intValue3));
         ASSERT_TRUE(GM_MEM::free(intValue3));
         ASSERT_EQ(nullptr, intValue3);
+        GM_MEM::destory();
     }
     
 }

@@ -3,6 +3,16 @@
 namespace GM_Test
 {
     
+    void T_GC::SetUp()
+    {
+        GM_GC::init();
+    }
+
+    void T_GC::TearDown()
+    {
+        GM_GC::destroy();
+    }
+
     TEST_F(T_GC, Base)
     {
         auto env = GM_GC::alloc<GM::GM_Environment>();
