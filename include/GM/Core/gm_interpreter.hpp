@@ -19,6 +19,7 @@ namespace GM
     class GM_Object;
     class GM_AST_TREE;
     class GM_Environment;
+    class GM_MemoryManager;
 
     class GM_Interpreter : extends(GM_Object)
     {
@@ -58,12 +59,14 @@ namespace GM
         };
 
     private:
+        friend class GM_MemoryManager;
+
         GM_Interpreter();
         ~GM_Interpreter() override;
 
     public:
         GM_Interpreter(GM_Interpreter& other) = delete;
-        void operator=(const GM_Interpreter& other) = delete;
+        GM_Interpreter operator=(const GM_Interpreter& other) = delete;
 
         static GM_Interpreter* instance();
 

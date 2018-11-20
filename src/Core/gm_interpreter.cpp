@@ -47,16 +47,15 @@ namespace GM
 
     GM_Interpreter* GM_Interpreter::instance()
     {
-        if (s_ins == 0)
-            s_ins = new GM_Interpreter();
+        if (s_ins == nullptr)
+            s_ins = GM_GC::alloc<GM_Interpreter>();
 
         return s_ins;
     }
 
     void GM_Interpreter::destory()
     {
-        delete s_ins;
-        s_ins = 0;
+        GM_GC::free(s_ins);
     }
 
     bool GM_Interpreter::init()
