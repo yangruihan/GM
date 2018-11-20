@@ -42,10 +42,10 @@ add_executable(
 get_static_lib_path(gtest gmock GMOCKD_LIB GMOCK_LIB)
 get_static_lib_path(gtest gtest GTESTD_LIB GTEST_LIB)
 
-message(STATUS "GMOCKD_LIB: ${GMOCKD_LIB}")
-message(STATUS "GMOCK_LIB: ${GMOCK_LIB}")
-message(STATUS "GTESTD_LIB: ${GTESTD_LIB}")
-message(STATUS "GTEST_LIB: ${GTEST_LIB}")
+message(STATUS "-+ GMOCKD_LIB: ${GMOCKD_LIB}")
+message(STATUS "-+ GMOCK_LIB: ${GMOCK_LIB}")
+message(STATUS "-+ GTESTD_LIB: ${GTESTD_LIB}")
+message(STATUS "-+ GTEST_LIB: ${GTEST_LIB}")
 
 if (WIN32 OR MSVC)
     target_link_libraries(

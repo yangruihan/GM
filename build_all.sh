@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-bash build.sh \
+bash build_debug.sh \
 && echo \
 "
 

@@ -13,7 +13,7 @@ if [ ! -d "bin/Test" ]; then
 fi
 
 if [ "$1" = "-d" ]; then
-    cd build/CMake/Release && cmake -DCMAKE_BUILD_TYPE=Release -DDEBUG=ON ../../../ && make -j
+    cd build/CMake/Release && cmake -DCMAKE_BUILD_TYPE=Release -DDEBUG=ON -DCOMMAND_LINE=ON ../../../ && make -j
 else
-    cd build/CMake/Release && cmake -DCMAKE_BUILD_TYPE=Release -DDEBUG=OFF ../../../ && make -j
+    cd build/CMake/Release && cmake -DCMAKE_BUILD_TYPE=Release -DDEBUG=OFF -DCOMMAND_LINE=ON ../../../ && make -j
 fi
