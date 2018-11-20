@@ -7,10 +7,16 @@ set(CMAKE_CXX_STANDARD 17)
 
 option(DEBUG "Debug Version" on)
 
-if(DEBUG)
-    add_definitions(-DDEBUG)
-endif(DEBUG)
+if(WIN32 OR MSVC)
+    set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} /MT")
+    set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -DDEBUG /MTd")
+else()
+    if(DEBUG)
+        add_definitions(-DDEBUG)
+    endif(DEBUG)
+endif()
 
+# ---------- FUNCTIONS ----------
 function(get_static_lib_path SUB_FOLDER LIB_NAME DEBUG_OUT RELEASE_OUT)
     if (WIN32 OR MSVC)
         set(${DEBUG_OUT} "${PROJECT_SOURCE_DIR}/libs/${SUB_FOLDER}/win32/debug/${LIB_NAME}.lib" PARENT_SCOPE)
