@@ -39,7 +39,7 @@ namespace GM_Test
         auto k = m_mem_pool->alloc<int>();
         // align 8
         auto size_int = 0;
-        if (sizeof(int) & 0x7 == 0)
+        if ((sizeof(int) & 0x7) == 0)
             size_int = sizeof(int);
         else
             size_int = ((sizeof(int) >> 3) + 1) << 3;
