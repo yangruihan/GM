@@ -116,13 +116,13 @@ namespace GM_Test
         ASSERT_EQ(1, (int)(intValues + (count - 1))->get_value());
         auto intValue_5 =(GM::GM_Object*)(intValues + 5);
         ASSERT_FALSE(GM_MEM::free(intValue_5));
-        ASSERT_EQ(GM_MEM::free_size(), 0);
+        ASSERT_EQ(GM_MEM::available_size(), 0);
 
         GM::GM_IntValue* intValue2 = GM_MEM::alloc_args<GM::GM_IntValue>(env, 20);
         ASSERT_NE(nullptr, intValue2);
         ASSERT_EQ(20, (int)intValue2->get_value());
         ASSERT_EQ(1, GM_MEM::get_object_memory_chunk_idx(intValue2));
-        ASSERT_EQ(GM_MEM::free_size(), GM_DEFAULT_MEMORY_CHUNK_SIZE - estd::BLOCK_SIZE - sizeof(GM::GM_IntValue));
+        ASSERT_EQ(GM_MEM::available_size() + estd::BLOCK_SIZE, GM_DEFAULT_MEMORY_CHUNK_SIZE - estd::BLOCK_SIZE - sizeof(GM::GM_IntValue));
 
         ASSERT_TRUE(GM_MEM::free(intValues));
 
