@@ -25,7 +25,7 @@ namespace GM
     {
 
     private:
-        class GM_InterpreterData
+        class GM_InterpreterData : extends(GM_Object)
         {
         public:
             GM_Environment* m_environment;
