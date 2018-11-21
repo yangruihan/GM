@@ -354,16 +354,18 @@ namespace GM
             GM_MemoryManager::dump(os, dump_obj_handler);
         }
 
-        static uint64_t inc_ref(void* ref)
+        template<class T = GM_Object>
+        static uint64_t inc_ref(T* ref)
         {
-            const auto obj = static_cast<GM_Object*>(ref);
+            const auto obj = (GM_Object*)(ref);
             obj->m_ref_cnt++;
             return obj->m_ref_cnt;
         }
 
-        static uint64_t dec_ref(void* ref, bool delay_free = false)
+        template<class T = GM_Object>
+        static uint64_t dec_ref(T* ref, bool delay_free = false)
         {
-            auto obj = static_cast<GM_Object*>(ref);
+            auto obj = (GM_Object*)(ref);
             obj->m_ref_cnt--;
             if (!delay_free && obj->m_ref_cnt == 0)
             {
@@ -376,8 +378,10 @@ namespace GM
             return obj->m_ref_cnt;
         }
 
-        static uint64_t get_ref_cnt(GM_Object* obj)
+        template<class T = GM_Object>
+        static uint64_t get_ref_cnt(const T* ref)
         {
+            auto obj = (GM_Object*)ref;
             return obj->m_ref_cnt;
         }
 

@@ -21,6 +21,17 @@ namespace GM
         delete m_var_map;
     }
 
+    std::string GM_Environment::str() const
+    {
+#ifdef DEBUG
+        return GM_Utils::format_str("[<class '%s'>, refcnt: %" PRIu64 "]",
+                                    "environment",
+                                    GM_GC::get_ref_cnt<GM_Environment>(this));
+#else
+        return "<class 'environment'>";
+#endif
+    }
+
     GM_Environment* GM_Environment::create(GM_Environment *parent)
     {
         return GM_GC::alloc_args<GM_Environment>(parent);

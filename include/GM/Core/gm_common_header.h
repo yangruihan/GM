@@ -5,6 +5,7 @@
 #include "../Common/gm_utils.hpp"
 
 #include <cstdint>
+#include <cinttypes>
 
 #define extends(class_name) public class_name
 #define implements(class_name) public class_name

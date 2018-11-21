@@ -19,7 +19,7 @@ namespace GM
 
         static GM_Environment* create(GM_Environment* parent);
 
-        std::string str() const override { return "environment"; }
+        std::string str() const override;
         
         void set_var(const std::string& var_name, GM_Value* var);
         GM_Value* get_var(const std::string& var_name,
