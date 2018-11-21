@@ -30,7 +30,7 @@ namespace GM
         {
             auto top = m_data_stack->top();
             m_data_stack->pop();
-            GM_GC::free(top);
+            delete top;
         }
 
         delete m_data_stack;
@@ -38,7 +38,7 @@ namespace GM
 
         for (auto& env : *m_loaded_env)
         {
-            GM_GC::free(env);
+            delete env;
         }
         delete m_loaded_env;
     }
@@ -82,10 +82,10 @@ namespace GM
 
     bool GM_Interpreter::_create_data(const size_t &parse_mode)
     {
-        GM_InterpreterData* data;
-        const auto ret = GM_InterpreterData::create(data,
-                                              m_global_environment,
-                                              parse_mode);
+        GM_Interpreter::GM_InterpreterData* data;
+        auto ret = GM_Interpreter::GM_InterpreterData::create(data,
+                                                              m_global_environment,
+                                                              parse_mode);
 
         m_data_stack->push(data);
 
@@ -97,7 +97,7 @@ namespace GM
         m_loaded_env->push_back(C_ENV);
         auto data = _get_current_data();
         m_data_stack->pop();
-        GM_GC::free(data);
+        delete data;
 
         return true;
     }
@@ -516,11 +516,11 @@ namespace GM
     }
 
     // ----- GM_InterpreterData ----- //
-    bool GM_Interpreter::GM_InterpreterData::create(GM_InterpreterData*& instance,
+    bool GM_Interpreter::GM_InterpreterData::create(GM_Interpreter::GM_InterpreterData*& instance,
                                                     GM_Environment* env,
                                                     const size_t& parse_mode)
     {
-        instance = GM_GC::alloc<GM_InterpreterData>();
+        instance = new GM_Interpreter::GM_InterpreterData();
         instance->m_environment = GM_Environment::create(env);
         instance->m_parse_mode = parse_mode;
 
