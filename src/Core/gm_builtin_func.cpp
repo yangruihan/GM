@@ -46,9 +46,8 @@ namespace GM
     
     GM_FUNCTION_I(GM_BuiltinFunc, __exit)
     {
-        auto ret = GM_Value::bool_value(param->get_environment(), false);
-        param->get_environment()->set_var(GM_INTERPRETER_RUN_FLAG,
-                                          ret);
+        const auto ret = (GM_BoolValue*) param->get_environment()->get_var(GM_INTERPRETER_RUN_FLAG);
+        ret->set_value(false);
         return ret;
     }
     

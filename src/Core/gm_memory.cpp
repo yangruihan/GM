@@ -7,4 +7,6 @@ namespace GM
 
     GM_GarbageCollector* GM_GarbageCollector::s_ins;
 
+    uint64_t GM_GarbageCollector::s_ins_idx_counter = 0x1000000000000000;
+
 }

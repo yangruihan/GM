@@ -24,9 +24,10 @@ namespace GM
     std::string GM_Environment::str() const
     {
 #ifdef DEBUG
-        return GM_Utils::format_str("[<class '%s'>, refcnt: %" PRIu64 "]",
+        return GM_Utils::format_str("[<class '%s'>, refcnt: %" PRIu64 ", insidx: %" PRIu64 "]",
                                     "environment",
-                                    GM_GC::get_ref_cnt<GM_Environment>(this));
+                                    GM_GC::get_ref_cnt(this),
+                                    GM_GC::get_ins_idx(this));
 #else
         return "<class 'environment'>";
 #endif

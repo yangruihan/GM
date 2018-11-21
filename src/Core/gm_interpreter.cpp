@@ -104,7 +104,7 @@ namespace GM
 
     bool GM_Interpreter::get_running_flag() const
     {
-        auto flag = C_ENV->get_var(GM_INTERPRETER_RUN_FLAG);
+        const auto flag = C_ENV->get_var(GM_INTERPRETER_RUN_FLAG);
         return dynamic_cast<GM_BoolValue*>(flag)->get_value();
     }
 
@@ -164,7 +164,7 @@ namespace GM
     {
         C_PARSE_CURSOR = 0;
 
-        auto command_len = command.size();
+        const auto command_len = command.size();
         auto ret = 0;
 
         while (C_PARSE_CURSOR < command_len - 1)
@@ -358,7 +358,7 @@ namespace GM
 
     GM_AST_TREE* GM_Interpreter::_get_ast_tree_from_token(const std::string& token) const
     {
-        auto token_size = token.size();
+        const auto token_size = token.size();
         if (token_size == 0 || token[0] == ' ')
             return new GM_AST_NULL_EXPR("");
 

@@ -321,8 +321,7 @@ namespace GM
         static T* alloc()
         {
             auto obj = GM_MemoryManager::alloc<T>();
-            inc_ref(obj);
-            s_ins->m_objs.push_back(obj);
+            _init_new_obj((GM_Object*)obj);
             return obj;
         }
 
@@ -330,8 +329,7 @@ namespace GM
         static T* alloc_args(TArgs &&... args)
         {
             auto obj = GM_MemoryManager::alloc_args<T>(std::forward<TArgs>(args)...);
-            inc_ref(obj);
-            s_ins->m_objs.push_back(obj);
+            _init_new_obj((GM_Object*)obj);
             return obj;
         }
         
@@ -354,18 +352,14 @@ namespace GM
             GM_MemoryManager::dump(os, dump_obj_handler);
         }
 
-        template<class T = GM_Object>
-        static uint64_t inc_ref(T* ref)
+        static uint64_t inc_ref(GM_Object* obj)
         {
-            const auto obj = (GM_Object*)(ref);
             obj->m_ref_cnt++;
             return obj->m_ref_cnt;
         }
 
-        template<class T = GM_Object>
-        static uint64_t dec_ref(T* ref, bool delay_free = false)
+        static uint64_t dec_ref(GM_Object* obj, bool delay_free = false)
         {
-            auto obj = (GM_Object*)(ref);
             obj->m_ref_cnt--;
             if (!delay_free && obj->m_ref_cnt == 0)
             {
@@ -378,11 +372,24 @@ namespace GM
             return obj->m_ref_cnt;
         }
 
-        template<class T = GM_Object>
-        static uint64_t get_ref_cnt(const T* ref)
+        static uint64_t get_ref_cnt(const GM_Object* obj)
         {
-            auto obj = (GM_Object*)ref;
             return obj->m_ref_cnt;
+        }
+
+        static uint64_t get_ref_cnt(GM_Object* obj)
+        {
+            return obj->m_ref_cnt;
+        }
+
+        static uint64_t get_ins_idx(const GM_Object* obj)
+        {
+            return obj->m_ins_idx;
+        }
+
+        static uint64_t get_ins_idx(GM_Object* obj)
+        {
+            return obj->m_ins_idx;
         }
 
         static void gc()
@@ -399,9 +406,22 @@ namespace GM
         }
 
     private:
+        static void _init_new_obj(GM_Object* obj)
+        {
+            inc_ref(obj);
+            obj->m_ins_idx = _get_valid_ins_idx();
+            s_ins->m_objs.push_back(obj);
+        }
+
+        static uint64_t _get_valid_ins_idx()
+        {
+            return s_ins_idx_counter++;
+        }
+
         static GM_GarbageCollector* s_ins;
+        static uint64_t             s_ins_idx_counter;
         
-        std::vector<GM_Object*> m_objs;
+        std::vector<GM_Object*>     m_objs;
 
     };
 

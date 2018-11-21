@@ -26,6 +26,7 @@ namespace GM
             return T_GM_BOOL_VALUE;
         }
 
+        void set_value(const bool& value) { m_value = value; }
         bool get_value() const { return m_value; }
 
     public:
