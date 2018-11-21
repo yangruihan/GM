@@ -23,7 +23,8 @@ namespace GM
         virtual ~GM_FloatValue () {};
 
     public:
-        GM_VALUE_STR_FUNC(GM_FloatValue)
+        GM_VALUE_DEBUG_STR_FUNC(GM_FloatValue)
+        GM_VALUE_STR_FUNC(float)
 
         std::string _str() const override;
 

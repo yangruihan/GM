@@ -15,7 +15,7 @@ namespace GM
         
     std::string GM_PairValue::_str() const
     {
-        return GM_Utils::format_str("(\"%s\": %s)",
+        return GM_Utils::format_str("\"%s\": %s",
                                   m_key.c_str(),
                                   m_value->str().c_str());
     }

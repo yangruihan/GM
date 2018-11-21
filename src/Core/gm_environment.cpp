@@ -18,6 +18,9 @@ namespace GM
         
     GM_Environment::~GM_Environment ()
     {
+        for (auto it = m_var_map->begin(); it != m_var_map->end(); ++it)
+            GM_GC::free(it->second);
+
         delete m_var_map;
     }
 

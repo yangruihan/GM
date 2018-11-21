@@ -19,6 +19,20 @@ if (ret != nullptr) \
 namespace GM
 {
 
+    GM_Interpreter::GM_InterpreterData::GM_InterpreterData()
+    {
+        m_ast_root = nullptr;
+        m_parse_cursor = 0;
+        m_token_index_stack = new std::stack<size_t>();
+        m_current_token_index = 0;
+    }
+
+    GM_Interpreter::GM_InterpreterData::~GM_InterpreterData()
+    {
+        GM_GC::free(m_environment);
+        delete m_token_index_stack;
+    }
+
     GM_Interpreter::GM_Interpreter()
     {
         _init();

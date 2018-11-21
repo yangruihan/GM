@@ -16,7 +16,8 @@ namespace GM
         ~GM_NullValue() override;
 
     public:
-        GM_VALUE_STR_FUNC(GM_NullValue)
+        GM_VALUE_DEBUG_STR_FUNC(GM_NullValue)
+        GM_VALUE_STR_FUNC(null)
 
         std::string _str() const override
         { return "null"; }

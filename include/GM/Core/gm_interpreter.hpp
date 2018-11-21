@@ -28,30 +28,17 @@ namespace GM
         class GM_InterpreterData : extends(GM_Object)
         {
         public:
-            GM_Environment* m_environment;
-
-            GM_AST_TREE* m_ast_root;
-
-            size_t m_parse_cursor;
-
+            GM_Environment*     m_environment;
+            GM_AST_TREE*        m_ast_root;
+            size_t              m_parse_cursor;
             std::stack<size_t>* m_token_index_stack;
-            size_t m_current_token_index;
+            size_t              m_current_token_index;
+            size_t              m_parse_mode;        // Parse Mode: (REPL | Source file)
 
-            size_t m_parse_mode;        // Parse Mode: (REPL | Source file)
-
-            GM_InterpreterData()
-            {
-                m_ast_root = nullptr;
-                m_parse_cursor = 0;
-                m_token_index_stack = new std::stack<size_t>();
-                m_current_token_index = 0;
-            }
-
-            virtual ~GM_InterpreterData()
-            {
-                delete m_token_index_stack;
-            }
-
+        public:
+            GM_InterpreterData();
+            virtual ~GM_InterpreterData();
+            
             static bool create(GM_InterpreterData*& instance,
                                GM_Environment* env,
                                const size_t& parse_mode);

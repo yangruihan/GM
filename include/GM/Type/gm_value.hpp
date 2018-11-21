@@ -49,7 +49,8 @@ namespace GM
         }
 
     public:
-        GM_VALUE_STR_FUNC(GM_Value)
+        GM_VALUE_DEBUG_STR_FUNC(GM_Value)
+        GM_VALUE_STR_FUNC(value)
 
         virtual std::string _str() const = 0;
 

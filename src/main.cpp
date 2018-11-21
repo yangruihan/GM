@@ -63,8 +63,10 @@ int main(int argc, char* argv[])
     GM_GC::dump(std::cout, on_dump_obj_handler);
     GM_GC::destroy();
 
+#ifdef _WINDOWS
     int pause;
     std::cin >> pause;
+#endif
 
     return 0;
 }

@@ -30,7 +30,8 @@ namespace GM
         bool get_value() const { return m_value; }
 
     public:
-        GM_VALUE_STR_FUNC(GM_BoolValue)
+        GM_VALUE_DEBUG_STR_FUNC(GM_BoolValue)
+        GM_VALUE_STR_FUNC(bool)
 
         std::string _str() const override;
 

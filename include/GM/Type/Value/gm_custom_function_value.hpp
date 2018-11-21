@@ -20,7 +20,8 @@ namespace GM
                             GM_AST_TREE* func_body);
         virtual ~GM_CustomFuncValue ();
     public:
-        GM_VALUE_STR_FUNC(GM_CustomFuncValue)
+        GM_VALUE_DEBUG_STR_FUNC(GM_CustomFuncValue)
+        GM_VALUE_STR_FUNC(function)
 
         std::string _str() const override;
 

@@ -22,7 +22,7 @@ namespace GM
     
     std::string GM_StrValue::_str() const
     {
-        return GM_Utils::format_str("%s", m_value.c_str());
+        return GM_Utils::format_str("'%s'", m_value.c_str());
     }
 
     std::string GM_StrValue::get(const size_t &index) const
