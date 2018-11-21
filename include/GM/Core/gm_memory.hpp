@@ -47,9 +47,9 @@ namespace GM
                 return pool->free_size();
             }
 
-            void dump(std::ostream& os) const
+            void dump(std::ostream& os, estd::dump_obj_handler dump_obj_handler = nullptr) const
             {
-                pool->dump(os);
+                pool->dump(os, dump_obj_handler);
             }
         };
     
@@ -108,9 +108,9 @@ namespace GM
             return s_ins->_free_arr(obj);
         }
         
-        static void dump(std::ostream& os)
+        static void dump(std::ostream& os, estd::dump_obj_handler dump_obj_handler = nullptr)
         {
-            s_ins->_dump(os);
+            s_ins->_dump(os, dump_obj_handler);
         }
         
         static size_t available_size()
@@ -235,7 +235,7 @@ namespace GM
         }
 
     private:
-        void _dump(std::ostream& os) const
+        void _dump(std::ostream& os, estd::dump_obj_handler dump_obj_handler = nullptr) const
         {
             os << "\n----------------------------------------------------------------------------------------" << std::endl;
             os << "--- Memory Manager Info ---" << std::endl;
@@ -246,7 +246,7 @@ namespace GM
             for (size_t i = 0, count = m_chunks.size(); i < count; i++)
             {
                 os << "\n*** Chunk " << i << " ***\n";
-                m_chunks[i]->dump(os);
+                m_chunks[i]->dump(os, dump_obj_handler);
             }
             os << "----------------------------------------------------------------------------------------" << std::endl;
         }
@@ -349,9 +349,9 @@ namespace GM
             return true;
         }
 
-        static void dump(std::ostream& os)
+        static void dump(std::ostream& os, estd::dump_obj_handler dump_obj_handler = nullptr)
         {
-            GM_MemoryManager::dump(os);
+            GM_MemoryManager::dump(os, dump_obj_handler);
         }
 
         static uint64_t inc_ref(void* ref)

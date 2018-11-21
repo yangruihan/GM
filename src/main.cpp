@@ -21,6 +21,15 @@ void parse_files(int argc, char* argv[], GM_Interpreter* interpreter)
     }
 }
 
+std::string on_dump_obj_handler(const void* ref)
+{
+    const auto obj = static_cast<const GM_Object*>(ref);
+    if (obj != nullptr)
+        return obj->str();
+
+    return "";
+}
+
 int main(int argc, char* argv[])
 {
     DEBUG_LOG("\n\n\n");
@@ -30,7 +39,7 @@ int main(int argc, char* argv[])
 #ifdef DEBUG
     for (auto i = 0; i < argc; i++)
     {
-        DEBUG_LOG_F("- %zu: %s", i, argv[i]);
+        DEBUG_LOG_F("- %d: %s", i, argv[i]);
     }
 #endif
 
@@ -51,7 +60,7 @@ int main(int argc, char* argv[])
     GM_Interpreter::destory();
     
     GM_GC::gc();
-    GM_GC::dump(std::cout);
+    GM_GC::dump(std::cout, on_dump_obj_handler);
     GM_GC::destroy();
 
     int pause;
