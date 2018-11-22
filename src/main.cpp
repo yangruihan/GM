@@ -13,7 +13,7 @@ void repl(GM_Interpreter* interpreter)
 
 void parse_files(const int argc, char* argv[], GM_Interpreter* interpreter)
 {
-    for (auto i = 0; i < argc; i++)
+    for (auto i = 1; i < argc; i++)
     {
         const std::string file_path = argv[i];
         interpreter->parse_file(file_path);

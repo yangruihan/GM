@@ -347,6 +347,12 @@ namespace GM
                 PRINT_ERROR("GCFatal: obj ref count is already 0");
                 return false;
             }
+            else if (ref->m_ins_idx < GM_DEFAULT_INS_IDX_START)
+            {
+                PRINT_ERROR("GCFatal: obj is not alloc by GCAllocator");
+                return false;
+            }
+
             if (dec_ref(ref) == 0)
                 obj = nullptr;
             return true;
@@ -365,12 +371,29 @@ namespace GM
 
         static uint64_t dec_ref(GM_Object* obj, bool delay_free = false)
         {
+            if (obj->m_ins_idx < GM_DEFAULT_INS_IDX_START)
+            {
+                PRINT_ERROR("GCFatal: obj is not alloc by GCAllocator");
+                return 0;
+            }
+
             obj->m_ref_cnt--;
             if (!delay_free && obj->m_ref_cnt == 0)
             {
                 const auto it = std::find(s_ins->m_objs.begin(), s_ins->m_objs.end(), obj);
+                
                 if (it != s_ins->m_objs.end())
+                {
                     s_ins->m_objs.erase(it);
+                }
+                else
+                {
+                    PRINT_ERROR("GCFatal: obj is not in managered memory");
+                    return 0;
+                }
+
+                obj->m_ins_idx = 0;
+                obj->m_memory_chunk_idx = 0;
                 obj->~GM_Object();
                 GM_MemoryManager::free(obj);
                 return 0;
@@ -396,6 +419,11 @@ namespace GM
         static uint64_t get_ins_idx(GM_Object* obj)
         {
             return obj->m_ins_idx;
+        }
+
+        static bool check_obj_valid(GM_Object* obj)
+        {
+            return obj != nullptr && obj->m_ref_cnt > 0 && obj->m_ins_idx >= GM_DEFAULT_INS_IDX_START;
         }
 
         static void gc()

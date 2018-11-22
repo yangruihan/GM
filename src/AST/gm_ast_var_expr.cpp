@@ -63,20 +63,22 @@ namespace GM
                 // prepare parameters
                 for (size_t i = 0, count = cust_func->get_param_count(); i < count; i++)
                 {
-                    auto value = get_child(i)->eval();
+                    const auto value = get_child(i)->eval();
                     env->set_var(cust_func->get_param_name(i), value);
                 }
 
                 GM_Utils::set_env_for_childs(cust_func->get_func_body(), env);
-                auto ret = cust_func->eval();
+                const auto ret = cust_func->eval();
                 GM_Utils::set_env_for_childs(cust_func->get_func_body(),
                                              cust_func->get_environment());
+
+                GM_GC::free(env);
 
                 return ret;
             }
         }
 
-        auto value = GM_Value::convert_to_value(object);
+        const auto value = GM_Value::convert_to_value(object);
         if (value != nullptr)
             return value;
 

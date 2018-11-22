@@ -36,7 +36,7 @@ namespace GM
             size_t              m_parse_mode;        // Parse Mode: (REPL | Source file)
 
         public:
-            GM_InterpreterData();
+            GM_InterpreterData(GM_Environment*& env, const size_t& parse_mode);
             virtual ~GM_InterpreterData();
             
             static bool create(GM_InterpreterData*& instance,
@@ -118,10 +118,8 @@ namespace GM
     
     private:
         std::stack<GM_InterpreterData*>* m_data_stack;
-
-        std::vector<GM_Environment*>* m_loaded_env;
-
-        GM_Environment* m_global_environment;
+        std::vector<GM_Environment*>*    m_loaded_env;
+        GM_Environment*                  m_global_environment;
 
 #ifdef DEBUG
         void _print_ast(GM_AST_TREE* node, int indent) const;

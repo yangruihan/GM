@@ -47,8 +47,8 @@ namespace GM
 
     GM_Value* GM_CustomFuncValue::eval()
     {
-        auto ret = m_func_body->eval();
-        auto list_value = dynamic_cast<GM_ListValue*>(ret);
+        const auto ret = m_func_body->eval();
+        const auto list_value = dynamic_cast<GM_ListValue*>(ret);
         if (list_value == nullptr)
             return ret;
 

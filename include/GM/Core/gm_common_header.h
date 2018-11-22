@@ -23,6 +23,8 @@
 
 #define GM_DEFAULT_MEMORY_CHUNK_SIZE 4096
 
+#define GM_DEFAULT_INS_IDX_START 0x1000000000000000
+
 
 // --------------- Function Key Define --------------- //
 

@@ -8,29 +8,29 @@ if (ret != nullptr) \
     return ret;     \
 } while(0)
 
-#define C_ENV _get_current_data()->m_environment
-#define C_PARSE_CURSOR _get_current_data()->m_parse_cursor
-#define C_TOKEN_INDEX _get_current_data()->m_current_token_index
-#define C_AST_ROOT _get_current_data()->m_ast_root
+#define C_ENV               _get_current_data()->m_environment
+#define C_PARSE_CURSOR      _get_current_data()->m_parse_cursor
+#define C_TOKEN_INDEX       _get_current_data()->m_current_token_index
+#define C_AST_ROOT          _get_current_data()->m_ast_root
 #define C_TOKEN_INDEX_STACK _get_current_data()->m_token_index_stack
-#define C_PARSE_MODE _get_current_data()->m_parse_mode
+#define C_PARSE_MODE        _get_current_data()->m_parse_mode
 
 
 namespace GM
 {
 
-    GM_Interpreter::GM_InterpreterData::GM_InterpreterData()
+    GM_Interpreter::GM_InterpreterData::GM_InterpreterData(GM_Environment*& env, const size_t& parse_mode)
+        : m_environment(GM_Environment::create(env)),
+          m_ast_root(nullptr),
+          m_parse_cursor(0), 
+          m_token_index_stack(new std::stack<size_t>()), 
+          m_current_token_index(0),
+          m_parse_mode(parse_mode)
     {
-        m_ast_root = nullptr;
-        m_parse_cursor = 0;
-        m_token_index_stack = new std::stack<size_t>();
-        m_current_token_index = 0;
     }
 
     GM_Interpreter::GM_InterpreterData::~GM_InterpreterData()
     {
-        GM_Environment::clear(m_environment);
-        GM_GC::free(m_environment);
         delete m_token_index_stack;
     }
 
@@ -77,8 +77,7 @@ namespace GM
         GM_NullValue::init(m_global_environment);
 
         m_loaded_env = new std::vector<GM_Environment*>();
-
-        m_data_stack = new std::stack<GM_Interpreter::GM_InterpreterData*>();
+        m_data_stack = new std::stack<GM_InterpreterData*>();
 
         return ret;
     }
@@ -86,7 +85,6 @@ namespace GM
     void GM_Interpreter::_destroy()
     {
         GM_NullValue::destroy();
-        GM_BuiltinFunc::destroy(m_global_environment);
 
         while (!m_data_stack->empty())
         {
@@ -97,14 +95,15 @@ namespace GM
 
         delete m_data_stack;
 
-        GM_Environment::clear(m_global_environment);
-        GM_GC::free(m_global_environment);
-
         for (auto& env : *m_loaded_env)
         {
+            GM_Environment::clear(env);
             GM_GC::free(env);
         }
         delete m_loaded_env;
+
+        GM_Environment::clear(m_global_environment);
+        GM_GC::free(m_global_environment);
     }
 
 
@@ -112,8 +111,8 @@ namespace GM
     {
         GM_InterpreterData* data;
         const auto ret = GM_InterpreterData::create(data,
-                                              m_global_environment,
-                                              parse_mode);
+                                                    m_global_environment,
+                                                    parse_mode);
 
         m_data_stack->push(data);
 
@@ -122,7 +121,9 @@ namespace GM
 
     bool GM_Interpreter::_clear_data() const
     {
+        GM_GC::inc_ref(C_ENV);
         m_loaded_env->push_back(C_ENV);
+        
         auto data = _get_current_data();
         m_data_stack->pop();
         GM_GC::free(data);
@@ -162,11 +163,11 @@ namespace GM
 
     int GM_Interpreter::parse_file(const std::string &file_path)
     {
-        _create_data(GM_INTERPRETER_FILE_MODE);
-
         int ret = 0;
         if (GM_Utils::str_ends_with(file_path, GM_SOURCE_FILE_SUFFIX))
         {
+            _create_data(GM_INTERPRETER_FILE_MODE);
+
             std::string file_content;
             if (GM_Utils::read_file(file_path.c_str(), file_content))
             {
@@ -181,9 +182,9 @@ namespace GM
                 ret = -1;
                 PRINT_ERROR_F("IOError: file(%s) read failed", file_path.c_str());
             }
-        }
 
-        _clear_data();
+            _clear_data();
+        }
 
         return ret;
     }
@@ -302,16 +303,16 @@ namespace GM
                     C_TOKEN_INDEX ++;
                 }
 
-                auto new_env = ret->set_environment(env);
+                const auto new_env = ret->set_environment(env);
 
                 DEBUG_LOG_F("Create AST Node %s, child count %zu",
                             ret->get_token().c_str(),
                             ret->get_need_child_count());
 
-                auto child_count = ret->get_need_child_count();
+                const auto child_count = ret->get_need_child_count();
 
-                auto parentheses_count = C_TOKEN_INDEX_STACK->size();
-                auto command_len = command.size();
+                const auto parentheses_count = C_TOKEN_INDEX_STACK->size();
+                const auto command_len = command.size();
 
                 if (command[C_PARSE_CURSOR - 1] == ')')
                 {
@@ -334,7 +335,7 @@ namespace GM
                         while (C_PARSE_CURSOR < command_len
                                && C_TOKEN_INDEX_STACK->size() >= parentheses_count)
                         {
-                            auto child = _parse(command, new_env);
+                            const auto child = _parse(command, new_env);
                             if (child == nullptr)
                                 return nullptr;
 
@@ -360,7 +361,7 @@ namespace GM
                 {
                     for (size_t i = 0; i < child_count; i++)
                     {
-                        auto child = _parse(command, new_env);
+                        const auto child = _parse(command, new_env);
                         if (child == nullptr)
                             return nullptr;
 
@@ -550,10 +551,7 @@ namespace GM
                                                     GM_Environment* env,
                                                     const size_t& parse_mode)
     {
-        instance = GM_GC::alloc<GM_InterpreterData>();
-        instance->m_environment = GM_Environment::create(env);
-        instance->m_parse_mode = parse_mode;
-
+        instance = GM_GC::alloc_args<GM_InterpreterData>(env, parse_mode);
         return true;
     }
 

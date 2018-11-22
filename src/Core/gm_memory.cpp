@@ -1,4 +1,5 @@
 #include "gm_memory.hpp"
+#include "GM.h"
 
 namespace GM
 {
@@ -7,6 +8,6 @@ namespace GM
 
     GM_GarbageCollector* GM_GarbageCollector::s_ins;
 
-    uint64_t GM_GarbageCollector::s_ins_idx_counter = 0x1000000000000000;
+    uint64_t GM_GarbageCollector::s_ins_idx_counter = GM_DEFAULT_INS_IDX_START;
 
 }

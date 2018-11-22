@@ -10,29 +10,35 @@ namespace GM
                                     : GM_Value(env), m_var_name(var_name)
     {}
     
-    GM_VarNameValue::~GM_VarNameValue() {}
+    GM_VarNameValue::~GM_VarNameValue() = default;
     
     void GM_VarNameValue::_init_functions() {}
 
     std::string GM_VarNameValue::_str() const
     {
-        auto var = get_environment()->get_var(m_var_name);
+        const auto var = get_environment()->get_var(m_var_name);
         if (var == nullptr)
         {
             PRINT_ERROR_F("NameError: name '%s' is not defined", m_var_name.c_str());
             return "";
         }
 
-        auto value = dynamic_cast<GM_Value*>(var);
+        const auto value = dynamic_cast<GM_Value*>(var);
         if (value != nullptr)
         {
-            return value->_str();
+            if (GM_GC::check_obj_valid(value))
+                return value->_str();
+            else
+                return "!!!EXCEPTION!!! Memory Broken";
         }
 
-        auto func = dynamic_cast<GM_Function*>(var);
+        const auto func = dynamic_cast<GM_Function*>(var);
         if (func != nullptr)
         {
-            return func->get_name();
+            if (GM_GC::check_obj_valid(func))
+                return func->get_name();
+            else
+                return "!!!EXCEPTION!!! Memory Broken";
         }
 
         PRINT_ERROR_F("TypeError: name '%s' variable type is invalid", m_var_name.c_str());

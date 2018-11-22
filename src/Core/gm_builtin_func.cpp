@@ -30,11 +30,6 @@ namespace GM
         return true;
     }
 
-    void GM_BuiltinFunc::destroy(GM_Environment* env)
-    {
-        GM_GC::free(env);
-    }
-
     GM_FUNCTION_I(GM_BuiltinFunc, __print)
     {
         GET_AST_TREE(ast_tree, 0);
@@ -63,7 +58,7 @@ namespace GM
         GET_PARAM(ast_tree1, GM_AST_VAR_EXPR, 0);
         GET_AST_TREE(ast_tree2, 1);
 
-        auto var_key = ast_tree1->get_var_name_value();
+        const auto var_key = ast_tree1->get_var_name_value();
         GM_Value* var_value = nullptr;
 
         auto value_var_expr = dynamic_cast<GM_AST_VAR_EXPR*>(ast_tree2);
@@ -74,6 +69,7 @@ namespace GM
 
         if (var_key != nullptr && var_value != nullptr)
         {
+            GM_GC::inc_ref(var_value);
             param->get_environment()->set_var(var_key->get_var_name(),
                                               var_value);
         }
