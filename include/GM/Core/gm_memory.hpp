@@ -368,11 +368,11 @@ namespace GM
             obj->m_ref_cnt--;
             if (!delay_free && obj->m_ref_cnt == 0)
             {
-                obj->~GM_Object();
-                GM_MemoryManager::free(obj);
                 const auto it = std::find(s_ins->m_objs.begin(), s_ins->m_objs.end(), obj);
                 if (it != s_ins->m_objs.end())
                     s_ins->m_objs.erase(it);
+                obj->~GM_Object();
+                GM_MemoryManager::free(obj);
                 return 0;
             }
             return obj->m_ref_cnt;

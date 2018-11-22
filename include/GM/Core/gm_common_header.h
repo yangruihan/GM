@@ -160,7 +160,7 @@ std::string str() const override { return GM_STR(format, ##__VA_ARGS__); }
     #define GM_VALUE_DEBUG_STR_FUNC(type)
 
     #define GM_VALUE_STR_FUNC(type) \
-    GM_STR_FUNC("<type: %s value: %s>", #type, _str().c_str())
+    GM_STR_FUNC("%s", _str().c_str())
 #endif
 
 namespace GM
