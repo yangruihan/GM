@@ -72,7 +72,7 @@ namespace GM
                 GM_Utils::set_env_for_childs(cust_func->get_func_body(),
                                              cust_func->get_environment());
 
-                GM_GC::free(env);
+//                GM_GC::free(env);
 
                 return ret;
             }

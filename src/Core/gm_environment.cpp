@@ -17,6 +17,7 @@ namespace GM
     GM_Environment::~GM_Environment ()
     {
         delete m_var_map;
+        m_var_map = nullptr;
     }
 
     std::string GM_Environment::str() const
@@ -40,6 +41,7 @@ namespace GM
     {
         for (auto & it : *env->m_var_map)
             GM_GC::free(it.second);
+        env->m_var_map->clear();
     }
     
     void GM_Environment::set_var(const std::string& var_name, GM_Value *var)
@@ -58,6 +60,12 @@ namespace GM
     {
         if (var_name.empty())
             return nullptr;
+
+        if (m_var_map == nullptr)
+        {
+            PRINT_ERROR("NullptrError: environment variable map is null");
+            return nullptr;
+        }
 
         const auto it = m_var_map->find(var_name);
         if (it != m_var_map->end())
