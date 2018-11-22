@@ -1,4 +1,4 @@
-#include <stdio.h>
+#include <cstdio>
 #include <iostream>
 #include <string>
 
@@ -11,12 +11,11 @@ void repl(GM_Interpreter* interpreter)
     interpreter->repl();
 }
 
-void parse_files(int argc, char* argv[], GM_Interpreter* interpreter)
+void parse_files(const int argc, char* argv[], GM_Interpreter* interpreter)
 {
-    std::string file_path;
-    for (size_t i = 0; i < argc; i++)
+    for (auto i = 0; i < argc; i++)
     {
-        file_path = argv[i];
+        const std::string file_path = argv[i];
         interpreter->parse_file(file_path);
     }
 }
@@ -30,7 +29,7 @@ std::string on_dump_obj_handler(const void* ref)
     return "";
 }
 
-int main(int argc, char* argv[])
+int main(const int argc, char* argv[])
 {
     DEBUG_LOG("\n\n\n");
 

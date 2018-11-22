@@ -41,11 +41,8 @@ namespace GM
     
     GM_Parameter::~GM_Parameter()
     {
-        if (m_list_params != nullptr)
-            delete m_list_params;
-
-        if (m_dict_params != nullptr)
-            delete m_dict_params;
+        delete m_list_params;
+        delete m_dict_params;
     }
 
     std::string GM_Parameter::str() const

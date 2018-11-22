@@ -91,7 +91,7 @@ namespace GM
         bool _init();
         void _destroy();
 
-        void _set_parse_mode(const size_t& mode)
+        void _set_parse_mode(const size_t& mode) const
         {
             m_data_stack->top()->m_parse_mode = mode;
         }

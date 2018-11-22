@@ -204,12 +204,12 @@ namespace GM
 #ifdef DEBUG
                 DEBUG_LOG_F("Create AST success");
                 DEBUG_LOG_F("--- Show AST structure ---");
-                auto root = this->get_ast_root();
+                const auto root = this->get_ast_root();
                 this->_print_ast(root, 0);
                 std::cout << std::endl;
 #endif
 
-                auto result = this->eval();
+                const auto result = this->eval();
                 if (result != nullptr)
                 {
                     ret = 0;
@@ -234,6 +234,8 @@ namespace GM
                 std::cout << "Error Code: " << ret << std::endl;
                 break;
             }
+
+            GM_GC::free(C_AST_ROOT);
         }
 
         return ret;
