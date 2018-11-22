@@ -2,28 +2,20 @@
 
 #include <vector>
 #include <string>
+#include <utility>
 
 #include "../Core/gm_common_header.h"
 #include "../Type/gm_value.hpp"
 #include "../Core/gm_environment.hpp"
+#include "gm_memory.hpp"
 
 namespace GM
 {
-    class GM_AST_BINARY_EXPR;
-    class GM_AST_DICT_EXPR;
-    class GM_AST_LIST_EXPR;
-    class GM_AST_LITERAL_EXPR;
-    class GM_AST_ADD_OPERATOR_EXPR;
-    class GM_AST_SUB_OPERATOR_EXPR;
-    class GM_AST_MUL_OPERATOR_EXPR;
-    class GM_AST_DIV_OPERATOR_EXPR;
-    class GM_AST_NULL_EXPR;
-    class GM_AST_STR_LITERAL_EXPR;
-    class GM_AST_VAR_EXPR;
 
     class GM_AST_TREE : extends(GM_Object)
     {
-    protected:
+    
+    public:
         GM_AST_TREE (const std::string& token): m_token(token)
         {
             m_childs = new std::vector<GM_AST_TREE*>();
@@ -32,13 +24,17 @@ namespace GM
         ~GM_AST_TREE () override
         {
             for (size_t i = 0, count = get_child_count(); i < count; i++)
-                delete (*m_childs)[i];
+                GM_GC::free((*m_childs)[i]);
 
             delete m_childs;
         }
 
-        friend class GM_MemoryManager;
-        friend class GM_GarbageCollector;
+    public:
+        template<class T = GM_AST_TREE, class ...TArgs>
+        static T* create(TArgs &&... args)
+        {
+            return GM_GC::alloc_args<T>(std::forward<TArgs>(args)...);
+        }
 
     public:
 
@@ -126,12 +122,9 @@ namespace GM
 
     protected:
         std::vector<GM_AST_TREE*>* m_childs;
-
-        const std::string m_token;
-
-        size_t m_token_index;
-        
-        GM_Environment* m_environment;
+        const std::string          m_token;
+        size_t                     m_token_index;
+        GM_Environment*            m_environment;
     };
 
 }

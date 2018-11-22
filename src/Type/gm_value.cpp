@@ -6,9 +6,15 @@
 namespace GM
 {
 
-    GM_Value::GM_Value(GM_Environment* env): m_environment(env) {}
+    GM_Value::GM_Value(GM_Environment* env): m_environment(env)
+    {
+        GM_GC::inc_ref(m_environment);
+    }
 
-    GM_Value::~GM_Value() {}
+    GM_Value::~GM_Value()
+    {
+        GM_GC::free(m_environment);
+    }
 
     GM_Value* GM_Value::convert_to_value(GM_Object* obj)
     {
@@ -53,7 +59,7 @@ namespace GM
 
     /* ----- create value ----- */
     GM_NullValue* GM_Value::null_value()
-    { return &GM_NullValue::instance; }
+    { return GM_NullValue::s_ins; }
 
     GM_BoolValue* GM_Value::bool_value(GM_Environment* env, const std::string &token)
     { return GM_GC::alloc_args<GM_BoolValue>(env, token); }

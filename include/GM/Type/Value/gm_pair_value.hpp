@@ -42,7 +42,7 @@ namespace GM
 
     protected:
         std::string m_key;
-        GM_Value* m_value;
+        GM_Value*   m_value;
 
     };
     

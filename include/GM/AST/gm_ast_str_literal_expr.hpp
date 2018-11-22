@@ -8,12 +8,9 @@ namespace GM
     class GM_AST_STR_LITERAL_EXPR : extends(GM_AST_LITERAL_EXPR)
     {
         
-    protected:
+    public:
         GM_AST_STR_LITERAL_EXPR (const std::string& token);
         ~GM_AST_STR_LITERAL_EXPR () override;
-
-        friend class GM_MemoryManager;
-        friend class GM_GarbageCollector;
         
     public:
         GM_AST_STR_FUNC(GM_AST_STR_LITERAL_EXPR)

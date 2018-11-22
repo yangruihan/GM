@@ -6,22 +6,24 @@
 namespace GM
 {
 
-    GM_CustomFuncValue::GM_CustomFuncValue(GM_Environment* env,
-                                           const std::string& func_name,
-                                           const size_t& param_count,
+    GM_CustomFuncValue::GM_CustomFuncValue(GM_Environment*                 env,
+                                           const std::string&              func_name,
+                                           const size_t&                   param_count,
                                            const std::vector<std::string>* param_list,
-                                           GM_AST_TREE* func_body)
+                                           GM_AST_TREE*                    func_body)
                                            : GM_Value(env),
                                              m_func_name(func_name),
                                              m_param_count(param_count),
                                              m_param_names(param_list),
                                              m_func_body(func_body)
-    {}
+    {
+        GM_GC::inc_ref(m_func_body);
+    }
 
     GM_CustomFuncValue::~GM_CustomFuncValue()
     {
         delete m_param_names;
-        delete m_func_body;
+        GM_GC::free(m_func_body);
     }
     
     void GM_CustomFuncValue::_init_functions() {}
@@ -40,10 +42,7 @@ namespace GM
 
     bool GM_CustomFuncValue::check_func_name_valid(const std::string &func_name)
     {
-        if (GM_Utils::is_digit(func_name[0]))
-            return false;
-
-        return true;
+        return !GM_Utils::is_digit(func_name[0]);
     }
 
     GM_Value* GM_CustomFuncValue::eval()

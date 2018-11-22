@@ -40,21 +40,7 @@ namespace GM
     
     GM_Interpreter::~GM_Interpreter() 
     {
-        while (!m_data_stack->empty())
-        {
-            auto top = m_data_stack->top();
-            m_data_stack->pop();
-            GM_GC::free(top);
-        }
-
-        delete m_data_stack;
-        GM_GC::free(m_global_environment);
-
-        for (auto& env : *m_loaded_env)
-        {
-            GM_GC::free(env);
-        }
-        delete m_loaded_env;
+        _destroy();
     }
 
     GM_Interpreter* GM_Interpreter::s_ins;
@@ -87,12 +73,36 @@ namespace GM
         if (!ret)
             return false;
 
+        GM_NullValue::init(m_global_environment);
+
         m_loaded_env = new std::vector<GM_Environment*>();
 
         m_data_stack = new std::stack<GM_Interpreter::GM_InterpreterData*>();
 
         return ret;
     }
+
+    void GM_Interpreter::_destroy()
+    {
+        GM_NullValue::destroy();
+
+        while (!m_data_stack->empty())
+        {
+            auto top = m_data_stack->top();
+            m_data_stack->pop();
+            GM_GC::free(top);
+        }
+
+        delete m_data_stack;
+        GM_GC::free(m_global_environment);
+
+        for (auto& env : *m_loaded_env)
+        {
+            GM_GC::free(env);
+        }
+        delete m_loaded_env;
+    }
+
 
     bool GM_Interpreter::_create_data(const size_t &parse_mode)
     {
@@ -374,7 +384,7 @@ namespace GM
     {
         const auto token_size = token.size();
         if (token_size == 0 || token[0] == ' ')
-            return new GM_AST_NULL_EXPR("");
+            return GM_AST_TREE::create<GM_AST_NULL_EXPR>("");
 
         GM_AST_TREE* ret;
         

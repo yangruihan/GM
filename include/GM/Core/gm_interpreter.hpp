@@ -89,6 +89,7 @@ namespace GM
 
     private:
         bool _init();
+        void _destroy();
 
         void _set_parse_mode(const size_t& mode)
         {
