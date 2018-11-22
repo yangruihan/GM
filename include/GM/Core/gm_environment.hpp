@@ -18,13 +18,17 @@ namespace GM
         GM_Environment& operator=(const GM_Environment& other) = delete;
 
         static GM_Environment* create(GM_Environment* parent);
+        static void clear(GM_Environment* env);
 
         std::string str() const override;
         
         void set_var(const std::string& var_name, GM_Value* var);
+        
         GM_Value* get_var(const std::string& var_name,
-                           const bool& find_loaded_env=true) const;
+                          const bool& find_loaded_env=true) const;
+
         GM_Value* get_current_env_var(const std::string& var_name) const;
+        GM_Value*& get_current_env_var(const std::string& var_name);
         
         void set_parent(const GM_Environment* env) { m_parent = env; }
         const GM_Environment* get_parent() const { return m_parent; }

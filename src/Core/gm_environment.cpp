@@ -4,23 +4,18 @@
 namespace GM
 {
 
-    GM_Environment::GM_Environment ()
+    GM_Environment::GM_Environment (): m_parent(nullptr)
     {
         m_var_map = new std::map<std::string, GM_Value*>();
-        set_parent(nullptr);
     }
     
-    GM_Environment::GM_Environment (GM_Environment* parent)
+    GM_Environment::GM_Environment (GM_Environment* parent): m_parent(parent)
     {
         m_var_map = new std::map<std::string, GM_Value*>();
-        set_parent(parent);
     }
         
     GM_Environment::~GM_Environment ()
     {
-        for (auto it = m_var_map->begin(); it != m_var_map->end(); ++it)
-            GM_GC::free(it->second);
-
         delete m_var_map;
     }
 
@@ -40,6 +35,12 @@ namespace GM
     {
         return GM_GC::alloc_args<GM_Environment>(parent);
     }
+
+    void GM_Environment::clear(GM_Environment* env)
+    {
+        for (auto & it : *env->m_var_map)
+            GM_GC::free(it.second);
+    }
     
     void GM_Environment::set_var(const std::string& var_name, GM_Value *var)
     {
@@ -53,12 +54,12 @@ namespace GM
     }
     
     GM_Value* GM_Environment::get_var(const std::string& var_name,
-                                       const bool& find_loaded_env) const
+                                      const bool& find_loaded_env) const
     {
-        if (var_name.size() == 0)
+        if (var_name.empty())
             return nullptr;
 
-        auto it = m_var_map->find(var_name);
+        const auto it = m_var_map->find(var_name);
         if (it != m_var_map->end())
         {
             return it->second;
@@ -76,11 +77,20 @@ namespace GM
 
     GM_Value* GM_Environment::get_current_env_var(const std::string& var_name) const
     {
-        auto it = m_var_map->find(var_name);
+        const auto it = m_var_map->find(var_name);
         if (it != m_var_map->end())
             return it->second;
         else
             return nullptr;
+    }
+
+    GM_Value*& GM_Environment::get_current_env_var(const std::string& var_name)
+    {
+        const auto it = m_var_map->find(var_name);
+        if (it != m_var_map->end())
+            return it->second;
+        else
+            return GM_Value_Nullptr;
     }
 
 }

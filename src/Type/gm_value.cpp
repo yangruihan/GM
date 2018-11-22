@@ -8,12 +8,14 @@ namespace GM
 
     GM_Value::GM_Value(GM_Environment* env): m_environment(env)
     {
+//        DEBUG_LOG_F("** inc env ref cnt %" PRIu64 ", %" PRIu64, GM_GC::get_ref_cnt(m_environment), GM_GC::get_ins_idx(m_environment));
         GM_GC::inc_ref(m_environment);
     }
 
     GM_Value::~GM_Value()
     {
         GM_GC::free(m_environment);
+//        DEBUG_LOG_F("** dec env ref cnt %" PRIu64 ", %" PRIu64, GM_GC::get_ref_cnt(m_environment), GM_GC::get_ins_idx(m_environment));
     }
 
     GM_Value* GM_Value::convert_to_value(GM_Object* obj)

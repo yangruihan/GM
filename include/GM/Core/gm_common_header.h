@@ -92,6 +92,9 @@ env->set_var(func_name, GM_Function::create_func(env, \
                                                  param_count, \
                                                  func))
 
+#define GM_ENV_GET_FUNCTION(env, func_name) \
+env->get_current_env_var(func_name)
+
 #define GM_ENV_ALIAS_FUNCTION(func_name, origin_func_name, param_count, func) \
 env->set_var(func_name, GM_Function::create_func(env, \
                                                  func_name, \
@@ -168,4 +171,7 @@ namespace GM
     
     typedef GM_Value* (*GM_FUNCTION_PTR)(const GM_Parameter*);
     
+    static inline GM_Object* GM_Obj_Nullptr = nullptr;
+    static inline GM_Value* GM_Value_Nullptr = nullptr;
+
 }

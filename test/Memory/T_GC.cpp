@@ -15,7 +15,7 @@ namespace GM_Test
 
     TEST_F(T_GC, Base)
     {
-        auto env = GM_GC::alloc<GM::GM_Environment>();
+        auto env = GM::GM_Environment::create(nullptr);
         ASSERT_NE(nullptr, env);
         ASSERT_EQ(1, GM_GC::get_ref_cnt(env));
 
@@ -31,6 +31,7 @@ namespace GM_Test
         ASSERT_TRUE(GM_GC::free(int_value));
         ASSERT_EQ(nullptr, int_value);
 
+        GM::GM_Environment::clear(env);
         ASSERT_TRUE(GM_GC::free(env));
         ASSERT_EQ(nullptr, env);
     }

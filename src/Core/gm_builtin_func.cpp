@@ -8,6 +8,8 @@ namespace GM
 
     bool GM_BuiltinFunc::init(GM_Environment* env)
     {
+        GM_GC::inc_ref(env);
+
         GM_ENV_SET_FUNCTION(BUILTIN_FUNC_PRINT, 1, GM_BuiltinFunc::__print);
         GM_ENV_SET_FUNCTION(BUILTIN_FUNC_EXIT,  0, GM_BuiltinFunc::__exit);
         GM_ENV_SET_FUNCTION(BUILTIN_FUNC_LET,   2, GM_BuiltinFunc::__let);
@@ -26,6 +28,11 @@ namespace GM
         GM_ENV_SET_FUNCTION(BUILTIN_FUNC_SET,   3, GM_BuiltinFunc::__set);
 
         return true;
+    }
+
+    void GM_BuiltinFunc::destroy(GM_Environment* env)
+    {
+        GM_GC::free(env);
     }
 
     GM_FUNCTION_I(GM_BuiltinFunc, __print)

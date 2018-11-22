@@ -9,8 +9,7 @@ namespace GM
                                     : GM_AST_TREE(token)
     {}
 
-    GM_AST_VAR_EXPR::~GM_AST_VAR_EXPR()
-    {}
+    GM_AST_VAR_EXPR::~GM_AST_VAR_EXPR() = default;
 
     size_t GM_AST_VAR_EXPR::get_need_child_count() const
     {
@@ -19,10 +18,7 @@ namespace GM
 
     bool GM_AST_VAR_EXPR::check_token_valid(const std::string &token)
     {
-        if (GM_Utils::is_digit(token[0]))
-            return false;
-
-        return true;
+        return !GM_Utils::is_digit(token[0]);
     }
 
     GM_Value* GM_AST_VAR_EXPR::eval()

@@ -37,6 +37,11 @@ namespace GM
                 delete pool;
             }
 
+            bool check_space(const size_t& size) const
+            {
+                return pool->check_space(size);
+            }
+
             size_t available_size() const
             {
                 return pool->available_size();
@@ -275,7 +280,7 @@ namespace GM
             const auto count = m_chunks.size();
             for (size_t idx = 0; idx < count; idx++)
             {
-                if (m_chunks[idx]->available_size() >= size)
+                if (m_chunks[idx]->check_space(size))
                 {
                     memory_chunk_idx = idx;
                     return m_chunks[idx];

@@ -29,6 +29,7 @@ namespace GM
 
     GM_Interpreter::GM_InterpreterData::~GM_InterpreterData()
     {
+        GM_Environment::clear(m_environment);
         GM_GC::free(m_environment);
         delete m_token_index_stack;
     }
@@ -85,6 +86,7 @@ namespace GM
     void GM_Interpreter::_destroy()
     {
         GM_NullValue::destroy();
+        GM_BuiltinFunc::destroy(m_global_environment);
 
         while (!m_data_stack->empty())
         {
@@ -94,6 +96,8 @@ namespace GM
         }
 
         delete m_data_stack;
+
+        GM_Environment::clear(m_global_environment);
         GM_GC::free(m_global_environment);
 
         for (auto& env : *m_loaded_env)

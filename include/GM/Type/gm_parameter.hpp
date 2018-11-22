@@ -91,9 +91,8 @@ namespace GM
         std::string* _handle_param_item(GM_Object* value) const;
         
     protected:
-        GM_Environment* m_environment;
-
-        std::vector<GM_Object*>* m_list_params;
+        GM_Environment*                    m_environment;
+        std::vector<GM_Object*>*           m_list_params;
         std::map<std::string, GM_Object*>* m_dict_params;
     };
  
