@@ -9,9 +9,12 @@ namespace GM
     class GM_AST_DICT_EXPR : extends(GM_AST_TREE)
     {
 
-    public:
+    protected:
         GM_AST_DICT_EXPR (const std::string& token);
         ~GM_AST_DICT_EXPR () override;
+
+        friend class GM_MemoryManager;
+        friend class GM_GarbageCollector;
 
     public:
         GM_AST_STR_FUNC(GM_AST_DICT_EXPR)

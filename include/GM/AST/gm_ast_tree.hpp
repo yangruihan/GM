@@ -9,10 +9,21 @@
 
 namespace GM
 {
+    class GM_AST_BINARY_EXPR;
+    class GM_AST_DICT_EXPR;
+    class GM_AST_LIST_EXPR;
+    class GM_AST_LITERAL_EXPR;
+    class GM_AST_ADD_OPERATOR_EXPR;
+    class GM_AST_SUB_OPERATOR_EXPR;
+    class GM_AST_MUL_OPERATOR_EXPR;
+    class GM_AST_DIV_OPERATOR_EXPR;
+    class GM_AST_NULL_EXPR;
+    class GM_AST_STR_LITERAL_EXPR;
+    class GM_AST_VAR_EXPR;
 
     class GM_AST_TREE : extends(GM_Object)
     {
-    public:
+    protected:
         GM_AST_TREE (const std::string& token): m_token(token)
         {
             m_childs = new std::vector<GM_AST_TREE*>();
@@ -25,6 +36,9 @@ namespace GM
 
             delete m_childs;
         }
+
+        friend class GM_MemoryManager;
+        friend class GM_GarbageCollector;
 
     public:
 
@@ -47,7 +61,7 @@ namespace GM
 
         GM_AST_TREE* get_child(const int& index) const
         {
-            if (m_childs->size() == 0)
+            if (m_childs->empty())
             {
                 PRINT_ERROR("NullptrError: childs is empty");
                 return nullptr;
@@ -55,7 +69,7 @@ namespace GM
 
             if (index < 0 || index > m_childs->size())
             {
-                PRINT_ERROR_F("IndexError: out of range(%ld)", m_childs->size());
+                PRINT_ERROR_F("IndexError: out of range(%zu)", m_childs->size());
                 return nullptr;
             }
 
