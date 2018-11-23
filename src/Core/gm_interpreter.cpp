@@ -210,7 +210,7 @@ namespace GM
                 std::cout << std::endl;
 #endif
 
-                const auto result = this->eval();
+                auto result = this->eval();
                 if (result != nullptr)
                 {
                     ret = 0;
@@ -224,6 +224,9 @@ namespace GM
                     if (C_PARSE_MODE == GM_INTERPRETER_REPL_MODE)
                         std::cout << result->str().c_str() << std::endl;
 #endif
+
+                    if (result != GM_NullValue::s_ins)
+                        GM_GC::free(result);
                 }
                 else
                 {

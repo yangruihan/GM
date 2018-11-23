@@ -50,7 +50,7 @@ namespace GM
     {
         const auto ret = (GM_BoolValue*) param->get_environment()->get_var(GM_INTERPRETER_RUN_FLAG);
         ret->set_value(false);
-        return ret;
+        return GM_Value::null_value();
     }
     
     GM_FUNCTION_I(GM_BuiltinFunc, __let)
