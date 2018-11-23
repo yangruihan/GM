@@ -12,6 +12,7 @@ namespace GM
 {
     class GM_VarNameValue;
 
+    KEEP_ENV
     class GM_AST_VAR_EXPR : extends(GM_AST_TREE)
     {
 

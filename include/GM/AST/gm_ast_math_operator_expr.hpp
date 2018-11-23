@@ -6,13 +6,14 @@
 namespace GM
 {
 
+    KEEP_ENV
     class GM_AST_ADD_OPERATOR_EXPR : extends(GM_AST_BINARY_EXPR)
     {
 
     public:
         GM_AST_ADD_OPERATOR_EXPR (const std::string& token)
                                 : GM_AST_BINARY_EXPR(token) {}
-        ~GM_AST_ADD_OPERATOR_EXPR () override {}
+        ~GM_AST_ADD_OPERATOR_EXPR () override = default;
 
     public:
         GM_AST_STR_FUNC(GM_AST_ADD_OPERATOR_EXPR)
@@ -30,12 +31,13 @@ namespace GM
         bool _check_childs_valid() const override;
     };
 
+    KEEP_ENV
     class GM_AST_SUB_OPERATOR_EXPR : extends(GM_AST_BINARY_EXPR)
     {
 
     public:
         GM_AST_SUB_OPERATOR_EXPR (const std::string& token): GM_AST_BINARY_EXPR(token) {}
-        ~GM_AST_SUB_OPERATOR_EXPR () override {}
+        virtual ~GM_AST_SUB_OPERATOR_EXPR () override = default;
 
     public:
         GM_AST_STR_FUNC(GM_AST_SUB_OPERATOR_EXPR)
@@ -54,12 +56,13 @@ namespace GM
 
     };
 
+    KEEP_ENV
     class GM_AST_MUL_OPERATOR_EXPR : extends(GM_AST_BINARY_EXPR)
     {
 
     public:
         GM_AST_MUL_OPERATOR_EXPR (const std::string& token): GM_AST_BINARY_EXPR(token) {}
-        ~GM_AST_MUL_OPERATOR_EXPR () override {}
+        virtual ~GM_AST_MUL_OPERATOR_EXPR () override = default;
 
     public:
         GM_AST_STR_FUNC(GM_AST_MUL_OPERATOR_EXPR)
@@ -78,12 +81,13 @@ namespace GM
 
     };
 
+    KEEP_ENV
     class GM_AST_DIV_OPERATOR_EXPR : extends(GM_AST_BINARY_EXPR)
     {
 
     public:
         GM_AST_DIV_OPERATOR_EXPR (const std::string& token): GM_AST_BINARY_EXPR(token) {}
-        ~GM_AST_DIV_OPERATOR_EXPR () override {}
+        virtual ~GM_AST_DIV_OPERATOR_EXPR () override = default;
 
     public:
         GM_AST_STR_FUNC(GM_AST_DIV_OPERATOR_EXPR)

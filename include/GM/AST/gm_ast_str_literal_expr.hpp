@@ -5,6 +5,8 @@
 
 namespace GM
 {
+
+    CREATE_NEW_ENV
     class GM_AST_STR_LITERAL_EXPR : extends(GM_AST_LITERAL_EXPR)
     {
         

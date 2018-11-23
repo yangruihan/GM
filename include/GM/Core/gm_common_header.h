@@ -26,8 +26,12 @@
 #define GM_DEFAULT_INS_IDX_START 0x1000000000000000
 
 
-// --------------- Function Key Define --------------- //
+// --------------- Attributes --------------- //
+#define CREATE_NEW_ENV
+#define KEEP_ENV
 
+
+// --------------- Function Key Define --------------- //
 #define FUNC_ADD_OP_KEY "__add__"
 #define FUNC_SUB_OP_KEY "__sub__"
 #define FUNC_MUL_OP_KEY "__mul__"

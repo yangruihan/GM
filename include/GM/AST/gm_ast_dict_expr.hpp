@@ -6,6 +6,7 @@
 namespace GM
 {
 
+    CREATE_NEW_ENV
     class GM_AST_DICT_EXPR : extends(GM_AST_TREE)
     {
 

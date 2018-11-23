@@ -12,6 +12,7 @@
 namespace GM
 {
 
+    KEEP_ENV
     class GM_AST_TREE : extends(GM_Object)
     {
     

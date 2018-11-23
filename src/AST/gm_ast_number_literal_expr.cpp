@@ -11,7 +11,7 @@ namespace GM
                                                              m_is_float(is_float)
     {}
 
-    GM_AST_NUMBER_LITERAL_EXPR::~GM_AST_NUMBER_LITERAL_EXPR() {}
+    GM_AST_NUMBER_LITERAL_EXPR::~GM_AST_NUMBER_LITERAL_EXPR() = default;
 
     size_t GM_AST_NUMBER_LITERAL_EXPR::get_need_child_count() const 
     {
@@ -20,15 +20,15 @@ namespace GM
 
     bool GM_AST_NUMBER_LITERAL_EXPR::check_token_valid(const std::string& token, bool& is_float)
     {
-        auto token_len = token.size();
-        auto start_pos = token[0] == '+' || token[0] == '-' ? 1 : 0;
+        const auto token_len = token.size();
+        const auto start_pos = token[0] == '+' || token[0] == '-' ? 1 : 0;
         is_float = false;
 
         for(size_t i = start_pos; i < token_len; i++)
         {
             if (token[i] == '.')
             {
-                if (is_float == false)
+                if (!is_float)
                     is_float = true;
                 else
                     return false;
@@ -60,4 +60,4 @@ namespace GM
         return true;
     }
 
-} // namespace GM
+}
