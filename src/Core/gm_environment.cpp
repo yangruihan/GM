@@ -75,9 +75,17 @@ namespace GM
         else
         {
             if (m_parent != nullptr)
+            {
                 return m_parent->get_var(var_name);
+            }
             else if (find_loaded_env)
-                return GM_Interpreter::instance()->get_var_from_loaded_env(var_name);
+            {
+                const auto interpreter = GM_Interpreter::instance();
+                if (interpreter == nullptr || !GM_GC::check_obj_valid(interpreter))
+                    return nullptr;
+                
+                return interpreter->get_var_from_loaded_env(var_name);
+            }
 
             return nullptr;
         }

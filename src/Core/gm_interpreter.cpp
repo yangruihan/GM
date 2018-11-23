@@ -537,8 +537,8 @@ namespace GM
     {
         for (size_t i = 0, count = m_loaded_env->size(); i < count; i++)
         {
-            auto env = (*m_loaded_env)[i];
-            auto value = env->get_var(var_name, false);
+            const auto env = (*m_loaded_env)[i];
+            const auto value = env->get_var(var_name, false);
             if (value != nullptr)
                 return value;
         }
