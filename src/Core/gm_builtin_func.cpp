@@ -8,8 +8,6 @@ namespace GM
 
     bool GM_BuiltinFunc::init(GM_Environment* env)
     {
-        GM_GC::inc_ref(env);
-
         GM_ENV_SET_FUNCTION(BUILTIN_FUNC_PRINT, 1, GM_BuiltinFunc::__print);
         GM_ENV_SET_FUNCTION(BUILTIN_FUNC_EXIT,  0, GM_BuiltinFunc::__exit);
         GM_ENV_SET_FUNCTION(BUILTIN_FUNC_LET,   2, GM_BuiltinFunc::__let);
@@ -43,7 +41,7 @@ namespace GM
 
         auto str = value->str();
         std::cout << str << std::endl;
-        return GM_Value::str_value(param->get_environment(), str);
+        return GM_Value::null_value();
     }
     
     GM_FUNCTION_I(GM_BuiltinFunc, __exit)
@@ -74,7 +72,7 @@ namespace GM
                                               var_value);
         }
 
-        return GM_Value::str_value(param->get_environment(), var_value->str());
+        return GM_Value::null_value();
     }
 
     GM_FUNCTION_I(GM_BuiltinFunc, __for)
