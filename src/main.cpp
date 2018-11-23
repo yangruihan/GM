@@ -22,11 +22,10 @@ void parse_files(const int argc, char* argv[], GM_Interpreter* interpreter)
 
 std::string on_dump_obj_handler(const void* ref)
 {
-    const auto obj = static_cast<const GM_Object*>(ref);
-    if (obj != nullptr)
-        return obj->str();
-
-    return "";
+    auto obj = static_cast<const GM_Object*>(ref);
+    if (!GM_GC::check_obj_valid(obj))
+        return "!!!!! EXCEPTION !!!!! Memory Broken, Obj has been free";
+    return obj->str();
 }
 
 int main(const int argc, char* argv[])

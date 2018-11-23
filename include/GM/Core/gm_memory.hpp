@@ -426,6 +426,11 @@ namespace GM
             return obj != nullptr && obj->m_ref_cnt > 0 && obj->m_ins_idx >= GM_DEFAULT_INS_IDX_START;
         }
 
+        static bool check_obj_valid(const GM_Object* obj)
+        {
+            return obj != nullptr && obj->m_ref_cnt > 0 && obj->m_ins_idx >= GM_DEFAULT_INS_IDX_START;
+        }
+
         static void gc()
         {
             for (int i = s_ins->m_objs.size() - 1; i >= 0; i--)
