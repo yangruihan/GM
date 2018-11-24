@@ -24,6 +24,11 @@ namespace GM
         _init_functions();
     }
 
+    GM_FloatValue::~GM_FloatValue()
+    {
+        GM_Environment::clear(get_environment());
+    }
+
     void GM_FloatValue::_init_functions()
     {
         GM_VALUE_SET_SELF_FUNCTION(FUNC_ADD_OP_KEY, 2, GM_FloatValue::__add);

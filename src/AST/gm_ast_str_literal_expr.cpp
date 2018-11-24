@@ -10,7 +10,10 @@ namespace GM
     {
     }
     
-    GM_AST_STR_LITERAL_EXPR::~GM_AST_STR_LITERAL_EXPR () {}
+    GM_AST_STR_LITERAL_EXPR::~GM_AST_STR_LITERAL_EXPR ()
+    {
+        GM_GC::free(m_environment);
+    }
     
 
     size_t GM_AST_STR_LITERAL_EXPR::get_need_child_count() const

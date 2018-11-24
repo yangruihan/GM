@@ -8,7 +8,7 @@ namespace GM
     GM_AST_NULL_EXPR::GM_AST_NULL_EXPR(const std::string& token): GM_AST_TREE(token)
     {}
 
-    GM_AST_NULL_EXPR::~GM_AST_NULL_EXPR() {}
+    GM_AST_NULL_EXPR::~GM_AST_NULL_EXPR() = default;
 
     bool GM_AST_NULL_EXPR::_check_childs_valid() const
     {

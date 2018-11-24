@@ -11,7 +11,10 @@ namespace GM
         _init_functions();
     }
     
-    GM_StrValue::~GM_StrValue() {}
+    GM_StrValue::~GM_StrValue()
+    {
+        GM_Environment::clear(get_environment());
+    }
     
     void GM_StrValue::_init_functions()
     {

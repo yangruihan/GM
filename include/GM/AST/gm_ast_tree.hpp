@@ -108,8 +108,9 @@ namespace GM
             return m_environment;
         }
         
-        GM_Environment* get_environment()
-        { return before_get_environment(); }
+        GM_Environment* get_environment() { return m_environment; }
+
+        GM_Environment* get_environment() const { return m_environment; }
     
     protected:
         virtual bool _check_childs_valid() const = 0;
@@ -117,9 +118,6 @@ namespace GM
         /* --- environment --- */
         virtual GM_Environment* before_set_environment(GM_Environment* env)
         { return env; }
-        
-        virtual GM_Environment* before_get_environment()
-        { return m_environment; }
 
     protected:
         std::vector<GM_AST_TREE*>* m_childs;

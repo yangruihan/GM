@@ -51,7 +51,11 @@ namespace GM
             PRINT_ERROR("NullptrError: set value failed, value is nullptr");
             return;
         }
-        
+
+        auto it = m_var_map->find(var_name);
+        if (it != m_var_map->end())
+            GM_GC::free((*m_var_map)[var_name]);
+
         (*m_var_map)[var_name] = var;
     }
     

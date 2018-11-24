@@ -26,7 +26,10 @@ namespace GM
         _init_functions();
     }
 
-    GM_IntValue::~GM_IntValue () {}
+    GM_IntValue::~GM_IntValue ()
+    {
+        GM_Environment::clear(get_environment());
+    }
 
     void GM_IntValue::_init_functions()
     {
