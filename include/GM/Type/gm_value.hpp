@@ -55,7 +55,7 @@ namespace GM
         virtual std::string _str() const = 0;
 
     protected:
-        virtual void _init_functions() {};
+        virtual void _init_functions() {}
 
     protected:
         GM_Environment* m_environment;

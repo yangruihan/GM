@@ -20,14 +20,6 @@ void parse_files(const int argc, char* argv[], GM_Interpreter* interpreter)
     }
 }
 
-std::string on_dump_obj_handler(const void* ref)
-{
-    auto obj = static_cast<const GM_Object*>(ref);
-    if (!GM_GC::check_obj_valid(obj))
-        return "!!!!! EXCEPTION !!!!! Memory Broken, Obj has been free";
-    return obj->str();
-}
-
 int main(const int argc, char* argv[])
 {
     DEBUG_LOG("\n\n\n");
@@ -58,7 +50,9 @@ int main(const int argc, char* argv[])
     GM_Interpreter::destory();
     
     GM_GC::gc();
-    GM_GC::dump(std::cout, on_dump_obj_handler);
+#ifdef DEBUG
+    GM_GC::dump(std::cout, GM::on_dump_obj_handler);
+#endif
     GM_GC::destroy();
 
 #ifdef _WINDOWS

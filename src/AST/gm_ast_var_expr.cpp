@@ -43,9 +43,11 @@ namespace GM
                 {
                     (*list_param)[i] = (get_child(i));
                 }
-                auto parameter = new GM_Parameter(get_environment(),
-                                                  list_param, nullptr);
-                return func->eval(parameter);
+                auto parameter = GM_GC::alloc_args<GM_Parameter>(get_environment(),
+                                                                 list_param, nullptr);
+                const auto ret = func->eval(parameter);
+                GM_GC::free(parameter);
+                return ret;
             }
         }
 
@@ -72,7 +74,7 @@ namespace GM
                 GM_Utils::set_env_for_childs(cust_func->get_func_body(),
                                              cust_func->get_environment());
 
-//                GM_GC::free(env);
+                GM_GC::free(env);
 
                 return ret;
             }

@@ -23,9 +23,11 @@ namespace GM
                 return nullptr;
             }
             
-            auto parameter = new GM_Parameter(get_environment(),
-                                              2, left_value, right_value);
-            return func->eval(parameter);
+            auto parameter = GM_GC::alloc_args<GM_Parameter>(get_environment(),
+                                                             2, left_value, right_value);
+            const auto ret = func->eval(parameter);
+            GM_GC::free(parameter);
+            return ret;
         }
 
         return nullptr;
@@ -64,9 +66,11 @@ namespace GM
                 return nullptr;
             }
             
-            auto parameter = new GM_Parameter(get_environment(),
-                                              2, left_value, right_value);
-            return func->eval(parameter);
+            auto parameter = GM_GC::alloc_args<GM_Parameter>(get_environment(),
+                                                             2, left_value, right_value);
+            const auto ret = func->eval(parameter);
+            GM_GC::free(parameter);
+            return ret;
         }
 
         return nullptr;
@@ -105,9 +109,11 @@ namespace GM
                 return nullptr;
             }
             
-            auto parameter = new GM_Parameter(get_environment(),
-                                              2, left_value, right_value);
-            return func->eval(parameter);
+            auto parameter = GM_GC::alloc_args<GM_Parameter>(get_environment(),
+                                                             2, left_value, right_value);
+            const auto ret = func->eval(parameter);
+            GM_GC::free(parameter);
+            return ret;
         }
 
         return nullptr;
@@ -146,9 +152,11 @@ namespace GM
                 return nullptr;
             }
             
-            auto parameter = new GM_Parameter(get_environment(),
-                                              2, left_value, right_value);
-            return func->eval(parameter);
+            auto parameter = GM_GC::alloc_args<GM_Parameter>(get_environment(),
+                                                             2, left_value, right_value);
+            const auto ret = func->eval(parameter);
+            GM_GC::free(parameter);
+            return ret;
         }
 
         return nullptr;

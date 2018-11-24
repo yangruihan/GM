@@ -15,6 +15,7 @@ namespace GM
     GM_Value::~GM_Value()
     {
         GM_GC::free(m_environment);
+        m_environment = nullptr;
 //        DEBUG_LOG_F("** dec env ref cnt %" PRIu64 ", %" PRIu64, GM_GC::get_ref_cnt(m_environment), GM_GC::get_ins_idx(m_environment));
     }
 

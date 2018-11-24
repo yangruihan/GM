@@ -19,6 +19,15 @@ if (ret != nullptr) \
 namespace GM
 {
 
+    std::string on_dump_obj_handler(const void* ref)
+    {
+        auto obj = static_cast<const GM_Object*>(ref);
+        if (!GM_GC::check_obj_valid(obj))
+            return GM_Utils::format_str("!!!!! EXCEPTION !!!!! [%s] Memory Broken, Obj has been free",
+                                        typeid(obj).name());
+        return obj->str();
+    }
+
     GM_Interpreter::GM_InterpreterData::GM_InterpreterData(GM_Environment*& env, const size_t& parse_mode)
         : m_environment(GM_Environment::create(env)),
           m_ast_root(nullptr),
@@ -33,6 +42,18 @@ namespace GM
     {
         GM_GC::free(m_environment);
         delete m_token_index_stack;
+    }
+
+    std::string GM_Interpreter::GM_InterpreterData::str() const
+    {
+#ifdef DEBUG
+        return GM_Utils::format_str("[<class '%s'>, refcnt: %" PRIu64 ", insidx: %" PRIu64 "]",
+                                    "interpreter data",
+                                    GM_GC::get_ref_cnt(this),
+                                    GM_GC::get_ins_idx(this));
+#else
+        return "<class 'interpreter data'>";
+#endif
     }
 
     GM_Interpreter::GM_Interpreter()
@@ -50,6 +71,18 @@ namespace GM
     GM_Interpreter* GM_Interpreter::instance()
     {
         return s_ins;
+    }
+
+    std::string GM_Interpreter::str() const
+    {
+#ifdef DEBUG
+        return GM_Utils::format_str("[<class '%s'>, refcnt: %" PRIu64 ", insidx: %" PRIu64 "]",
+                                    "interpreter",
+                                    GM_GC::get_ref_cnt(this),
+                                    GM_GC::get_ins_idx(this));
+#else
+        return "<class 'interpreter'>";
+#endif
     }
 
     void GM_Interpreter::init()
@@ -153,6 +186,10 @@ namespace GM
             DEBUG_LOG_F("-- Input: %s", command.c_str());
 
             ret = parse_and_eval(command);
+
+#ifdef DEBUG
+            GM_GC::dump(std::cout, on_dump_obj_handler);
+#endif
 
             running_flag = get_running_flag();
         }

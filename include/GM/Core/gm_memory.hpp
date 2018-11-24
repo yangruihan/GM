@@ -160,10 +160,11 @@ namespace GM
             if (size >= m_max_alloc_size)
                 return nullptr;
 
-            auto chunk = _get_enough_size_chunk(size, m_curt_memory_idx);
+            uint16_t memory_idx = 0;
+            auto chunk = _get_enough_size_chunk(size, memory_idx);
             T* ret = chunk->pool->alloc<T>();
             new (ret) T();
-            static_cast<GM_Object*>(ret)->m_memory_chunk_idx = m_curt_memory_idx;
+            static_cast<GM_Object*>(ret)->m_memory_chunk_idx = memory_idx;
             return ret;
         }
 
@@ -173,13 +174,15 @@ namespace GM
             auto size = sizeof(T) * count;
             if (size >= m_max_alloc_size)
                 return nullptr;
-            auto chunk = _get_enough_size_chunk(size, m_curt_memory_idx);
+
+            uint16_t memory_idx = 0;
+            auto chunk = _get_enough_size_chunk(size, memory_idx);
             T* ret = chunk->pool->alloc_arr<T>(count);
             for (size_t i = 0; i < count; i++)
             {
                 const auto gm_obj = static_cast<GM_Object*>(ret + i);
                 new (ret + i) T();
-                gm_obj->m_memory_chunk_idx = m_curt_memory_idx;
+                gm_obj->m_memory_chunk_idx = memory_idx;
             }
             return ret;
         }
@@ -191,9 +194,10 @@ namespace GM
             if (size >= m_max_alloc_size)
                 return nullptr;
 
-            auto chunk = _get_enough_size_chunk(size, m_curt_memory_idx);
+            uint16_t memory_idx = 0;
+            auto chunk = _get_enough_size_chunk(size, memory_idx);
             T* ret = chunk->pool->alloc_args<T>(std::forward<TArgs>(args)...);
-            static_cast<GM_Object*>(ret)->m_memory_chunk_idx = m_curt_memory_idx;
+            static_cast<GM_Object*>(ret)->m_memory_chunk_idx = memory_idx;
             return ret;
         }
 
@@ -203,10 +207,12 @@ namespace GM
             auto size = sizeof(T) * count;
             if (size >= m_max_alloc_size)
                 return nullptr;
-            auto chunk = _get_enough_size_chunk(size, m_curt_memory_idx);
+
+            uint16_t memory_idx = 0;
+            auto chunk = _get_enough_size_chunk(size, memory_idx);
             T* ret = chunk->pool->alloc_arr_args<T>(count, std::forward<TArgs>(args)...);
             for (size_t i = 0; i < count; i++)
-                static_cast<GM_Object*>(ret + i)->m_memory_chunk_idx = m_curt_memory_idx;
+                static_cast<GM_Object*>(ret + i)->m_memory_chunk_idx = memory_idx;
             return ret;
         }
 
@@ -220,22 +226,24 @@ namespace GM
         }
 
         template<class T>
-        bool _free(T*& obj)
+        bool _free(T*& ref)
         {
-            const auto memory_chunk_idx = static_cast<GM_Object*>(obj)->m_memory_chunk_idx;
-            auto chunk = m_chunks[memory_chunk_idx];
+            auto obj = static_cast<GM_Object*>(ref);
+            auto chunk = m_chunks[obj->m_memory_chunk_idx];
+            obj->m_memory_chunk_idx = 0;
             auto ret = chunk->pool->free(obj);
-            obj = nullptr;
+            ref = nullptr;
             return ret;
         }
 
         template<class T>
-        bool _free_arr(T*& obj)
+        bool _free_arr(T*& ref)
         {
-            const auto memory_chunk_idx = static_cast<GM_Object*>(obj)->m_memory_chunk_idx;
-            auto chunk = m_chunks[memory_chunk_idx];
+            auto obj = static_cast<GM_Object*>(ref);
+            auto chunk = m_chunks[obj->m_memory_chunk_idx];
+            obj->m_memory_chunk_idx = 0;
             auto ret = chunk->pool->free_arr(obj);
-            obj = nullptr;
+            ref = nullptr;
             return ret;
         }
 
@@ -301,7 +309,6 @@ namespace GM
     private:
         std::vector<memory_chunk*> m_chunks;
         size_t                     m_max_alloc_size;
-        uint16_t                   m_curt_memory_idx;
     };
 
     class GM_GarbageCollector : extends(GM_Object)
@@ -393,7 +400,6 @@ namespace GM
                 }
 
                 obj->m_ins_idx = 0;
-                obj->m_memory_chunk_idx = 0;
                 obj->~GM_Object();
                 GM_MemoryManager::free(obj);
                 return 0;

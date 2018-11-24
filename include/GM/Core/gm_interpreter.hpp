@@ -16,6 +16,8 @@
 
 namespace GM
 {
+    std::string on_dump_obj_handler(const void* ref);
+
     class GM_Object;
     class GM_AST_TREE;
     class GM_Environment;
@@ -42,6 +44,8 @@ namespace GM
             static bool create(GM_InterpreterData*& instance,
                                GM_Environment* env,
                                const size_t& parse_mode);
+
+            std::string str() const override;
 
         };
 
@@ -74,7 +78,7 @@ namespace GM
 
     public:
 
-        std::string str() const override { return "interpreter"; }
+        std::string str() const override;
 
         GM_AST_TREE* get_ast_root() const
         {

@@ -41,7 +41,14 @@ namespace GM
     
     GM_Parameter::~GM_Parameter()
     {
+        if (m_list_params != nullptr)
+            for (auto& param : *m_list_params)
+                GM_GC::free(param);
         delete m_list_params;
+
+        if (m_dict_params != nullptr)
+            for (auto& param: *m_dict_params)
+                GM_GC::free(param.second);
         delete m_dict_params;
     }
 

@@ -114,8 +114,10 @@ namespace GM
 
         GET_CUR_ENV_FUNC(func, arg1, FUNC_LS_OP_KEY);
 
-        return func->eval(new GM_Parameter(param->get_environment(),
-                                           2, arg1, arg2));
+        auto new_param = GM_GC::alloc_args<GM_Parameter>(param->get_environment(), 2, arg1, arg2);
+        const auto ret = func->eval(new_param);
+        GM_GC::free(new_param);
+        return ret;
     }
 
     GM_FUNCTION_I(GM_BuiltinFunc, __eq)
@@ -128,8 +130,10 @@ namespace GM
 
         GET_CUR_ENV_FUNC(func, arg1, FUNC_EQ_OP_KEY);
 
-        return func->eval(new GM_Parameter(param->get_environment(),
-                                           2, arg1, arg2));
+        auto new_param = GM_GC::alloc_args<GM_Parameter>(param->get_environment(), 2, arg1, arg2);
+        const auto ret = func->eval(new_param);
+        GM_GC::free(new_param);
+        return ret;
     }
 
     GM_FUNCTION_I(GM_BuiltinFunc, __gt)
@@ -142,8 +146,10 @@ namespace GM
 
         GET_CUR_ENV_FUNC(func, arg1, FUNC_GT_OP_KEY);
 
-        return func->eval(new GM_Parameter(param->get_environment(),
-                                           2, arg1, arg2));
+        auto new_param = GM_GC::alloc_args<GM_Parameter>(param->get_environment(), 2, arg1, arg2);
+        const auto ret = func->eval(new_param);
+        GM_GC::free(new_param);
+        return ret;
     }
 
     GM_FUNCTION_I(GM_BuiltinFunc, __le)
@@ -156,8 +162,10 @@ namespace GM
 
         GET_CUR_ENV_FUNC(func, arg1, FUNC_LE_OP_KEY);
 
-        return func->eval(new GM_Parameter(param->get_environment(),
-                                           2, arg1, arg2));
+        auto new_param = GM_GC::alloc_args<GM_Parameter>(param->get_environment(), 2, arg1, arg2);
+        const auto ret = func->eval(new_param);
+        GM_GC::free(new_param);
+        return ret;
     }
 
     GM_FUNCTION_I(GM_BuiltinFunc, __ge)
@@ -170,8 +178,10 @@ namespace GM
 
         GET_CUR_ENV_FUNC(func, arg1, FUNC_GE_OP_KEY);
 
-        return func->eval(new GM_Parameter(param->get_environment(),
-                                           2, arg1, arg2));
+        auto new_param = GM_GC::alloc_args<GM_Parameter>(param->get_environment(), 2, arg1, arg2);
+        const auto ret = func->eval(new_param);
+        GM_GC::free(new_param);
+        return ret;
     }
 
     GM_FUNCTION_I(GM_BuiltinFunc, __ne)
@@ -184,8 +194,10 @@ namespace GM
 
         GET_CUR_ENV_FUNC(func, arg1, FUNC_NE_OP_KEY);
 
-        return func->eval(new GM_Parameter(param->get_environment(),
-                                           2, arg1, arg2));
+        auto new_param = GM_GC::alloc_args<GM_Parameter>(param->get_environment(), 2, arg1, arg2);
+        const auto ret = func->eval(new_param);
+        GM_GC::free(new_param);
+        return ret;
     }
 
     GM_FUNCTION_I(GM_BuiltinFunc, __def)
@@ -317,8 +329,11 @@ namespace GM
 
         GET_CUR_ENV_FUNC(func, container, FUNC_GET_OP_KEY);
 
-        return func->eval(new GM_Parameter(param->get_environment(),
-                                           2, container, index));
+        auto new_param = GM_GC::alloc_args<GM_Parameter>(param->get_environment(),
+                                          2, container, index);
+        const auto ret = func->eval(new_param);
+        GM_GC::free(new_param);
+        return ret;
     }
 
     GM_FUNCTION_I(GM_BuiltinFunc, __set)

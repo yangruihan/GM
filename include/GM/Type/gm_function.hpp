@@ -28,6 +28,9 @@ namespace GM
                                          const int& param_count,
                                          const GM_FUNCTION_PTR func);
 
+        GM_VALUE_DEBUG_STR_FUNC(GM_Function)
+        GM_VALUE_STR_FUNC(GM_Function)
+
         std::string _str() const override
         {
             return GM_Utils::format_str("[$GM_Function, name:%s]",
