@@ -102,6 +102,18 @@ namespace GM
         }
     }
 
+    void GM_Environment::set_parent(GM_Environment* env)
+    {
+        if (m_parent == env)
+            return;
+
+        if (m_parent != nullptr)
+            GCFREE(m_parent);
+
+        GCINC(m_parent);
+        m_parent = env;
+    }
+
     GM_Value* GM_Environment::get_current_env_var(const std::string& var_name) const
     {
         const auto it = m_var_map->find(var_name);

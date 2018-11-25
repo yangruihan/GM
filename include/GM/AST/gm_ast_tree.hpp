@@ -60,6 +60,7 @@ namespace GM
 
         GM_AST_TREE* get_child(const int& index) const
         {
+#ifdef DEBUG
             if (m_childs->empty())
             {
                 PRINT_ERROR("NullptrError: childs is empty");
@@ -71,6 +72,7 @@ namespace GM
                 PRINT_ERROR_F("IndexError: out of range(%zu)", m_childs->size());
                 return nullptr;
             }
+#endif
 
             return (*m_childs)[index];
         }
@@ -127,7 +129,7 @@ namespace GM
         std::vector<GM_AST_TREE*>* m_childs;
         const std::string          m_token;
         size_t                     m_token_index;
-        GM_Environment*            m_environment;
+        GM_Environment*            m_environment = nullptr;
     };
 
 }

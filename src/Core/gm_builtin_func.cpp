@@ -293,6 +293,7 @@ namespace GM
             PRINT_ERROR("SyntaxError: condition statement not return a bool value");
             return GM_Value::null_value();
         }
+        GCINC(condition_result);
 
         GM_Value* ret = GM_Value::null_value();
         if (condition_result->get_value())
@@ -304,6 +305,8 @@ namespace GM
             if (ast_false_part != nullptr)
                 ret = ast_false_part->eval();
         }
+
+        GCFREE(condition_result);
 
         return GM_Utils::get_last_value(ret);
     }
