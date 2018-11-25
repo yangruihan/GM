@@ -10,10 +10,7 @@ namespace GM
                                         : GM_AST_TREE(token)
     {}
     
-    GM_AST_LIST_EXPR::~GM_AST_LIST_EXPR()
-    {
-        GM_GC::free(m_environment);
-    }
+    GM_AST_LIST_EXPR::~GM_AST_LIST_EXPR() = default;
 
     size_t GM_AST_LIST_EXPR::get_need_child_count() const
     {

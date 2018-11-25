@@ -41,12 +41,14 @@ namespace GM
                 auto list_param = new std::vector<GM_Object*>(count);
                 for (size_t i = 0; i < count; i++)
                 {
-                    (*list_param)[i] = (get_child(i));
+                    auto child = get_child(i);
+                    (*list_param)[i] = child;
                 }
                 auto parameter = GM_GC::alloc_args<GM_Parameter>(get_environment(),
                                                                  list_param, nullptr);
+                GCINC(parameter);
                 const auto ret = func->eval(parameter);
-                GM_GC::free(parameter);
+                GCFREE(parameter);
                 return ret;
             }
         }
@@ -61,6 +63,7 @@ namespace GM
             else
             {
                 auto env = GM_Environment::create(cust_func->get_environment());
+                GCINC(env);
 
                 // prepare parameters
                 for (size_t i = 0, count = cust_func->get_param_count(); i < count; i++)
@@ -74,7 +77,7 @@ namespace GM
                 GM_Utils::set_env_for_childs(cust_func->get_func_body(),
                                              cust_func->get_environment());
 
-                GM_GC::free(env);
+                GCFREE(env);
 
                 return ret;
             }
@@ -82,7 +85,10 @@ namespace GM
 
         const auto value = GM_Value::convert_to_value(object);
         if (value != nullptr)
+        {
+            GCINC(value);
             return value;
+        }
 
         return nullptr;
     }

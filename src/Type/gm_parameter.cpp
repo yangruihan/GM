@@ -18,6 +18,7 @@ namespace GM
         for (size_t i = 0; i < count; i++)
         {
             auto value = va_arg(args, GM_Object*);
+            GCINC(value);
             auto dict_key = _handle_param_item(value);
             if (dict_key == nullptr)
             {
@@ -37,18 +38,26 @@ namespace GM
                                : m_environment(env),
                                  m_list_params(list_param),
                                  m_dict_params(dict_param)
-    {}
+    {
+        if (m_list_params != nullptr)
+            for (auto& param : *m_list_params)
+                GCINC(param);
+
+        if (m_dict_params != nullptr)
+            for (auto& param: *m_dict_params)
+                GCINC(param.second);
+    }
     
     GM_Parameter::~GM_Parameter()
     {
         if (m_list_params != nullptr)
             for (auto& param : *m_list_params)
-                GM_GC::free(param);
+                GCFREE(param);
         delete m_list_params;
 
         if (m_dict_params != nullptr)
             for (auto& param: *m_dict_params)
-                GM_GC::free(param.second);
+                GCFREE(param.second);
         delete m_dict_params;
     }
 

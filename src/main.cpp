@@ -36,10 +36,11 @@ int main(const int argc, char* argv[])
     DEBUG_LOG("-------------------");
 
     DEBUG_LOG_F("----- GM Interpreter [Version %d.%d.%d]-----", 0, 0, 1);
-    
+
+    // ----- init part -----
     GM_GC::init();
     GM_Interpreter::init();
-    
+
     const auto interpreter = GM_Interpreter::instance();
 
     if (argc == 1)

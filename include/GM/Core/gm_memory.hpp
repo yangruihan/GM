@@ -393,11 +393,11 @@ namespace GM
                 {
                     s_ins->m_objs.erase(it);
                 }
-                else
-                {
-                    PRINT_ERROR("GCFatal: obj is not in managered memory");
-                    return 0;
-                }
+//                else
+//                {
+//                    PRINT_ERROR("GCFatal: obj is not in managered memory");
+//                    return 0;
+//                }
 
                 obj->m_ins_idx = 0;
                 obj->~GM_Object();
@@ -439,21 +439,30 @@ namespace GM
 
         static void gc()
         {
+            std::vector<GM_Object*> wait_to_free_list;
+
             for (int i = s_ins->m_objs.size() - 1; i >= 0; i--)
             {
                 auto obj = s_ins->m_objs[i];
                 if (obj->m_ref_cnt == 0)
                 {
-                    GM_MemoryManager::free(obj);
                     s_ins->m_objs.erase(s_ins->m_objs.begin() + i);
+                    wait_to_free_list.push_back(obj);
                 }
+            }
+
+            for (auto& obj : wait_to_free_list)
+            {
+                obj->m_ins_idx = 0;
+                obj->~GM_Object();
+                GM_MemoryManager::free(obj);
             }
         }
 
     private:
         static void _init_new_obj(GM_Object* obj)
         {
-            inc_ref(obj);
+            obj->m_ref_cnt = 0;
             obj->m_ins_idx = _get_valid_ins_idx();
             s_ins->m_objs.push_back(obj);
         }

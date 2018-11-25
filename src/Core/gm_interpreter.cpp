@@ -36,6 +36,8 @@ namespace GM
           m_current_token_index(0),
           m_parse_mode(parse_mode)
     {
+        GM_GC::inc_ref(m_environment);
+
     }
 
     GM_Interpreter::GM_InterpreterData::~GM_InterpreterData()
@@ -88,7 +90,10 @@ namespace GM
     void GM_Interpreter::init()
     {
         if (s_ins == nullptr)
+        {
             s_ins = GM_GC::alloc<GM_Interpreter>();
+            GM_GC::inc_ref(s_ins);
+        }
     }
 
     void GM_Interpreter::destory()
@@ -101,8 +106,10 @@ namespace GM
         auto ret = true;
 
         m_global_environment = GM_Environment::create(nullptr);
-        m_global_environment->set_var(GM_INTERPRETER_RUN_FLAG,
-                                         GM_Value::bool_value(m_global_environment, true));
+        GM_GC::inc_ref(m_global_environment);
+
+        auto run_flag = GM_Value::bool_value(m_global_environment, true);
+        m_global_environment->set_var(GM_INTERPRETER_RUN_FLAG, run_flag);
 
         ret = GM_BuiltinFunc::init(m_global_environment);
         if (!ret)
@@ -147,16 +154,25 @@ namespace GM
         const auto ret = GM_InterpreterData::create(data,
                                                     m_global_environment,
                                                     parse_mode);
-
-        m_data_stack->push(data);
+        if (ret)
+        {
+            GM_GC::inc_ref(data);
+            m_data_stack->push(data);
+        }
+        else
+        {
+            PRINT_ERROR("MemoryError: create interpreter data fatal");
+        }
 
         return ret;
     }
 
     bool GM_Interpreter::_clear_data() const
     {
-        GM_GC::inc_ref(C_ENV);
-        m_loaded_env->push_back(C_ENV);
+        auto env = C_ENV;
+
+        GM_GC::inc_ref(env);
+        m_loaded_env->push_back(env);
         
         auto data = _get_current_data();
         m_data_stack->pop();
@@ -168,7 +184,7 @@ namespace GM
     bool GM_Interpreter::get_running_flag() const
     {
         const auto flag = C_ENV->get_var(GM_INTERPRETER_RUN_FLAG);
-        return dynamic_cast<GM_BoolValue*>(flag)->get_value();
+        return static_cast<GM_BoolValue*>(flag)->get_value();
     }
 
     int GM_Interpreter::repl()
@@ -243,7 +259,7 @@ namespace GM
 #ifdef DEBUG
                 DEBUG_LOG_F("Create AST success");
                 DEBUG_LOG_F("--- Show AST structure ---");
-                const auto root = this->get_ast_root();
+                const auto root = C_AST_ROOT;
                 this->_print_ast(root, 0);
                 std::cout << std::endl;
 #endif
@@ -259,12 +275,12 @@ namespace GM
                     DEBUG_LOG_F("- Result: %s", result->str().c_str());
                     DEBUG_LOG_F("--------------------");
 #else
-                    if (C_PARSE_MODE == GM_INTERPRETER_REPL_MODE)
+                    if (C_PARSE_MODE == GM_INTERPRETER_REPL_MODE && result != GM_NullValue::s_ins)
                         std::cout << result->str().c_str() << std::endl;
 #endif
 
-                    if (result != GM_NullValue::s_ins)
-                        GM_GC::free(result);
+//                    if (result != GM_NullValue::s_ins)
+//                        GM_GC::free(result);
 
                 }
                 else
@@ -279,6 +295,7 @@ namespace GM
             }
 
             GM_GC::free(C_AST_ROOT);
+            GM_GC::gc();
         }
 
         return ret;
@@ -286,7 +303,7 @@ namespace GM
 
     GM_Value* GM_Interpreter::eval() const
     {
-        auto root = get_ast_root();
+        auto root = C_AST_ROOT;
         
         if (root != nullptr)
         {
@@ -305,6 +322,8 @@ namespace GM
 
         if (C_AST_ROOT == nullptr)
             return -1;
+
+        GM_GC::inc_ref(C_AST_ROOT);
 
         return 0;
     }

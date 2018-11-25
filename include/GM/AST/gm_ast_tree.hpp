@@ -28,6 +28,8 @@ namespace GM
                 GM_GC::free((*m_childs)[i]);
 
             delete m_childs;
+
+            GM_GC::free(m_environment);
         }
 
     public:
@@ -92,6 +94,7 @@ namespace GM
                 return false;
             }
 
+            GM_GC::inc_ref(child);
             m_childs->push_back(child);
 
             DEBUG_LOG_F("Current AST_NODE(%s) add child AST_NODE(%s)",
@@ -105,6 +108,7 @@ namespace GM
         GM_Environment* set_environment(GM_Environment* environment)
         {
             m_environment = before_set_environment(environment);
+            GM_GC::inc_ref(m_environment);
             return m_environment;
         }
         

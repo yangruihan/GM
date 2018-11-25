@@ -64,6 +64,9 @@
 
 
 // --------------- Common Macro --------------- //
+// ----- GC ----- //
+#define GCINC(ref) GM_GC::inc_ref(ref)
+#define GCFREE(ref) GM_GC::free(ref)
 
 #define GM_STATIC_FUNCTION_D(func_name) \
 static GM_Value* (func_name)(const GM_Parameter* param)

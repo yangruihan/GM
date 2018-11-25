@@ -63,13 +63,13 @@ namespace GM
         if (type2 == T_GM_INT_VALUE)
         {
             auto int_arg2 = dynamic_cast<GM_IntValue*>(arg2);
-            return GM_Value::int_value(int_arg1->get_environment(),
+            return GM_Value::int_value(GM_Environment::create(int_arg1->get_environment()),
                                        int_arg1->get_value() + int_arg2->get_value());
         }
         else
         {
             auto float_arg2 = dynamic_cast<GM_FloatValue*>(arg2);
-            return GM_Value::float_value(int_arg1->get_environment(),
+            return GM_Value::float_value(GM_Environment::create(int_arg1->get_environment()),
                                          int_arg1->get_value() + float_arg2->get_value());
         }
 
@@ -90,13 +90,13 @@ namespace GM
         if (type2 == T_GM_INT_VALUE)
         {
             auto int_arg2 = dynamic_cast<GM_IntValue*>(arg2);
-            return GM_Value::int_value(int_arg1->get_environment(),
+            return GM_Value::int_value(GM_Environment::create(int_arg1->get_environment()),
                                        int_arg1->get_value() - int_arg2->get_value());
         }
         else
         {
             auto float_arg2 = dynamic_cast<GM_FloatValue*>(arg2);
-            return GM_Value::float_value(int_arg1->get_environment(),
+            return GM_Value::float_value(GM_Environment::create(int_arg1->get_environment()),
                                        int_arg1->get_value() - float_arg2->get_value());
         }
 
@@ -117,13 +117,13 @@ namespace GM
         if (type2 == T_GM_INT_VALUE)
         {
             auto int_arg2 = dynamic_cast<GM_IntValue*>(arg2);
-            return GM_Value::int_value(int_arg1->get_environment(),
+            return GM_Value::int_value(GM_Environment::create(int_arg1->get_environment()),
                                        int_arg1->get_value() * int_arg2->get_value());
         }
         else
         {
             auto float_arg2 = dynamic_cast<GM_FloatValue*>(arg2);
-            return GM_Value::float_value(int_arg1->get_environment(),
+            return GM_Value::float_value(GM_Environment::create(int_arg1->get_environment()),
                                        int_arg1->get_value() * float_arg2->get_value());
         }
 
@@ -149,7 +149,7 @@ namespace GM
                 PRINT_ERROR("ZeroDivisionError: integer division or modulo by zero");
                 return nullptr;
             }
-            return GM_Value::int_value(int_arg1->get_environment(),
+            return GM_Value::int_value(GM_Environment::create(int_arg1->get_environment()),
                                        int_arg1->get_value() / int_arg2->get_value());
         }
         else
@@ -160,7 +160,7 @@ namespace GM
                 PRINT_ERROR("ZeroDivisionError: float division or modulo by zero");
                 return nullptr;
             }
-            return GM_Value::float_value(int_arg1->get_environment(),
+            return GM_Value::float_value(GM_Environment::create(int_arg1->get_environment()),
                                        int_arg1->get_value() / float_arg2->get_value());
         }
 

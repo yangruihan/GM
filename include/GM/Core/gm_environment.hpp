@@ -30,13 +30,13 @@ namespace GM
         GM_Value* get_current_env_var(const std::string& var_name) const;
         GM_Value*& get_current_env_var(const std::string& var_name);
         
-        void set_parent(const GM_Environment* env) { m_parent = env; }
+        void set_parent(GM_Environment* env) { m_parent = env; }
         const GM_Environment* get_parent() const { return m_parent; }
         
     protected:
         std::map<std::string, GM_Value*>* m_var_map;
         
-        const GM_Environment* m_parent;
+        GM_Environment* m_parent;
     };
 
 }

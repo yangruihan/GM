@@ -49,7 +49,7 @@ namespace GM
         GET_PARAM(self, GM_StrValue, 0);
         GET_VALUE_PARAM(other, 1);
 
-        return GM_Value::str_value(param->get_environment(),
+        return GM_Value::str_value(GM_Environment::create(param->get_environment()),
                                    self->_str() + other->_str());
     }
 
@@ -59,7 +59,8 @@ namespace GM
         GET_PARAM(index, GM_IntValue, 1);
 
         auto ret = self->get((size_t)index->get_value());
-        return GM_Value::str_value(param->get_environment(), ret);
+        return GM_Value::str_value(GM_Environment::create(param->get_environment()),
+                                   ret);
     }
 
     GM_FUNCTION_I(GM_StrValue, __set)

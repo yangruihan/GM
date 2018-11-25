@@ -13,7 +13,11 @@ namespace GM
 
     void GM_NullValue::init(GM_Environment* env)
     {
-        s_ins = GM_GC::alloc_args<GM_NullValue>(env);
+        if (s_ins == nullptr)
+        {
+            s_ins = GM_GC::alloc_args<GM_NullValue>(env);
+            GM_GC::inc_ref(s_ins);
+        }
     }
 
     void GM_NullValue::destroy()

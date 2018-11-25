@@ -12,10 +12,16 @@ namespace GM
     GM_Environment::GM_Environment (GM_Environment* parent): m_parent(parent)
     {
         m_var_map = new std::map<std::string, GM_Value*>();
+
+        if (m_parent != nullptr)
+            GCINC(m_parent);
     }
         
     GM_Environment::~GM_Environment ()
     {
+        if (m_parent != nullptr)
+            GCFREE(m_parent);
+
         delete m_var_map;
         m_var_map = nullptr;
     }
@@ -40,7 +46,7 @@ namespace GM
     void GM_Environment::clear(GM_Environment* env)
     {
         for (auto & it : *env->m_var_map)
-            GM_GC::free(it.second);
+            GCFREE(it.second);
         env->m_var_map->clear();
     }
     
@@ -54,8 +60,9 @@ namespace GM
 
         auto it = m_var_map->find(var_name);
         if (it != m_var_map->end())
-            GM_GC::free((*m_var_map)[var_name]);
+            GCFREE((*m_var_map)[var_name]);
 
+        GCINC(var);
         (*m_var_map)[var_name] = var;
     }
     
