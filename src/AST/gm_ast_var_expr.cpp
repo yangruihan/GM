@@ -86,7 +86,6 @@ namespace GM
         const auto value = GM_Value::convert_to_value(object);
         if (value != nullptr)
         {
-            GCINC(value);
             return value;
         }
 
