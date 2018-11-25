@@ -16,13 +16,13 @@ namespace GM
         if (s_ins == nullptr)
         {
             s_ins = GM_GC::alloc_args<GM_NullValue>(env);
-            GM_GC::inc_ref(s_ins);
+            GCINC(s_ins);
         }
     }
 
     void GM_NullValue::destroy()
     {
-        GM_GC::free(s_ins);
+        GCFREE(s_ins);
     }
 
     void GM_NullValue::_init_functions() {}

@@ -10,12 +10,12 @@ namespace GM
                                 GM_Value* value)
         : GM_Value(env), m_key(key), m_value(value)
     {
-        GM_GC::inc_ref(m_value);
+        GCINC(m_value);
     }
 
     GM_PairValue::~GM_PairValue ()
     {
-        GM_GC::free(m_value);
+        GCFREE(m_value);
     }
         
     std::string GM_PairValue::_str() const

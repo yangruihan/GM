@@ -31,8 +31,8 @@ namespace GM
 #ifdef DEBUG
         return GM_Utils::format_str("[<class '%s'>, refcnt: %" PRIu64 ", insidx: %" PRIu64 "]",
                                     "environment",
-                                    GM_GC::get_ref_cnt(this),
-                                    GM_GC::get_ins_idx(this));
+                                    GCREFCNF(this),
+                                    GCINSIDX(this));
 #else
         return "<class 'environment'>";
 #endif
@@ -92,7 +92,7 @@ namespace GM
             else if (find_loaded_env)
             {
                 const auto interpreter = GM_Interpreter::instance();
-                if (interpreter == nullptr || !GM_GC::check_obj_valid(interpreter))
+                if (interpreter == nullptr || !GCISVALID(interpreter))
                     return nullptr;
                 
                 return interpreter->get_var_from_loaded_env(var_name);

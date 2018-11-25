@@ -22,7 +22,7 @@ namespace GM
     std::string on_dump_obj_handler(const void* ref)
     {
         auto obj = static_cast<const GM_Object*>(ref);
-        if (!GM_GC::check_obj_valid(obj))
+        if (!GCISVALID(obj))
             return GM_Utils::format_str("!!!!! EXCEPTION !!!!! [%s] Memory Broken, Obj has been free",
                                         typeid(obj).name());
         return obj->str();
@@ -36,13 +36,12 @@ namespace GM
           m_current_token_index(0),
           m_parse_mode(parse_mode)
     {
-        GM_GC::inc_ref(m_environment);
-
+        GCINC(m_environment);
     }
 
     GM_Interpreter::GM_InterpreterData::~GM_InterpreterData()
     {
-        GM_GC::free(m_environment);
+        GCFREE(m_environment);
         delete m_token_index_stack;
     }
 
@@ -51,8 +50,8 @@ namespace GM
 #ifdef DEBUG
         return GM_Utils::format_str("[<class '%s'>, refcnt: %" PRIu64 ", insidx: %" PRIu64 "]",
                                     "interpreter data",
-                                    GM_GC::get_ref_cnt(this),
-                                    GM_GC::get_ins_idx(this));
+                                    GCREFCNF(this),
+                                    GCINSIDX(this));
 #else
         return "<class 'interpreter data'>";
 #endif
@@ -80,8 +79,8 @@ namespace GM
 #ifdef DEBUG
         return GM_Utils::format_str("[<class '%s'>, refcnt: %" PRIu64 ", insidx: %" PRIu64 "]",
                                     "interpreter",
-                                    GM_GC::get_ref_cnt(this),
-                                    GM_GC::get_ins_idx(this));
+                                    GCREFCNF(this),
+                                    GCINSIDX(this));
 #else
         return "<class 'interpreter'>";
 #endif
@@ -92,13 +91,13 @@ namespace GM
         if (s_ins == nullptr)
         {
             s_ins = GM_GC::alloc<GM_Interpreter>();
-            GM_GC::inc_ref(s_ins);
+            GCINC(s_ins);
         }
     }
 
     void GM_Interpreter::destory()
     {
-        GM_GC::free(s_ins);
+        GCFREE(s_ins);
     }
 
     bool GM_Interpreter::_init()
@@ -106,7 +105,7 @@ namespace GM
         auto ret = true;
 
         m_global_environment = GM_Environment::create(nullptr);
-        GM_GC::inc_ref(m_global_environment);
+        GCINC(m_global_environment);
 
         auto run_flag = GM_Value::bool_value(m_global_environment, true);
         m_global_environment->set_var(GM_INTERPRETER_RUN_FLAG, run_flag);
@@ -131,7 +130,7 @@ namespace GM
         {
             auto top = m_data_stack->top();
             m_data_stack->pop();
-            GM_GC::free(top);
+            GCFREE(top);
         }
 
         delete m_data_stack;
@@ -139,12 +138,12 @@ namespace GM
         for (auto& env : *m_loaded_env)
         {
             GM_Environment::clear(env);
-            GM_GC::free(env);
+            GCFREE(env);
         }
         delete m_loaded_env;
 
         GM_Environment::clear(m_global_environment);
-        GM_GC::free(m_global_environment);
+        GCFREE(m_global_environment);
     }
 
 
@@ -156,7 +155,7 @@ namespace GM
                                                     parse_mode);
         if (ret)
         {
-            GM_GC::inc_ref(data);
+            GCINC(data);
             m_data_stack->push(data);
         }
         else
@@ -171,12 +170,12 @@ namespace GM
     {
         auto env = C_ENV;
 
-        GM_GC::inc_ref(env);
+        GCINC(env);
         m_loaded_env->push_back(env);
         
         auto data = _get_current_data();
         m_data_stack->pop();
-        GM_GC::free(data);
+        GCFREE(data);
 
         return true;
     }
@@ -280,7 +279,7 @@ namespace GM
 #endif
 
 //                    if (result != GM_NullValue::s_ins)
-//                        GM_GC::free(result);
+//                        GCFREE(result);
 
                 }
                 else
@@ -294,7 +293,7 @@ namespace GM
                 break;
             }
 
-            GM_GC::free(C_AST_ROOT);
+            GCFREE(C_AST_ROOT);
             GM_GC::gc();
         }
 
@@ -323,7 +322,7 @@ namespace GM
         if (C_AST_ROOT == nullptr)
             return -1;
 
-        GM_GC::inc_ref(C_AST_ROOT);
+        GCINC(C_AST_ROOT);
 
         return 0;
     }

@@ -67,6 +67,11 @@
 // ----- GC ----- //
 #define GCINC(ref) GM_GC::inc_ref(ref)
 #define GCFREE(ref) GM_GC::free(ref)
+#define GCGC() GM_GC::gc()
+#define GCREFCNF(ref) GM_GC::get_ref_cnt(ref)
+#define GCINSIDX(ref) GM_GC::get_ins_idx(ref)
+#define GCISVALID(ref) GM_GC::check_obj_valid(ref)
+
 
 #define GM_STATIC_FUNCTION_D(func_name) \
 static GM_Value* (func_name)(const GM_Parameter* param)

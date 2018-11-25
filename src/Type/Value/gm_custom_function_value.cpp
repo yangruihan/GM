@@ -17,13 +17,13 @@ namespace GM
                                              m_param_names(param_list),
                                              m_func_body(func_body)
     {
-        GM_GC::inc_ref(m_func_body);
+        GCINC(m_func_body);
     }
 
     GM_CustomFuncValue::~GM_CustomFuncValue()
     {
         delete m_param_names;
-        GM_GC::free(m_func_body);
+        GCFREE(m_func_body);
     }
     
     void GM_CustomFuncValue::_init_functions() {}

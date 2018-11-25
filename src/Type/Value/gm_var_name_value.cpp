@@ -26,7 +26,7 @@ namespace GM
         const auto value = dynamic_cast<GM_Value*>(var);
         if (value != nullptr)
         {
-            if (GM_GC::check_obj_valid(value))
+            if (GCISVALID(value))
                 return value->_str();
             else
                 return "!!!EXCEPTION!!! Memory Broken";
@@ -35,7 +35,7 @@ namespace GM
         const auto func = dynamic_cast<GM_Function*>(var);
         if (func != nullptr)
         {
-            if (GM_GC::check_obj_valid(func))
+            if (GCISVALID(func))
                 return func->get_name();
             else
                 return "!!!EXCEPTION!!! Memory Broken";
