@@ -28,6 +28,9 @@ namespace GM
                                          const int& param_count,
                                          const GM_FUNCTION_PTR func);
 
+        GM_VALUE_DEBUG_STR_FUNC(GM_Function)
+        GM_VALUE_STR_FUNC(GM_Function)
+
         std::string _str() const override
         {
             return GM_Utils::format_str("[$GM_Function, name:%s]",
@@ -43,14 +46,10 @@ namespace GM
         GM_Value* eval(GM_Parameter* parameter) const;
 
     protected:
-        // function name
-        const std::string m_name;
-
-        // function parameters count
-        const int m_param_count;
-
-        // function pointer
-        const GM_FUNCTION_PTR m_function;
+        const std::string     m_name;           // function name
+        const int             m_param_count;    // function parameters count
+        const GM_FUNCTION_PTR m_function;       // function pointer
+    
     };
 
 }

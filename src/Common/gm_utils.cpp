@@ -12,8 +12,7 @@ namespace GM
     GM_Environment* GM_Utils::set_env_for_childs(GM_AST_TREE* tree, GM_Environment* parent)
     {
         // create a new environment
-        auto new_env = new GM_Environment();
-        new_env->set_parent(parent);
+        const auto new_env = GM_Environment::create(parent);
 
         // change env for func body
         tree->set_environment(new_env);
@@ -21,7 +20,7 @@ namespace GM
         for (size_t i = 0, count = tree->get_child_count(); i < count; i++)
             stack.push(tree->get_child(i));
 
-        while (stack.size() > 0)
+        while (!stack.empty())
         {
             auto ast_tree = stack.top();
             stack.pop();

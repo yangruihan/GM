@@ -11,12 +11,16 @@ namespace GM
     class GM_NullValue : extends(GM_Value)
     {
 
-    private:
+    public:
         GM_NullValue (GM_Environment* env);
         ~GM_NullValue() override;
 
     public:
-        GM_VALUE_STR_FUNC(GM_NullValue)
+        static void init(GM_Environment* env);
+        static void destroy();
+
+        GM_VALUE_DEBUG_STR_FUNC(GM_NullValue)
+        GM_VALUE_STR_FUNC(null)
 
         std::string _str() const override
         { return "null"; }
@@ -31,7 +35,7 @@ namespace GM
         void _init_functions() override;
 
     public:
-        static GM_NullValue instance;
+        static GM_NullValue* s_ins;
 
     };
 

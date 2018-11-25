@@ -39,17 +39,18 @@ namespace GM
             return GM_Value::null_value();
         }
 
+        GCINC(value);
         auto str = value->str();
+        GCFREE(value);
         std::cout << str << std::endl;
-        return GM_Value::str_value(param->get_environment(), str);
+        return GM_Value::null_value();
     }
     
     GM_FUNCTION_I(GM_BuiltinFunc, __exit)
     {
-        auto ret = GM_Value::bool_value(param->get_environment(), false);
-        param->get_environment()->set_var(GM_INTERPRETER_RUN_FLAG,
-                                          ret);
-        return ret;
+        const auto ret = (GM_BoolValue*) param->get_environment()->get_var(GM_INTERPRETER_RUN_FLAG);
+        ret->set_value(false);
+        return GM_Value::null_value();
     }
     
     GM_FUNCTION_I(GM_BuiltinFunc, __let)
@@ -57,7 +58,7 @@ namespace GM
         GET_PARAM(ast_tree1, GM_AST_VAR_EXPR, 0);
         GET_AST_TREE(ast_tree2, 1);
 
-        auto var_key = ast_tree1->get_var_name_value();
+        const auto var_key = ast_tree1->get_var_name_value();
         GM_Value* var_value = nullptr;
 
         auto value_var_expr = dynamic_cast<GM_AST_VAR_EXPR*>(ast_tree2);
@@ -72,7 +73,7 @@ namespace GM
                                               var_value);
         }
 
-        return GM_Value::str_value(param->get_environment(), var_value->str());
+        return GM_Value::null_value();
     }
 
     GM_FUNCTION_I(GM_BuiltinFunc, __for)
@@ -111,11 +112,20 @@ namespace GM
 
         auto arg1 = GM_Value::convert_to_value(ast_tree1->eval());
         auto arg2 = GM_Value::convert_to_value(ast_tree2->eval());
+        GCINC(arg1);
+        GCINC(arg2);
 
         GET_CUR_ENV_FUNC(func, arg1, FUNC_LS_OP_KEY);
 
-        return func->eval(new GM_Parameter(param->get_environment(),
-                                           2, arg1, arg2));
+        auto new_param = GM_GC::alloc_args<GM_Parameter>(param->get_environment(), 2, arg1, arg2);
+        GCINC(new_param);
+
+        const auto ret = func->eval(new_param);
+
+        GCFREE(new_param);
+        GCFREE(arg1);
+        GCFREE(arg2);
+        return ret;
     }
 
     GM_FUNCTION_I(GM_BuiltinFunc, __eq)
@@ -125,11 +135,20 @@ namespace GM
 
         auto arg1 = GM_Value::convert_to_value(ast_tree1->eval());
         auto arg2 = GM_Value::convert_to_value(ast_tree2->eval());
+        GCINC(arg1);
+        GCINC(arg2);
 
         GET_CUR_ENV_FUNC(func, arg1, FUNC_EQ_OP_KEY);
 
-        return func->eval(new GM_Parameter(param->get_environment(),
-                                           2, arg1, arg2));
+        auto new_param = GM_GC::alloc_args<GM_Parameter>(param->get_environment(), 2, arg1, arg2);
+        GCINC(new_param);
+
+        const auto ret = func->eval(new_param);
+
+        GCFREE(new_param);
+        GCFREE(arg1);
+        GCFREE(arg2);
+        return ret;
     }
 
     GM_FUNCTION_I(GM_BuiltinFunc, __gt)
@@ -139,11 +158,20 @@ namespace GM
 
         auto arg1 = GM_Value::convert_to_value(ast_tree1->eval());
         auto arg2 = GM_Value::convert_to_value(ast_tree2->eval());
+        GCINC(arg1);
+        GCINC(arg2);
 
         GET_CUR_ENV_FUNC(func, arg1, FUNC_GT_OP_KEY);
 
-        return func->eval(new GM_Parameter(param->get_environment(),
-                                           2, arg1, arg2));
+        auto new_param = GM_GC::alloc_args<GM_Parameter>(param->get_environment(), 2, arg1, arg2);
+        GCINC(new_param);
+
+        const auto ret = func->eval(new_param);
+
+        GCFREE(new_param);
+        GCFREE(arg1);
+        GCFREE(arg2);
+        return ret;
     }
 
     GM_FUNCTION_I(GM_BuiltinFunc, __le)
@@ -153,11 +181,20 @@ namespace GM
 
         auto arg1 = dynamic_cast<GM_Value*>(ast_tree1->eval());
         auto arg2 = dynamic_cast<GM_Value*>(ast_tree2->eval());
+        GCINC(arg1);
+        GCINC(arg2);
 
         GET_CUR_ENV_FUNC(func, arg1, FUNC_LE_OP_KEY);
 
-        return func->eval(new GM_Parameter(param->get_environment(),
-                                           2, arg1, arg2));
+        auto new_param = GM_GC::alloc_args<GM_Parameter>(param->get_environment(), 2, arg1, arg2);
+        GCINC(new_param);
+
+        const auto ret = func->eval(new_param);
+
+        GCFREE(new_param);
+        GCFREE(arg1);
+        GCFREE(arg2);
+        return ret;
     }
 
     GM_FUNCTION_I(GM_BuiltinFunc, __ge)
@@ -167,11 +204,20 @@ namespace GM
 
         auto arg1 = GM_Value::convert_to_value(ast_tree1->eval());
         auto arg2 = GM_Value::convert_to_value(ast_tree2->eval());
+        GCINC(arg1);
+        GCINC(arg2);
 
         GET_CUR_ENV_FUNC(func, arg1, FUNC_GE_OP_KEY);
 
-        return func->eval(new GM_Parameter(param->get_environment(),
-                                           2, arg1, arg2));
+        auto new_param = GM_GC::alloc_args<GM_Parameter>(param->get_environment(), 2, arg1, arg2);
+        GCINC(new_param);
+
+        const auto ret = func->eval(new_param);
+
+        GCFREE(new_param);
+        GCFREE(arg1);
+        GCFREE(arg2);
+        return ret;
     }
 
     GM_FUNCTION_I(GM_BuiltinFunc, __ne)
@@ -181,11 +227,20 @@ namespace GM
 
         auto arg1 = GM_Value::convert_to_value(ast_tree1->eval());
         auto arg2 = GM_Value::convert_to_value(ast_tree2->eval());
+        GCINC(arg1);
+        GCINC(arg2);
 
         GET_CUR_ENV_FUNC(func, arg1, FUNC_NE_OP_KEY);
 
-        return func->eval(new GM_Parameter(param->get_environment(),
-                                           2, arg1, arg2));
+        auto new_param = GM_GC::alloc_args<GM_Parameter>(param->get_environment(), 2, arg1, arg2);
+        GCINC(new_param);
+
+        const auto ret = func->eval(new_param);
+
+        GCFREE(new_param);
+        GCFREE(arg1);
+        GCFREE(arg2);
+        return ret;
     }
 
     GM_FUNCTION_I(GM_BuiltinFunc, __def)
@@ -238,6 +293,7 @@ namespace GM
             PRINT_ERROR("SyntaxError: condition statement not return a bool value");
             return GM_Value::null_value();
         }
+        GCINC(condition_result);
 
         GM_Value* ret = GM_Value::null_value();
         if (condition_result->get_value())
@@ -249,6 +305,8 @@ namespace GM
             if (ast_false_part != nullptr)
                 ret = ast_false_part->eval();
         }
+
+        GCFREE(condition_result);
 
         return GM_Utils::get_last_value(ret);
     }
@@ -314,11 +372,22 @@ namespace GM
 
         auto container = GM_Value::convert_to_value(container_node->eval());
         auto index = GM_Value::convert_to_value(index_node->eval());
+        GCINC(container);
+        GCINC(index);
 
         GET_CUR_ENV_FUNC(func, container, FUNC_GET_OP_KEY);
 
-        return func->eval(new GM_Parameter(param->get_environment(),
-                                           2, container, index));
+        auto new_param = GM_GC::alloc_args<GM_Parameter>(param->get_environment(),
+                                          2, container, index);
+        GCINC(new_param);
+
+        const auto ret = func->eval(new_param);
+
+        GCFREE(new_param);
+        GCFREE(container);
+        GCFREE(index);
+
+        return ret;
     }
 
     GM_FUNCTION_I(GM_BuiltinFunc, __set)
@@ -337,11 +406,23 @@ namespace GM
         auto container = GM_Value::convert_to_value(container_node->eval());
         auto index = GM_Value::convert_to_value(index_node->eval());
         auto value = value_node->eval();
+        GCINC(container);
+        GCINC(index);
+        GCINC(value);
 
         GET_CUR_ENV_FUNC(func, container, FUNC_SET_OP_KEY);
 
-        return func->eval(new GM_Parameter(param->get_environment(),
-                                           3, container, index, value));
+        auto new_param = GM_GC::alloc_args<GM_Parameter>(param->get_environment(),
+                                                     3, container, index, value);
+        GCINC(new_param);
+        const auto ret = func->eval(new_param);
+
+        GCFREE(new_param);
+        GCFREE(container);
+        GCFREE(index);
+        GCFREE(value);
+
+        return ret;
     }
 
 }

@@ -16,16 +16,29 @@ namespace GM
 
         if (left_value != nullptr && right_value != nullptr)
         {
+            GCINC(left_value);
+            GCINC(right_value);
+
             auto func = left_value->get_cur_env_func(FUNC_ADD_OP_KEY);
             if (func == nullptr)
             {
-                PRINT_ERROR_F("FunctionError: %s not found", FUNC_ADD_OP_KEY);
+                GCFREE(left_value);
+                GCFREE(right_value);
+
+                PRINT_ERROR_F("FunctionError: %s not found", FUNC_SUB_OP_KEY);
                 return nullptr;
             }
             
-            auto parameter = new GM_Parameter(get_environment(),
-                                              2, left_value, right_value);
-            return func->eval(parameter);
+            auto parameter = GM_GC::alloc_args<GM_Parameter>(get_environment(),
+                                                             2, left_value, right_value);
+            GCINC(parameter);
+
+            const auto ret = func->eval(parameter);
+
+            GCFREE(parameter);
+            GCFREE(left_value);
+            GCFREE(right_value);
+            return ret;
         }
 
         return nullptr;
@@ -57,16 +70,29 @@ namespace GM
 
         if (left_value != nullptr && right_value != nullptr)
         {
+            GCINC(left_value);
+            GCINC(right_value);
+
             auto func = left_value->get_cur_env_func(FUNC_SUB_OP_KEY);
             if (func == nullptr)
             {
+                GCFREE(left_value);
+                GCFREE(right_value);
+
                 PRINT_ERROR_F("FunctionError: %s not found", FUNC_SUB_OP_KEY);
                 return nullptr;
             }
             
-            auto parameter = new GM_Parameter(get_environment(),
-                                              2, left_value, right_value);
-            return func->eval(parameter);
+            auto parameter = GM_GC::alloc_args<GM_Parameter>(get_environment(),
+                                                             2, left_value, right_value);
+            GCINC(parameter);
+
+            const auto ret = func->eval(parameter);
+
+            GCFREE(parameter);
+            GCFREE(left_value);
+            GCFREE(right_value);
+            return ret;
         }
 
         return nullptr;
@@ -98,16 +124,29 @@ namespace GM
 
         if (left_value != nullptr && right_value != nullptr)
         {
+            GCINC(left_value);
+            GCINC(right_value);
+
             auto func = left_value->get_cur_env_func(FUNC_MUL_OP_KEY);
             if (func == nullptr)
             {
-                PRINT_ERROR_F("FunctionError: %s not found", FUNC_MUL_OP_KEY);
+                GCFREE(left_value);
+                GCFREE(right_value);
+
+                PRINT_ERROR_F("FunctionError: %s not found", FUNC_SUB_OP_KEY);
                 return nullptr;
             }
             
-            auto parameter = new GM_Parameter(get_environment(),
-                                              2, left_value, right_value);
-            return func->eval(parameter);
+            auto parameter = GM_GC::alloc_args<GM_Parameter>(get_environment(),
+                                                             2, left_value, right_value);
+            GCINC(parameter);
+
+            const auto ret = func->eval(parameter);
+
+            GCFREE(parameter);
+            GCFREE(left_value);
+            GCFREE(right_value);
+            return ret;
         }
 
         return nullptr;
@@ -139,16 +178,29 @@ namespace GM
 
         if (left_value != nullptr && right_value != nullptr)
         {
+            GCINC(left_value);
+            GCINC(right_value);
+
             auto func = left_value->get_cur_env_func(FUNC_DIV_OP_KEY);
             if (func == nullptr)
             {
-                PRINT_ERROR_F("FunctionError: %s not found", FUNC_DIV_OP_KEY);
+                GCFREE(left_value);
+                GCFREE(right_value);
+
+                PRINT_ERROR_F("FunctionError: %s not found", FUNC_SUB_OP_KEY);
                 return nullptr;
             }
             
-            auto parameter = new GM_Parameter(get_environment(),
-                                              2, left_value, right_value);
-            return func->eval(parameter);
+            auto parameter = GM_GC::alloc_args<GM_Parameter>(get_environment(),
+                                                             2, left_value, right_value);
+            GCINC(parameter);
+
+            const auto ret = func->eval(parameter);
+
+            GCFREE(parameter);
+            GCFREE(left_value);
+            GCFREE(right_value);
+            return ret;
         }
 
         return nullptr;

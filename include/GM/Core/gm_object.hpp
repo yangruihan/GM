@@ -4,9 +4,7 @@
 
 namespace GM
 {
-    class GM_MemoryManager;
-    class GM_GarbageCollector;
-
+    
     class GM_Object
     {
 
@@ -21,8 +19,9 @@ namespace GM
         friend class GM_MemoryManager;
         friend class GM_GarbageCollector;
 
-        uint16_t m_memory_chunk_idx = 0;
-        uint64_t m_ref_cnt          = 0;
+        uint16_t m_memory_chunk_idx = 0;        // memory chunk index
+        uint64_t m_ref_cnt          = 0;        // reference count
+        uint64_t m_ins_idx          = 0;        // instance index
 
     };
 

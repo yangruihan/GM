@@ -20,7 +20,8 @@ namespace GM
         virtual ~GM_PairValue ();
 
     public:
-        GM_VALUE_STR_FUNC(GM_PairValue)
+        GM_VALUE_DEBUG_STR_FUNC(GM_PairValue)
+        GM_VALUE_STR_FUNC(pair)
 
         std::string _str() const override;
 
@@ -41,7 +42,7 @@ namespace GM
 
     protected:
         std::string m_key;
-        GM_Value* m_value;
+        GM_Value*   m_value;
 
     };
     

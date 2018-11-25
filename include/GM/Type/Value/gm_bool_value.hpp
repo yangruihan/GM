@@ -18,7 +18,7 @@ namespace GM
                       const char* token);
         GM_BoolValue (GM_Environment* env,
                       const bool& value);
-        ~GM_BoolValue() override {}
+        ~GM_BoolValue() override = default;
 
     public:
         VALUE_TYPE get_type() const override
@@ -26,10 +26,12 @@ namespace GM
             return T_GM_BOOL_VALUE;
         }
 
+        void set_value(const bool& value) { m_value = value; }
         bool get_value() const { return m_value; }
 
     public:
-        GM_VALUE_STR_FUNC(GM_BoolValue)
+        GM_VALUE_DEBUG_STR_FUNC(GM_BoolValue)
+        GM_VALUE_STR_FUNC(bool)
 
         std::string _str() const override;
 

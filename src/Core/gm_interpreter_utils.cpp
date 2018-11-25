@@ -8,19 +8,19 @@ namespace GM
     {
         if (GM_AST_ADD_OPERATOR_EXPR::check_token_valid(token))
         {
-            return new GM_AST_ADD_OPERATOR_EXPR(token);
+            return GM_AST_TREE::create<GM_AST_ADD_OPERATOR_EXPR>(token);
         }
         else if (GM_AST_SUB_OPERATOR_EXPR::check_token_valid(token))
         {
-            return new GM_AST_SUB_OPERATOR_EXPR(token);
+            return GM_AST_TREE::create<GM_AST_SUB_OPERATOR_EXPR>(token);
         }
         else if (GM_AST_MUL_OPERATOR_EXPR::check_token_valid(token))
         {
-            return new GM_AST_MUL_OPERATOR_EXPR(token);
+            return GM_AST_TREE::create<GM_AST_MUL_OPERATOR_EXPR>(token);
         }
         else if (GM_AST_DIV_OPERATOR_EXPR::check_token_valid(token))
         {
-            return new GM_AST_DIV_OPERATOR_EXPR(token);
+            return GM_AST_TREE::create<GM_AST_DIV_OPERATOR_EXPR>(token);
         }
         
         return nullptr;
@@ -36,7 +36,7 @@ namespace GM
             bool is_float;
             if (GM_AST_NUMBER_LITERAL_EXPR::check_token_valid(token, is_float))
             {
-                return new GM_AST_NUMBER_LITERAL_EXPR(token, is_float);
+                return GM_AST_TREE::create<GM_AST_NUMBER_LITERAL_EXPR>(token, is_float);
             }
         }
         
@@ -47,7 +47,7 @@ namespace GM
     {
         if (GM_AST_STR_LITERAL_EXPR::check_token_valid(token))
         {
-            return new GM_AST_STR_LITERAL_EXPR(token);
+            return GM_AST_TREE::create<GM_AST_STR_LITERAL_EXPR>(token);
         }
         
         return nullptr;
@@ -57,7 +57,7 @@ namespace GM
     {
         if (GM_AST_VAR_EXPR::check_token_valid(token))
         {
-            return new GM_AST_VAR_EXPR(token);
+            return GM_AST_TREE::create<GM_AST_VAR_EXPR>(token);
         }
 
         return nullptr;
@@ -67,7 +67,7 @@ namespace GM
     {
         if (GM_AST_LIST_EXPR::check_token_valid(token))
         {
-            return new GM_AST_LIST_EXPR(token);
+            return GM_AST_TREE::create<GM_AST_LIST_EXPR>(token);
         }
 
         return nullptr;
@@ -77,7 +77,7 @@ namespace GM
     {
         if (GM_AST_DICT_EXPR::check_token_valid(token))
         {
-            return new GM_AST_DICT_EXPR(token);
+            return GM_AST_TREE::create<GM_AST_DICT_EXPR>(token);
         }
 
         return nullptr;

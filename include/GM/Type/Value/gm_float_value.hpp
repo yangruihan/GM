@@ -20,10 +20,11 @@ namespace GM
         GM_FloatValue (GM_Environment* env,
                        double value);
 
-        virtual ~GM_FloatValue () {};
+        virtual ~GM_FloatValue ();
 
     public:
-        GM_VALUE_STR_FUNC(GM_FloatValue)
+        GM_VALUE_DEBUG_STR_FUNC(GM_FloatValue)
+        GM_VALUE_STR_FUNC(float)
 
         std::string _str() const override;
 

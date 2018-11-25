@@ -49,12 +49,13 @@ namespace GM
         }
 
     public:
-        GM_VALUE_STR_FUNC(GM_Value)
+        GM_VALUE_DEBUG_STR_FUNC(GM_Value)
+        GM_VALUE_STR_FUNC(value)
 
         virtual std::string _str() const = 0;
 
     protected:
-        virtual void _init_functions() {};
+        virtual void _init_functions() {}
 
     protected:
         GM_Environment* m_environment;

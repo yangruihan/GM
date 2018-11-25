@@ -20,7 +20,8 @@ namespace GM
                             GM_AST_TREE* func_body);
         virtual ~GM_CustomFuncValue ();
     public:
-        GM_VALUE_STR_FUNC(GM_CustomFuncValue)
+        GM_VALUE_DEBUG_STR_FUNC(GM_CustomFuncValue)
+        GM_VALUE_STR_FUNC(function)
 
         std::string _str() const override;
 
@@ -54,10 +55,10 @@ namespace GM
         void _init_functions() override;
 
     protected:
-        const std::string m_func_name;
-        const size_t m_param_count;
+        const std::string               m_func_name;
+        const size_t                    m_param_count;
         const std::vector<std::string>* m_param_names;
-        GM_AST_TREE* m_func_body;
+        GM_AST_TREE*                    m_func_body;
 
     };
 

@@ -37,6 +37,11 @@ namespace GM
                 delete pool;
             }
 
+            bool check_space(const size_t& size) const
+            {
+                return pool->check_space(size);
+            }
+
             size_t available_size() const
             {
                 return pool->available_size();
@@ -47,9 +52,9 @@ namespace GM
                 return pool->free_size();
             }
 
-            void dump(std::ostream& os) const
+            void dump(std::ostream& os, estd::dump_obj_handler dump_obj_handler = nullptr) const
             {
-                pool->dump(os);
+                pool->dump(os, dump_obj_handler);
             }
         };
     
@@ -108,9 +113,9 @@ namespace GM
             return s_ins->_free_arr(obj);
         }
         
-        static void dump(std::ostream& os)
+        static void dump(std::ostream& os, estd::dump_obj_handler dump_obj_handler = nullptr)
         {
-            s_ins->_dump(os);
+            s_ins->_dump(os, dump_obj_handler);
         }
         
         static size_t available_size()
@@ -155,10 +160,11 @@ namespace GM
             if (size >= m_max_alloc_size)
                 return nullptr;
 
-            auto chunk = _get_enough_size_chunk(size, m_curt_memory_idx);
+            uint16_t memory_idx = 0;
+            auto chunk = _get_enough_size_chunk(size, memory_idx);
             T* ret = chunk->pool->alloc<T>();
             new (ret) T();
-            static_cast<GM_Object*>(ret)->m_memory_chunk_idx = m_curt_memory_idx;
+            static_cast<GM_Object*>(ret)->m_memory_chunk_idx = memory_idx;
             return ret;
         }
 
@@ -168,13 +174,15 @@ namespace GM
             auto size = sizeof(T) * count;
             if (size >= m_max_alloc_size)
                 return nullptr;
-            auto chunk = _get_enough_size_chunk(size, m_curt_memory_idx);
+
+            uint16_t memory_idx = 0;
+            auto chunk = _get_enough_size_chunk(size, memory_idx);
             T* ret = chunk->pool->alloc_arr<T>(count);
             for (size_t i = 0; i < count; i++)
             {
                 const auto gm_obj = static_cast<GM_Object*>(ret + i);
                 new (ret + i) T();
-                gm_obj->m_memory_chunk_idx = m_curt_memory_idx;
+                gm_obj->m_memory_chunk_idx = memory_idx;
             }
             return ret;
         }
@@ -186,9 +194,10 @@ namespace GM
             if (size >= m_max_alloc_size)
                 return nullptr;
 
-            auto chunk = _get_enough_size_chunk(size, m_curt_memory_idx);
+            uint16_t memory_idx = 0;
+            auto chunk = _get_enough_size_chunk(size, memory_idx);
             T* ret = chunk->pool->alloc_args<T>(std::forward<TArgs>(args)...);
-            static_cast<GM_Object*>(ret)->m_memory_chunk_idx = m_curt_memory_idx;
+            static_cast<GM_Object*>(ret)->m_memory_chunk_idx = memory_idx;
             return ret;
         }
 
@@ -198,10 +207,12 @@ namespace GM
             auto size = sizeof(T) * count;
             if (size >= m_max_alloc_size)
                 return nullptr;
-            auto chunk = _get_enough_size_chunk(size, m_curt_memory_idx);
+
+            uint16_t memory_idx = 0;
+            auto chunk = _get_enough_size_chunk(size, memory_idx);
             T* ret = chunk->pool->alloc_arr_args<T>(count, std::forward<TArgs>(args)...);
             for (size_t i = 0; i < count; i++)
-                static_cast<GM_Object*>(ret + i)->m_memory_chunk_idx = m_curt_memory_idx;
+                static_cast<GM_Object*>(ret + i)->m_memory_chunk_idx = memory_idx;
             return ret;
         }
 
@@ -215,27 +226,29 @@ namespace GM
         }
 
         template<class T>
-        bool _free(T*& obj)
+        bool _free(T*& ref)
         {
-            const auto memory_chunk_idx = static_cast<GM_Object*>(obj)->m_memory_chunk_idx;
-            auto chunk = m_chunks[memory_chunk_idx];
+            auto obj = static_cast<GM_Object*>(ref);
+            auto chunk = m_chunks[obj->m_memory_chunk_idx];
+            obj->m_memory_chunk_idx = 0;
             auto ret = chunk->pool->free(obj);
-            obj = nullptr;
+            ref = nullptr;
             return ret;
         }
 
         template<class T>
-        bool _free_arr(T*& obj)
+        bool _free_arr(T*& ref)
         {
-            const auto memory_chunk_idx = static_cast<GM_Object*>(obj)->m_memory_chunk_idx;
-            auto chunk = m_chunks[memory_chunk_idx];
+            auto obj = static_cast<GM_Object*>(ref);
+            auto chunk = m_chunks[obj->m_memory_chunk_idx];
+            obj->m_memory_chunk_idx = 0;
             auto ret = chunk->pool->free_arr(obj);
-            obj = nullptr;
+            ref = nullptr;
             return ret;
         }
 
     private:
-        void _dump(std::ostream& os) const
+        void _dump(std::ostream& os, estd::dump_obj_handler dump_obj_handler = nullptr) const
         {
             os << "\n----------------------------------------------------------------------------------------" << std::endl;
             os << "--- Memory Manager Info ---" << std::endl;
@@ -246,7 +259,7 @@ namespace GM
             for (size_t i = 0, count = m_chunks.size(); i < count; i++)
             {
                 os << "\n*** Chunk " << i << " ***\n";
-                m_chunks[i]->dump(os);
+                m_chunks[i]->dump(os, dump_obj_handler);
             }
             os << "----------------------------------------------------------------------------------------" << std::endl;
         }
@@ -275,7 +288,7 @@ namespace GM
             const auto count = m_chunks.size();
             for (size_t idx = 0; idx < count; idx++)
             {
-                if (m_chunks[idx]->available_size() >= size)
+                if (m_chunks[idx]->check_space(size))
                 {
                     memory_chunk_idx = idx;
                     return m_chunks[idx];
@@ -296,7 +309,6 @@ namespace GM
     private:
         std::vector<memory_chunk*> m_chunks;
         size_t                     m_max_alloc_size;
-        uint16_t                   m_curt_memory_idx;
     };
 
     class GM_GarbageCollector : extends(GM_Object)
@@ -321,8 +333,7 @@ namespace GM
         static T* alloc()
         {
             auto obj = GM_MemoryManager::alloc<T>();
-            inc_ref(obj);
-            s_ins->m_objs.push_back(obj);
+            _init_new_obj((GM_Object*)obj);
             return obj;
         }
 
@@ -330,8 +341,7 @@ namespace GM
         static T* alloc_args(TArgs &&... args)
         {
             auto obj = GM_MemoryManager::alloc_args<T>(std::forward<TArgs>(args)...);
-            inc_ref(obj);
-            s_ins->m_objs.push_back(obj);
+            _init_new_obj((GM_Object*)obj);
             return obj;
         }
         
@@ -344,35 +354,61 @@ namespace GM
                 PRINT_ERROR("GCFatal: obj ref count is already 0");
                 return false;
             }
+            else if (ref->m_ins_idx < GM_DEFAULT_INS_IDX_START)
+            {
+                PRINT_ERROR("GCFatal: obj is not alloc by GCAllocator");
+                return false;
+            }
+
             if (dec_ref(ref) == 0)
                 obj = nullptr;
             return true;
         }
 
-        static void dump(std::ostream& os)
+        static void dump(std::ostream& os, estd::dump_obj_handler dump_obj_handler = nullptr)
         {
-            GM_MemoryManager::dump(os);
+            GM_MemoryManager::dump(os, dump_obj_handler);
         }
 
-        static uint64_t inc_ref(void* ref)
+        static uint64_t inc_ref(GM_Object* obj)
         {
-            const auto obj = static_cast<GM_Object*>(ref);
             obj->m_ref_cnt++;
             return obj->m_ref_cnt;
         }
 
-        static uint64_t dec_ref(void* ref, bool delay_free = false)
+        static uint64_t dec_ref(GM_Object* obj, bool delay_free = false)
         {
-            auto obj = static_cast<GM_Object*>(ref);
+            if (obj->m_ins_idx < GM_DEFAULT_INS_IDX_START)
+            {
+                PRINT_ERROR("GCFatal: obj is not alloc by GCAllocator");
+                return 0;
+            }
+
             obj->m_ref_cnt--;
             if (!delay_free && obj->m_ref_cnt == 0)
             {
-                GM_MemoryManager::free(obj);
                 const auto it = std::find(s_ins->m_objs.begin(), s_ins->m_objs.end(), obj);
+                
                 if (it != s_ins->m_objs.end())
+                {
                     s_ins->m_objs.erase(it);
+                }
+//                else
+//                {
+//                    PRINT_ERROR("GCFatal: obj is not in managered memory");
+//                    return 0;
+//                }
+
+                obj->m_ins_idx = 0;
+                obj->~GM_Object();
+                GM_MemoryManager::free(obj);
                 return 0;
             }
+            return obj->m_ref_cnt;
+        }
+
+        static uint64_t get_ref_cnt(const GM_Object* obj)
+        {
             return obj->m_ref_cnt;
         }
 
@@ -381,23 +417,65 @@ namespace GM
             return obj->m_ref_cnt;
         }
 
+        static uint64_t get_ins_idx(const GM_Object* obj)
+        {
+            return obj->m_ins_idx;
+        }
+
+        static uint64_t get_ins_idx(GM_Object* obj)
+        {
+            return obj->m_ins_idx;
+        }
+
+        static bool check_obj_valid(GM_Object* obj)
+        {
+            return obj != nullptr && obj->m_ref_cnt > 0 && obj->m_ins_idx >= GM_DEFAULT_INS_IDX_START;
+        }
+
+        static bool check_obj_valid(const GM_Object* obj)
+        {
+            return obj != nullptr && obj->m_ref_cnt > 0 && obj->m_ins_idx >= GM_DEFAULT_INS_IDX_START;
+        }
+
         static void gc()
         {
+            std::vector<GM_Object*> wait_to_free_list;
+
             for (int i = s_ins->m_objs.size() - 1; i >= 0; i--)
             {
                 auto obj = s_ins->m_objs[i];
                 if (obj->m_ref_cnt == 0)
                 {
-                    GM_MemoryManager::free(obj);
                     s_ins->m_objs.erase(s_ins->m_objs.begin() + i);
+                    wait_to_free_list.push_back(obj);
                 }
+            }
+
+            for (auto& obj : wait_to_free_list)
+            {
+                obj->m_ins_idx = 0;
+                obj->~GM_Object();
+                GM_MemoryManager::free(obj);
             }
         }
 
     private:
+        static void _init_new_obj(GM_Object* obj)
+        {
+            obj->m_ref_cnt = 0;
+            obj->m_ins_idx = _get_valid_ins_idx();
+            s_ins->m_objs.push_back(obj);
+        }
+
+        static uint64_t _get_valid_ins_idx()
+        {
+            return s_ins_idx_counter++;
+        }
+
         static GM_GarbageCollector* s_ins;
+        static uint64_t             s_ins_idx_counter;
         
-        std::vector<GM_Object*> m_objs;
+        std::vector<GM_Object*>     m_objs;
 
     };
 

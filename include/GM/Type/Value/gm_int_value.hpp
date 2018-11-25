@@ -24,7 +24,8 @@ namespace GM
         virtual ~GM_IntValue ();
 
     public:
-        GM_VALUE_STR_FUNC(GM_IntValue)
+        GM_VALUE_DEBUG_STR_FUNC(GM_IntValue)
+        GM_VALUE_STR_FUNC(int)
 
         std::string _str() const override;
 

@@ -15,6 +15,7 @@ namespace GM
     GM_ListValue::~GM_ListValue ()
     {
         delete m_items;
+        GM_Environment::clear(get_environment());
     }
 
     void GM_ListValue::_init_functions()

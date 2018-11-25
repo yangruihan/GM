@@ -1,4 +1,4 @@
-#include <stdio.h>
+#include <cstdio>
 #include <iostream>
 #include <string>
 
@@ -11,17 +11,16 @@ void repl(GM_Interpreter* interpreter)
     interpreter->repl();
 }
 
-void parse_files(int argc, char* argv[], GM_Interpreter* interpreter)
+void parse_files(const int argc, char* argv[], GM_Interpreter* interpreter)
 {
-    std::string file_path;
-    for (size_t i = 0; i < argc; i++)
+    for (auto i = 1; i < argc; i++)
     {
-        file_path = argv[i];
+        const std::string file_path = argv[i];
         interpreter->parse_file(file_path);
     }
 }
 
-int main(int argc, char* argv[])
+int main(const int argc, char* argv[])
 {
     DEBUG_LOG("\n\n\n");
 
@@ -30,17 +29,18 @@ int main(int argc, char* argv[])
 #ifdef DEBUG
     for (auto i = 0; i < argc; i++)
     {
-        DEBUG_LOG_F("- %zu: %s", i, argv[i]);
+        DEBUG_LOG_F("- %d: %s", i, argv[i]);
     }
 #endif
 
     DEBUG_LOG("-------------------");
 
     DEBUG_LOG_F("----- GM Interpreter [Version %d.%d.%d]-----", 0, 0, 1);
-    
+
+    // ----- init part -----
     GM_GC::init();
     GM_Interpreter::init();
-    
+
     const auto interpreter = GM_Interpreter::instance();
 
     if (argc == 1)
@@ -51,11 +51,15 @@ int main(int argc, char* argv[])
     GM_Interpreter::destory();
     
     GM_GC::gc();
-    GM_GC::dump(std::cout);
+#ifdef DEBUG
+    GM_GC::dump(std::cout, GM::on_dump_obj_handler);
+#endif
     GM_GC::destroy();
 
+#ifdef _WINDOWS
     int pause;
     std::cin >> pause;
+#endif
 
     return 0;
 }

@@ -8,16 +8,54 @@ if (ret != nullptr) \
     return ret;     \
 } while(0)
 
-#define C_ENV _get_current_data()->m_environment
-#define C_PARSE_CURSOR _get_current_data()->m_parse_cursor
-#define C_TOKEN_INDEX _get_current_data()->m_current_token_index
-#define C_AST_ROOT _get_current_data()->m_ast_root
+#define C_ENV               _get_current_data()->m_environment
+#define C_PARSE_CURSOR      _get_current_data()->m_parse_cursor
+#define C_TOKEN_INDEX       _get_current_data()->m_current_token_index
+#define C_AST_ROOT          _get_current_data()->m_ast_root
 #define C_TOKEN_INDEX_STACK _get_current_data()->m_token_index_stack
-#define C_PARSE_MODE _get_current_data()->m_parse_mode
+#define C_PARSE_MODE        _get_current_data()->m_parse_mode
 
 
 namespace GM
 {
+
+    std::string on_dump_obj_handler(const void* ref)
+    {
+        auto obj = static_cast<const GM_Object*>(ref);
+        if (!GCISVALID(obj))
+            return GM_Utils::format_str("!!!!! EXCEPTION !!!!! [%s] Memory Broken, Obj has been free",
+                                        typeid(obj).name());
+        return obj->str();
+    }
+
+    GM_Interpreter::GM_InterpreterData::GM_InterpreterData(GM_Environment*& env, const size_t& parse_mode)
+        : m_environment(GM_Environment::create(env)),
+          m_ast_root(nullptr),
+          m_parse_cursor(0), 
+          m_token_index_stack(new std::stack<size_t>()), 
+          m_current_token_index(0),
+          m_parse_mode(parse_mode)
+    {
+        GCINC(m_environment);
+    }
+
+    GM_Interpreter::GM_InterpreterData::~GM_InterpreterData()
+    {
+        GCFREE(m_environment);
+        delete m_token_index_stack;
+    }
+
+    std::string GM_Interpreter::GM_InterpreterData::str() const
+    {
+#ifdef DEBUG
+        return GM_Utils::format_str("[<class '%s'>, refcnt: %" PRIu64 ", insidx: %" PRIu64 "]",
+                                    "interpreter data",
+                                    GCREFCNF(this),
+                                    GCINSIDX(this));
+#else
+        return "<class 'interpreter data'>";
+#endif
+    }
 
     GM_Interpreter::GM_Interpreter()
     {
@@ -26,21 +64,7 @@ namespace GM
     
     GM_Interpreter::~GM_Interpreter() 
     {
-        while (!m_data_stack->empty())
-        {
-            auto top = m_data_stack->top();
-            m_data_stack->pop();
-            delete top;
-        }
-
-        delete m_data_stack;
-        GM_GC::free(m_global_environment);
-
-        for (auto& env : *m_loaded_env)
-        {
-            delete env;
-        }
-        delete m_loaded_env;
+        _destroy();
     }
 
     GM_Interpreter* GM_Interpreter::s_ins;
@@ -50,15 +74,30 @@ namespace GM
         return s_ins;
     }
 
+    std::string GM_Interpreter::str() const
+    {
+#ifdef DEBUG
+        return GM_Utils::format_str("[<class '%s'>, refcnt: %" PRIu64 ", insidx: %" PRIu64 "]",
+                                    "interpreter",
+                                    GCREFCNF(this),
+                                    GCINSIDX(this));
+#else
+        return "<class 'interpreter'>";
+#endif
+    }
+
     void GM_Interpreter::init()
     {
         if (s_ins == nullptr)
+        {
             s_ins = GM_GC::alloc<GM_Interpreter>();
+            GCINC(s_ins);
+        }
     }
 
     void GM_Interpreter::destory()
     {
-        GM_GC::free(s_ins);
+        GCFREE(s_ins);
     }
 
     bool GM_Interpreter::_init()
@@ -66,46 +105,85 @@ namespace GM
         auto ret = true;
 
         m_global_environment = GM_Environment::create(nullptr);
-        m_global_environment->set_var(GM_INTERPRETER_RUN_FLAG,
-                                         GM_Value::bool_value(m_global_environment, true));
+        GCINC(m_global_environment);
+
+        auto run_flag = GM_Value::bool_value(m_global_environment, true);
+        m_global_environment->set_var(GM_INTERPRETER_RUN_FLAG, run_flag);
 
         ret = GM_BuiltinFunc::init(m_global_environment);
         if (!ret)
             return false;
 
-        m_loaded_env = new std::vector<GM_Environment*>();
+        GM_NullValue::init(m_global_environment);
 
-        m_data_stack = new std::stack<GM_Interpreter::GM_InterpreterData*>();
+        m_loaded_env = new std::vector<GM_Environment*>();
+        m_data_stack = new std::stack<GM_InterpreterData*>();
 
         return ret;
     }
 
+    void GM_Interpreter::_destroy()
+    {
+        GM_NullValue::destroy();
+
+        while (!m_data_stack->empty())
+        {
+            auto top = m_data_stack->top();
+            m_data_stack->pop();
+            GCFREE(top);
+        }
+
+        delete m_data_stack;
+
+        for (auto& env : *m_loaded_env)
+        {
+            GM_Environment::clear(env);
+            GCFREE(env);
+        }
+        delete m_loaded_env;
+
+        GM_Environment::clear(m_global_environment);
+        GCFREE(m_global_environment);
+    }
+
+
     bool GM_Interpreter::_create_data(const size_t &parse_mode)
     {
-        GM_Interpreter::GM_InterpreterData* data;
-        auto ret = GM_Interpreter::GM_InterpreterData::create(data,
-                                                              m_global_environment,
-                                                              parse_mode);
-
-        m_data_stack->push(data);
+        GM_InterpreterData* data;
+        const auto ret = GM_InterpreterData::create(data,
+                                                    m_global_environment,
+                                                    parse_mode);
+        if (ret)
+        {
+            GCINC(data);
+            m_data_stack->push(data);
+        }
+        else
+        {
+            PRINT_ERROR("MemoryError: create interpreter data fatal");
+        }
 
         return ret;
     }
 
     bool GM_Interpreter::_clear_data() const
     {
-        m_loaded_env->push_back(C_ENV);
+        auto env = C_ENV;
+
+        GCINC(env);
+        m_loaded_env->push_back(env);
+        
         auto data = _get_current_data();
         m_data_stack->pop();
-        delete data;
+        GCFREE(data);
 
         return true;
     }
 
     bool GM_Interpreter::get_running_flag() const
     {
-        auto flag = C_ENV->get_var(GM_INTERPRETER_RUN_FLAG);
-        return dynamic_cast<GM_BoolValue*>(flag)->get_value();
+        const auto flag = C_ENV->get_var(GM_INTERPRETER_RUN_FLAG);
+        return static_cast<GM_BoolValue*>(flag)->get_value();
     }
 
     int GM_Interpreter::repl()
@@ -124,6 +202,10 @@ namespace GM
 
             ret = parse_and_eval(command);
 
+#ifdef DEBUG
+            GM_GC::dump(std::cout, on_dump_obj_handler);
+#endif
+
             running_flag = get_running_flag();
         }
 
@@ -134,11 +216,11 @@ namespace GM
 
     int GM_Interpreter::parse_file(const std::string &file_path)
     {
-        _create_data(GM_INTERPRETER_FILE_MODE);
-
         int ret = 0;
         if (GM_Utils::str_ends_with(file_path, GM_SOURCE_FILE_SUFFIX))
         {
+            _create_data(GM_INTERPRETER_FILE_MODE);
+
             std::string file_content;
             if (GM_Utils::read_file(file_path.c_str(), file_content))
             {
@@ -153,9 +235,9 @@ namespace GM
                 ret = -1;
                 PRINT_ERROR_F("IOError: file(%s) read failed", file_path.c_str());
             }
-        }
 
-        _clear_data();
+            _clear_data();
+        }
 
         return ret;
     }
@@ -164,7 +246,7 @@ namespace GM
     {
         C_PARSE_CURSOR = 0;
 
-        auto command_len = command.size();
+        const auto command_len = command.size();
         auto ret = 0;
 
         while (C_PARSE_CURSOR < command_len - 1)
@@ -176,7 +258,7 @@ namespace GM
 #ifdef DEBUG
                 DEBUG_LOG_F("Create AST success");
                 DEBUG_LOG_F("--- Show AST structure ---");
-                auto root = this->get_ast_root();
+                const auto root = C_AST_ROOT;
                 this->_print_ast(root, 0);
                 std::cout << std::endl;
 #endif
@@ -192,9 +274,13 @@ namespace GM
                     DEBUG_LOG_F("- Result: %s", result->str().c_str());
                     DEBUG_LOG_F("--------------------");
 #else
-                    if (C_PARSE_MODE == GM_INTERPRETER_REPL_MODE)
+                    if (C_PARSE_MODE == GM_INTERPRETER_REPL_MODE && result != GM_NullValue::s_ins)
                         std::cout << result->str().c_str() << std::endl;
 #endif
+
+//                    if (result != GM_NullValue::s_ins)
+//                        GCFREE(result);
+
                 }
                 else
                 {
@@ -206,6 +292,9 @@ namespace GM
                 std::cout << "Error Code: " << ret << std::endl;
                 break;
             }
+
+            GCFREE(C_AST_ROOT);
+            GM_GC::gc();
         }
 
         return ret;
@@ -213,7 +302,7 @@ namespace GM
 
     GM_Value* GM_Interpreter::eval() const
     {
-        auto root = get_ast_root();
+        auto root = C_AST_ROOT;
         
         if (root != nullptr)
         {
@@ -232,6 +321,8 @@ namespace GM
 
         if (C_AST_ROOT == nullptr)
             return -1;
+
+        GCINC(C_AST_ROOT);
 
         return 0;
     }
@@ -272,16 +363,16 @@ namespace GM
                     C_TOKEN_INDEX ++;
                 }
 
-                auto new_env = ret->set_environment(env);
+                const auto new_env = ret->set_environment(env);
 
                 DEBUG_LOG_F("Create AST Node %s, child count %zu",
                             ret->get_token().c_str(),
                             ret->get_need_child_count());
 
-                auto child_count = ret->get_need_child_count();
+                const auto child_count = ret->get_need_child_count();
 
-                auto parentheses_count = C_TOKEN_INDEX_STACK->size();
-                auto command_len = command.size();
+                const auto parentheses_count = C_TOKEN_INDEX_STACK->size();
+                const auto command_len = command.size();
 
                 if (command[C_PARSE_CURSOR - 1] == ')')
                 {
@@ -304,7 +395,7 @@ namespace GM
                         while (C_PARSE_CURSOR < command_len
                                && C_TOKEN_INDEX_STACK->size() >= parentheses_count)
                         {
-                            auto child = _parse(command, new_env);
+                            const auto child = _parse(command, new_env);
                             if (child == nullptr)
                                 return nullptr;
 
@@ -330,7 +421,7 @@ namespace GM
                 {
                     for (size_t i = 0; i < child_count; i++)
                     {
-                        auto child = _parse(command, new_env);
+                        const auto child = _parse(command, new_env);
                         if (child == nullptr)
                             return nullptr;
 
@@ -358,9 +449,9 @@ namespace GM
 
     GM_AST_TREE* GM_Interpreter::_get_ast_tree_from_token(const std::string& token) const
     {
-        auto token_size = token.size();
+        const auto token_size = token.size();
         if (token_size == 0 || token[0] == ' ')
-            return new GM_AST_NULL_EXPR("");
+            return GM_AST_TREE::create<GM_AST_NULL_EXPR>("");
 
         GM_AST_TREE* ret;
         
@@ -506,8 +597,8 @@ namespace GM
     {
         for (size_t i = 0, count = m_loaded_env->size(); i < count; i++)
         {
-            auto env = (*m_loaded_env)[i];
-            auto value = env->get_var(var_name, false);
+            const auto env = (*m_loaded_env)[i];
+            const auto value = env->get_var(var_name, false);
             if (value != nullptr)
                 return value;
         }
@@ -516,14 +607,11 @@ namespace GM
     }
 
     // ----- GM_InterpreterData ----- //
-    bool GM_Interpreter::GM_InterpreterData::create(GM_Interpreter::GM_InterpreterData*& instance,
+    bool GM_Interpreter::GM_InterpreterData::create(GM_InterpreterData*& instance,
                                                     GM_Environment* env,
                                                     const size_t& parse_mode)
     {
-        instance = new GM_Interpreter::GM_InterpreterData();
-        instance->m_environment = GM_Environment::create(env);
-        instance->m_parse_mode = parse_mode;
-
+        instance = GM_GC::alloc_args<GM_InterpreterData>(env, parse_mode);
         return true;
     }
 

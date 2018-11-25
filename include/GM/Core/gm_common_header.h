@@ -5,6 +5,7 @@
 #include "../Common/gm_utils.hpp"
 
 #include <cstdint>
+#include <cinttypes>
 
 #define extends(class_name) public class_name
 #define implements(class_name) public class_name
@@ -22,9 +23,15 @@
 
 #define GM_DEFAULT_MEMORY_CHUNK_SIZE 4096
 
+#define GM_DEFAULT_INS_IDX_START 0x1000000000000000
+
+
+// --------------- Attributes --------------- //
+#define CREATE_NEW_ENV
+#define KEEP_ENV
+
 
 // --------------- Function Key Define --------------- //
-
 #define FUNC_ADD_OP_KEY "__add__"
 #define FUNC_SUB_OP_KEY "__sub__"
 #define FUNC_MUL_OP_KEY "__mul__"
@@ -57,6 +64,14 @@
 
 
 // --------------- Common Macro --------------- //
+// ----- GC ----- //
+#define GCINC(ref) GM_GC::inc_ref(ref)
+#define GCFREE(ref) GM_GC::free(ref)
+#define GCGC() GM_GC::gc()
+#define GCREFCNF(ref) GM_GC::get_ref_cnt(ref)
+#define GCINSIDX(ref) GM_GC::get_ins_idx(ref)
+#define GCISVALID(ref) GM_GC::check_obj_valid(ref)
+
 
 #define GM_STATIC_FUNCTION_D(func_name) \
 static GM_Value* (func_name)(const GM_Parameter* param)
@@ -90,6 +105,9 @@ env->set_var(func_name, GM_Function::create_func(env, \
                                                  func_name, \
                                                  param_count, \
                                                  func))
+
+#define GM_ENV_GET_FUNCTION(env, func_name) \
+env->get_current_env_var(func_name)
 
 #define GM_ENV_ALIAS_FUNCTION(func_name, origin_func_name, param_count, func) \
 env->set_var(func_name, GM_Function::create_func(env, \
@@ -141,18 +159,22 @@ GM::GM_Utils::format_str(format, ##__VA_ARGS__)
 std::string str() const override { return GM_STR(format, ##__VA_ARGS__); }
 
 #ifdef DEBUG
-#define GM_AST_STR_FUNC(type) \
-GM_STR_FUNC("[$%s, token:%s, child_count:%zu]", #type, m_token.c_str(), get_child_count())
+    #define GM_AST_STR_FUNC(type) \
+    GM_STR_FUNC("[$%s, token:%s, child_count:%zu]", #type, m_token.c_str(), get_child_count())
 #else
-#define GM_AST_STR_FUNC(type)
+    #define GM_AST_STR_FUNC(type)
 #endif
 
 #ifdef DEBUG
-#define GM_VALUE_STR_FUNC(type) \
-GM_STR_FUNC("[$%s, value:%s]", #type, _str().c_str())
+    #define GM_VALUE_DEBUG_STR_FUNC(type) \
+    GM_STR_FUNC("<type: $%s, value: %s>", #type, _str().c_str())
+
+    #define GM_VALUE_STR_FUNC(type)
 #else
-#define GM_VALUE_STR_FUNC(type) \
-GM_STR_FUNC("%s", _str().c_str())
+    #define GM_VALUE_DEBUG_STR_FUNC(type)
+
+    #define GM_VALUE_STR_FUNC(type) \
+    GM_STR_FUNC("%s", _str().c_str())
 #endif
 
 namespace GM
@@ -163,4 +185,7 @@ namespace GM
     
     typedef GM_Value* (*GM_FUNCTION_PTR)(const GM_Parameter*);
     
+    static inline GM_Object* GM_Obj_Nullptr = nullptr;
+    static inline GM_Value* GM_Value_Nullptr = nullptr;
+
 }

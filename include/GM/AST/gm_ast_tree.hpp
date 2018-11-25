@@ -2,16 +2,20 @@
 
 #include <vector>
 #include <string>
+#include <utility>
 
 #include "../Core/gm_common_header.h"
 #include "../Type/gm_value.hpp"
 #include "../Core/gm_environment.hpp"
+#include "gm_memory.hpp"
 
 namespace GM
 {
 
+    KEEP_ENV
     class GM_AST_TREE : extends(GM_Object)
     {
+    
     public:
         GM_AST_TREE (const std::string& token): m_token(token)
         {
@@ -21,9 +25,18 @@ namespace GM
         ~GM_AST_TREE () override
         {
             for (size_t i = 0, count = get_child_count(); i < count; i++)
-                delete (*m_childs)[i];
+                GCFREE((*m_childs)[i]);
 
             delete m_childs;
+
+            GCFREE(m_environment);
+        }
+
+    public:
+        template<class T = GM_AST_TREE, class ...TArgs>
+        static T* create(TArgs &&... args)
+        {
+            return GM_GC::alloc_args<T>(std::forward<TArgs>(args)...);
         }
 
     public:
@@ -47,7 +60,8 @@ namespace GM
 
         GM_AST_TREE* get_child(const int& index) const
         {
-            if (m_childs->size() == 0)
+#ifdef DEBUG
+            if (m_childs->empty())
             {
                 PRINT_ERROR("NullptrError: childs is empty");
                 return nullptr;
@@ -55,9 +69,10 @@ namespace GM
 
             if (index < 0 || index > m_childs->size())
             {
-                PRINT_ERROR_F("IndexError: out of range(%ld)", m_childs->size());
+                PRINT_ERROR_F("IndexError: out of range(%zu)", m_childs->size());
                 return nullptr;
             }
+#endif
 
             return (*m_childs)[index];
         }
@@ -81,6 +96,7 @@ namespace GM
                 return false;
             }
 
+            GCINC(child);
             m_childs->push_back(child);
 
             DEBUG_LOG_F("Current AST_NODE(%s) add child AST_NODE(%s)",
@@ -94,11 +110,13 @@ namespace GM
         GM_Environment* set_environment(GM_Environment* environment)
         {
             m_environment = before_set_environment(environment);
+            GCINC(m_environment);
             return m_environment;
         }
         
-        GM_Environment* get_environment()
-        { return before_get_environment(); }
+        GM_Environment* get_environment() { return m_environment; }
+
+        GM_Environment* get_environment() const { return m_environment; }
     
     protected:
         virtual bool _check_childs_valid() const = 0;
@@ -106,18 +124,12 @@ namespace GM
         /* --- environment --- */
         virtual GM_Environment* before_set_environment(GM_Environment* env)
         { return env; }
-        
-        virtual GM_Environment* before_get_environment()
-        { return m_environment; }
 
     protected:
         std::vector<GM_AST_TREE*>* m_childs;
-
-        const std::string m_token;
-
-        size_t m_token_index;
-        
-        GM_Environment* m_environment;
+        const std::string          m_token;
+        size_t                     m_token_index;
+        GM_Environment*            m_environment = nullptr;
     };
 
 }

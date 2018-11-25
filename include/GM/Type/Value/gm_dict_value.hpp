@@ -20,7 +20,8 @@ namespace GM
         ~GM_DictValue () override;
 
     public:
-        GM_VALUE_STR_FUNC(GM_DictValue)
+        GM_VALUE_DEBUG_STR_FUNC(GM_DictValue)
+        GM_VALUE_STR_FUNC(dict)
 
         std::string _str() const override;
 

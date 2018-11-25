@@ -10,6 +10,8 @@ namespace GM
     GM_Parameter::GM_Parameter(GM_Environment* env,
                                const size_t count, ...): m_environment(env)
     {
+        GCINC(m_environment);
+
         m_list_params = new std::vector<GM_Object*>();
         m_dict_params = new std::map<std::string, GM_Object*>();
         
@@ -18,6 +20,7 @@ namespace GM
         for (size_t i = 0; i < count; i++)
         {
             auto value = va_arg(args, GM_Object*);
+            GCINC(value);
             auto dict_key = _handle_param_item(value);
             if (dict_key == nullptr)
             {
@@ -37,15 +40,31 @@ namespace GM
                                : m_environment(env),
                                  m_list_params(list_param),
                                  m_dict_params(dict_param)
-    {}
+    {
+        GCINC(m_environment);
+
+        if (m_list_params != nullptr)
+            for (auto& param : *m_list_params)
+                GCINC(param);
+
+        if (m_dict_params != nullptr)
+            for (auto& param: *m_dict_params)
+                GCINC(param.second);
+    }
     
     GM_Parameter::~GM_Parameter()
     {
         if (m_list_params != nullptr)
-            delete m_list_params;
+            for (auto& param : *m_list_params)
+                GCFREE(param);
+        delete m_list_params;
 
         if (m_dict_params != nullptr)
-            delete m_dict_params;
+            for (auto& param: *m_dict_params)
+                GCFREE(param.second);
+        delete m_dict_params;
+
+        GCFREE(m_environment);
     }
 
     std::string GM_Parameter::str() const

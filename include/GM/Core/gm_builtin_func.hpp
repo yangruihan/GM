@@ -13,6 +13,7 @@ namespace GM
 
     public:
         static bool init(GM_Environment* env);
+        static void destroy(GM_Environment* env);
 
     private:
         GM_STATIC_FUNCTION_D(__print);

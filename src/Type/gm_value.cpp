@@ -6,9 +6,18 @@
 namespace GM
 {
 
-    GM_Value::GM_Value(GM_Environment* env): m_environment(env) {}
+    GM_Value::GM_Value(GM_Environment* env): m_environment(env)
+    {
+//        DEBUG_LOG_F("** inc env ref cnt %" PRIu64 ", %" PRIu64, GCREFCNF(m_environment), GCINSIDX(m_environment));
+        GCINC(m_environment);
+    }
 
-    GM_Value::~GM_Value() {}
+    GM_Value::~GM_Value()
+    {
+        GCFREE(m_environment);
+        m_environment = nullptr;
+//        DEBUG_LOG_F("** dec env ref cnt %" PRIu64 ", %" PRIu64, GCREFCNF(m_environment), GCINSIDX(m_environment));
+    }
 
     GM_Value* GM_Value::convert_to_value(GM_Object* obj)
     {
@@ -53,7 +62,7 @@ namespace GM
 
     /* ----- create value ----- */
     GM_NullValue* GM_Value::null_value()
-    { return &GM_NullValue::instance; }
+    { return GM_NullValue::s_ins; }
 
     GM_BoolValue* GM_Value::bool_value(GM_Environment* env, const std::string &token)
     { return GM_GC::alloc_args<GM_BoolValue>(env, token); }

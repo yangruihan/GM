@@ -16,6 +16,8 @@
 
 namespace GM
 {
+    std::string on_dump_obj_handler(const void* ref);
+
     class GM_Object;
     class GM_AST_TREE;
     class GM_Environment;
@@ -25,36 +27,25 @@ namespace GM
     {
 
     private:
-        class GM_InterpreterData
+        class GM_InterpreterData : extends(GM_Object)
         {
         public:
-            GM_Environment* m_environment;
-
-            GM_AST_TREE* m_ast_root;
-
-            size_t m_parse_cursor;
-
+            GM_Environment*     m_environment;
+            GM_AST_TREE*        m_ast_root;
+            size_t              m_parse_cursor;
             std::stack<size_t>* m_token_index_stack;
-            size_t m_current_token_index;
+            size_t              m_current_token_index;
+            size_t              m_parse_mode;        // Parse Mode: (REPL | Source file)
 
-            size_t m_parse_mode;        // Parse Mode: (REPL | Source file)
-
-            GM_InterpreterData()
-            {
-                m_ast_root = nullptr;
-                m_parse_cursor = 0;
-                m_token_index_stack = new std::stack<size_t>();
-                m_current_token_index = 0;
-            }
-
-            virtual ~GM_InterpreterData()
-            {
-                delete m_token_index_stack;
-            }
-
+        public:
+            GM_InterpreterData(GM_Environment*& env, const size_t& parse_mode);
+            virtual ~GM_InterpreterData();
+            
             static bool create(GM_InterpreterData*& instance,
                                GM_Environment* env,
                                const size_t& parse_mode);
+
+            std::string str() const override;
 
         };
 
@@ -87,7 +78,7 @@ namespace GM
 
     public:
 
-        std::string str() const override { return "interpreter"; }
+        std::string str() const override;
 
         GM_AST_TREE* get_ast_root() const
         {
@@ -102,8 +93,9 @@ namespace GM
 
     private:
         bool _init();
+        void _destroy();
 
-        void _set_parse_mode(const size_t& mode)
+        void _set_parse_mode(const size_t& mode) const
         {
             m_data_stack->top()->m_parse_mode = mode;
         }
@@ -130,10 +122,8 @@ namespace GM
     
     private:
         std::stack<GM_InterpreterData*>* m_data_stack;
-
-        std::vector<GM_Environment*>* m_loaded_env;
-
-        GM_Environment* m_global_environment;
+        std::vector<GM_Environment*>*    m_loaded_env;
+        GM_Environment*                  m_global_environment;
 
 #ifdef DEBUG
         void _print_ast(GM_AST_TREE* node, int indent) const;

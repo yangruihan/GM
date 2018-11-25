@@ -20,7 +20,8 @@ namespace GM
         virtual ~GM_ListValue ();
 
     public:
-        GM_VALUE_STR_FUNC(GM_ListValue)
+        GM_VALUE_DEBUG_STR_FUNC(GM_ListValue)
+        GM_VALUE_STR_FUNC(list)
 
         std::string _str() const override;
 
