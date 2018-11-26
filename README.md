@@ -1,5 +1,7 @@
 # GM
 
+[![Build Status](https://travis-ci.org/yangruihan/GM.svg?branch=master)](https://travis-ci.org/yangruihan/GM)
+
 GM is a dynamic interpretation toy programming language, which syntax like LISP.
 
 ## Screenshots
