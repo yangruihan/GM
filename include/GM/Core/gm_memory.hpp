@@ -27,7 +27,7 @@ namespace GM
             estd::memory_pool<GM_DEFAULT_MEMORY_CHUNK_SIZE>* pool;
             memory_chunk* next;
 
-            memory_chunk()
+            memory_chunk() : next(nullptr)
             {
                 pool = new estd::memory_pool<GM_DEFAULT_MEMORY_CHUNK_SIZE>();
             }
@@ -36,6 +36,8 @@ namespace GM
             {
                 delete pool;
             }
+
+            memory_chunk(const memory_chunk& other) = delete;
 
             bool check_space(const size_t& size) const
             {

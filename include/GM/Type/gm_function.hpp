@@ -16,9 +16,9 @@ namespace GM
     {
 
     public:
-        GM_Function (GM_Environment* env,
-                     const std::string func_name,
-                     const int& param_count,
+        GM_Function (GM_Environment*       env,
+                     const std::string&    func_name,
+                     const int&            param_count,
                      const GM_FUNCTION_PTR func);
         virtual ~GM_Function ();
     

@@ -35,7 +35,7 @@ namespace GM
             
             if (index >= m_list_params->size())
             {
-                PRINT_ERROR_F("GetparamError: index(%ld) out of range(%ld)",
+                PRINT_ERROR_F("GetparamError: index(%zu) out of range(%zu)",
                               index,
                               m_list_params->size());
                 return nullptr;
@@ -52,7 +52,7 @@ namespace GM
         }
         
         template<typename T>
-        T* get_param(const std::string key) const
+        T* get_param(const std::string& key) const
         {
             if (m_dict_params == nullptr)
             {

@@ -493,11 +493,10 @@ namespace GM
         
         auto left_parentheses = false;
         auto quotation_mark = false;
-        
-        char c;
+
         while (end_pos < command_len)
         {
-            c = command[end_pos];
+            const auto c = command[end_pos];
             if (c == '\0')
             {
                 if (left_parentheses)
@@ -535,7 +534,7 @@ namespace GM
             }
             else if (c == ')')
             {
-                if (C_TOKEN_INDEX_STACK->size() == 0)
+                if (C_TOKEN_INDEX_STACK->empty())
                 {
                     PRINT_ERROR("Syntax Error: no matching left parenthesis");
                     C_PARSE_CURSOR = command_len;
@@ -556,7 +555,7 @@ namespace GM
                 }
 
                 token = command.substr(start_pos, end_pos - start_pos);
-                DEBUG_LOG_F("%s sub (%ld, %ld) -> %s",
+                DEBUG_LOG_F("%s sub (%zu, %zu) -> %s",
                             command.c_str(),
                             start_pos,
                             end_pos,

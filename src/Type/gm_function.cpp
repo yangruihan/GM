@@ -5,7 +5,7 @@ namespace GM
 {
 
     GM_Function::GM_Function(GM_Environment*       env,
-                             const std::string     func_name,
+                             const std::string&    func_name,
                              const int&            param_count,
                              const GM_FUNCTION_PTR func)
     : GM_Value(env), m_name(func_name), m_param_count(param_count), m_function(func)

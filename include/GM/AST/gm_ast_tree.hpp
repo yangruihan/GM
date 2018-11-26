@@ -32,6 +32,8 @@ namespace GM
             GCFREE(m_environment);
         }
 
+        GM_AST_TREE(const GM_AST_TREE& other) = delete;
+
     public:
         template<class T = GM_AST_TREE, class ...TArgs>
         static T* create(TArgs &&... args)
