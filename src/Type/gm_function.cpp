@@ -15,7 +15,7 @@ namespace GM
     {}
 
     GM_Function* GM_Function::create_func(GM_Environment*       env,
-                                          const std::string     name,
+                                          const std::string&    name,
                                           const int&            param_count,
                                           const GM_FUNCTION_PTR func)
     {

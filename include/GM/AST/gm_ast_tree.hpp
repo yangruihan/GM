@@ -17,7 +17,11 @@ namespace GM
     {
     
     public:
-        GM_AST_TREE (const std::string& token): m_token(token)
+        explicit GM_AST_TREE (const std::string& token)
+            : m_childs(nullptr),
+              m_token(token),
+              m_token_index(0),
+              m_environment(0)
         {
             m_childs = new std::vector<GM_AST_TREE*>();
         }
@@ -131,7 +135,7 @@ namespace GM
         std::vector<GM_AST_TREE*>* m_childs;
         const std::string          m_token;
         size_t                     m_token_index;
-        GM_Environment*            m_environment = nullptr;
+        GM_Environment*            m_environment;
     };
 
 }

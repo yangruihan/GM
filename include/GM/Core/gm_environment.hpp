@@ -12,7 +12,7 @@ namespace GM
     {
     public:
         GM_Environment ();
-        GM_Environment (GM_Environment* parent);
+        explicit GM_Environment (GM_Environment* parent);
         ~GM_Environment () override;
         
         GM_Environment& operator=(const GM_Environment& other) = delete;

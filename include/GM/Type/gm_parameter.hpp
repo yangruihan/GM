@@ -16,8 +16,8 @@ namespace GM
     public:
         GM_Parameter(GM_Environment* env,
                      const size_t count, ...);
-        GM_Parameter(GM_Environment* env,
-                     std::vector<GM_Object*>* list_param,
+        GM_Parameter(GM_Environment*                    env,
+                     std::vector<GM_Object*>*           list_param,
                      std::map<std::string, GM_Object*>* dict_param);
         virtual ~GM_Parameter();
     
@@ -63,7 +63,7 @@ namespace GM
             auto it = m_dict_params->find(key);
             if (it == m_dict_params->end())
             {
-                PRINT_ERROR_F("GetparamError: index(%ld) out of range(%ld)",
+                PRINT_ERROR_F("GetparamError: index(%zu) out of range(%zu)",
                               index,
                               m_list_params->size());
                 return nullptr;

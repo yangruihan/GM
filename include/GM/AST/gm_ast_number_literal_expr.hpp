@@ -11,7 +11,7 @@ namespace GM
     {
     
     public:
-        GM_AST_NUMBER_LITERAL_EXPR (const std::string& token, const bool& is_float);
+        explicit GM_AST_NUMBER_LITERAL_EXPR (const std::string& token, const bool& is_float);
         ~GM_AST_NUMBER_LITERAL_EXPR () override;
 
     public:

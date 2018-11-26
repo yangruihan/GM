@@ -34,8 +34,8 @@ namespace GM
         va_end(args);
     }
 
-    GM_Parameter::GM_Parameter(GM_Environment* env,
-                               std::vector<GM_Object*>* list_param,
+    GM_Parameter::GM_Parameter(GM_Environment*                    env,
+                               std::vector<GM_Object*>*           list_param,
                                std::map<std::string, GM_Object*>* dict_param)
                                : m_environment(env),
                                  m_list_params(list_param),

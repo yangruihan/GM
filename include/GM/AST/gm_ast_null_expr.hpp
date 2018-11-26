@@ -9,7 +9,7 @@ namespace GM
     class GM_AST_NULL_EXPR : extends(GM_AST_TREE)
     {
     public:
-        GM_AST_NULL_EXPR (const std::string& token);
+        explicit GM_AST_NULL_EXPR (const std::string& token);
         ~GM_AST_NULL_EXPR () override;
 
     public:

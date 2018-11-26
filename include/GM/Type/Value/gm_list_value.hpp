@@ -16,7 +16,7 @@ namespace GM
     {
 
     public:
-        GM_ListValue (GM_Environment* env);
+        explicit GM_ListValue (GM_Environment* env);
         virtual ~GM_ListValue ();
 
     public:

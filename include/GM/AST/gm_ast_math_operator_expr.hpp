@@ -11,7 +11,7 @@ namespace GM
     {
 
     public:
-        GM_AST_ADD_OPERATOR_EXPR (const std::string& token)
+        explicit GM_AST_ADD_OPERATOR_EXPR (const std::string& token)
                                 : GM_AST_BINARY_EXPR(token) {}
         ~GM_AST_ADD_OPERATOR_EXPR () override = default;
 

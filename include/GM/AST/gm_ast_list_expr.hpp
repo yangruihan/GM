@@ -11,7 +11,7 @@ namespace GM
     {
 
     public:
-        GM_AST_LIST_EXPR (const std::string& token);
+        explicit GM_AST_LIST_EXPR (const std::string& token);
         ~GM_AST_LIST_EXPR () override;
 
     public:
