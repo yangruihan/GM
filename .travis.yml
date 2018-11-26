@@ -5,12 +5,16 @@ compiler:
 
 dist: trusty
 
+sudo: false
+
 before_install:
-  - sudo add-apt-repository -y ppa:ubuntu-toolchain-r/test
-  - sudo apt-get update -qq
+  - add-apt-repository -y ppa:ubuntu-toolchain-r/test
+  - apt-get update
 
 install:
-  - sudo apt-get install -qq -y g++-8
-  - sudo update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-8 1
+  - apt-get install -y cmake
+  - apt-get install -y g++-8
+  - apt-get install -y gdb
+  - update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-8 1
 
 script: bash build_all.sh
