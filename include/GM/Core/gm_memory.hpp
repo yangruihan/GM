@@ -251,8 +251,9 @@ namespace GM
         void _dump(std::ostream& os, estd::dump_obj_handler dump_obj_handler = nullptr) const
         {
             os << "\n----------------------------------------------------------------------------------------" << std::endl;
-            os << "--- Memory Manager Info ---" << std::endl;
-            os << GM_Utils::format_str("- Memory | sum: \t\t%zuB\n", (GM_DEFAULT_MEMORY_CHUNK_SIZE * m_chunks.size()));
+            os << "-------- Memory Manager Info --------" << std::endl;
+            os << GM_Utils::format_str("- Memory | sum: \t\t%zuB\n", GM_DEFAULT_MEMORY_CHUNK_SIZE * m_chunks.size());
+            os << GM_Utils::format_str("- Memory | free: \t\t%zuB\n", _free_size());
             os << GM_Utils::format_str("- Memory | available: \t\t%zuB\n", _available_size());
             os << GM_Utils::format_str("- Memory | chunk count: \t%zu\n", m_chunks.size());
             os << "----------------------------------------------------------------------------------------" << std::endl;
