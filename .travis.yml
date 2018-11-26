@@ -2,6 +2,15 @@ language: cpp
 
 compiler:
   - gcc
-  - clang
+
+dist: trusty
+
+before_install:
+  - sudo add-apt-repository -y ppa:ubuntu-toolchain-r/test
+  - sudo apt-get update -qq
+
+install:
+  - sudo apt-get install -qq -y g++-8
+  - sudo update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-8 1
 
 script: bash build_all.sh
