@@ -31,6 +31,7 @@ target_link_libraries(
     Core
     Common
     AST
+    Token
     Type
     Type_Value
 )

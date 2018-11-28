@@ -12,3 +12,5 @@
 #include "Type/gm_types_header.h"
 
 #include "AST/gm_ast_header.h"
+
+#include "Token/gm_token.hpp"

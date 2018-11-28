@@ -1,0 +1,31 @@
+// comments
+
+var a = 10          // int number
+var b = 12.5        // float number
+var c = "hello"     // string
+var d = false       // bool
+
+// flow control
+
+if (a < 10 and d) {
+    ...
+} else {
+    ...
+}
+
+
+for (var i = 0; i < 10; i++) {
+
+}
+
+while (a < 10) {
+
+}
+
+// function
+fn max(a, b) {
+    if (a < b)
+        return b
+    else
+        return a
+}

@@ -7,6 +7,7 @@
 #include "gm_environment.hpp"
 #include "../AST/gm_ast_header.h"
 #include "../Type/gm_types_header.h"
+#include "gm_token.hpp"
 
 //#define GM_TOKEN_C_ENDLINE  100     // \0
 //#define GM_TOKEN_C_LEFT_P   101     // (
@@ -68,11 +69,22 @@ namespace GM
         static GM_Interpreter* s_ins;
 
     public:
+        
+        //
+        // read eval print loop
+        //
         int repl();
+        
+        //
+        // parse source code from file
+        //
         int parse_file(const std::string& file_path);
 
+        //
+        // parse source code and eval
+        //
         int parse_and_eval(const std::string& command);
-
+        
         int parse(const std::string& command);
         GM_Value* eval() const;
 
