@@ -4,6 +4,7 @@
 
 namespace GM
 {
+
     void error(const size_t& line, const std::string& msg)
     {
         report(line, "", msg);
