@@ -1,0 +1,17 @@
+expr            = arithmetic_expr | assignment_expr ;
+
+assignment_expr = "var" assignment_stmt ;
+assignment_stmt = IDENTIFIER "=" arithmetic_expr ;
+
+arithmetic_expr = equality ;
+equality        = comparison ( ( "!=" | "==" )  comparison )* ;
+comparison      = addition ( ( ">" | ">=" | "<" | "<=" ) addition )* ;
+addition        = multiplication ( ( "+" | "-" ) multiplication )* ;
+multiplication  = unary ( ( "/" | "*" ) unary )* ;
+unary           = ( "!" | "-" ) unary | primary ;
+
+primary         = NUMBER | STRING | "false" | "true" | "null" | "(" expr ")" ;
+
+IDENTIFIER      = [A-Za-z_][A-Za-z_0-9]*
+NUMBER          = [1-9][0-9]*(.[0-9]+)?
+STRING          = "[A-Za-z_\\]*"

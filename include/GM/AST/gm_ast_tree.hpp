@@ -3,6 +3,7 @@
 #include <vector>
 #include <string>
 #include <utility>
+#include <cstdarg>
 
 #include "../Core/gm_common_header.h"
 #include "../Type/gm_value.hpp"
@@ -109,6 +110,19 @@ namespace GM
                         str().c_str(),
                         child->str().c_str());
 
+            return true;
+        }
+
+        bool add_childs(const size_t count, ...)
+        {
+            va_list args;
+            va_start(args, count);
+            for (size_t i = 0; i < count; i++)
+            {
+                auto value = va_arg(args, GM_AST_TREE*);
+                add_child(value);
+            }
+            va_end(args);
             return true;
         }
 

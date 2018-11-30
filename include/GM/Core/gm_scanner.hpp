@@ -13,12 +13,19 @@ namespace GM
     class GM_Scanner : extends(GM_Object)
     {
     public:
-        GM_Scanner(const std::string& source);
+        GM_Scanner();
+        explicit GM_Scanner(const std::string& source);
         ~GM_Scanner() override = default;
 
+        GM_Scanner(const GM_Scanner& other) = delete;
+        GM_Scanner operator=(const GM_Scanner& other) = delete;
+
+        void set_source(const std::string& source);
         std::vector<GM_Token*> scan_tokens();
 
     protected:
+        void _init_id_map();
+
         void _scan_token();
 
         void _add_token(const GM_TokenType& type);

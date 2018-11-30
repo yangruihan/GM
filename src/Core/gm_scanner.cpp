@@ -5,9 +5,42 @@
 namespace GM
 {
 
+    GM_Scanner::GM_Scanner()
+        : m_source(""), m_source_len(0),
+          m_start_pos(0), m_curt_pos(0), m_line(1)
+    {
+        _init_id_map();
+    }
+
     GM_Scanner::GM_Scanner(const std::string& source)
-    : m_source(source), m_source_len(source.size()),
-      m_start_pos(0), m_curt_pos(0), m_line(1)
+        : m_source(source), m_source_len(source.size()),
+          m_start_pos(0), m_curt_pos(0), m_line(1)
+    {
+        _init_id_map();
+    }
+
+    void GM_Scanner::set_source(const std::string& source)
+    {
+        m_source = source;
+        m_source_len = m_source.size();
+    }
+
+    std::vector<GM_Token*> GM_Scanner::scan_tokens()
+    {
+        m_start_pos = 0;
+        m_curt_pos = 0;
+        m_line = 1;
+
+        while (!_is_end()) {
+            m_start_pos = m_curt_pos;
+            _scan_token();
+        }
+
+        _add_token(GM_EOF, "");
+        return m_tokens;
+    }
+
+    void GM_Scanner::_init_id_map()
     {
         m_id_map["and"]     = GM_AND;
         m_id_map["or"]      = GM_OR;
@@ -24,17 +57,6 @@ namespace GM
         m_id_map["class"]   = GM_CLASS;
         m_id_map["super"]   = GM_SUPER;
         m_id_map["this"]    = GM_THIS;
-    }
-
-    std::vector<GM_Token*> GM_Scanner::scan_tokens()
-    {
-        while (!_is_end()) {
-            m_start_pos = m_curt_pos;
-            _scan_token();
-        }
-
-        _add_token(GM_EOF, "");
-        return m_tokens;
     }
 
     void GM_Scanner::_scan_token()

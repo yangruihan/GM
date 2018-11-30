@@ -25,7 +25,7 @@ namespace GM
         std::string str() const override;
 
         template<typename T>
-        T* get_param(const size_t index) const
+        T* get_param(const size_t& index) const
         {
             if (m_list_params == nullptr)
             {
