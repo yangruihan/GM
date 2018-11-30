@@ -139,11 +139,20 @@ namespace GM
     {
         auto assign = GM_GC::alloc_args<GM_AST_VAR_EXPR>("let");
 
-        // consumen "var"
-        _advance();
+        // consume "var"
+        if (!_match(GM_VAR))
+        {
+            // error
+        }
 
         // variable identifier
         auto identifier = _IDENTIFIER();
+
+        // consume "="
+        if (!_match(GM_EQ))
+        {
+            // error
+        }
 
         // arithmetic expression
         auto arithmetic_expr = _arithmetic_expr();
