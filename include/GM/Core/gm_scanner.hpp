@@ -32,7 +32,7 @@ namespace GM
         char _advance();
         char _peek(const size_t& offset=0);
 
-        bool _is_end();
+        bool _is_end() const;
 
     protected:
         std::string            m_source;

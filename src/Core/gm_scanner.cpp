@@ -39,7 +39,7 @@ namespace GM
 
     void GM_Scanner::_scan_token()
     {
-        char c = _advance();
+        const char c = _advance();
         switch (c)
         {
             // ignore char
@@ -149,7 +149,7 @@ namespace GM
 
     void GM_Scanner::_string_token()
     {
-        while (_peek() != '"' and !_is_end())
+        while (_peek() != '"' && !_is_end())
         {
             if (_peek() == '\n') m_line++;
             _advance();
@@ -163,8 +163,8 @@ namespace GM
 
         _advance();
 
-        std::string content = m_source.substr(m_start_pos + 1,
-                                              m_curt_pos - m_start_pos - 2);
+        const std::string content = m_source.substr(m_start_pos + 1,
+                                                    m_curt_pos - m_start_pos - 2);
         _add_token(GM_STRING, content);
     }
 
@@ -193,9 +193,9 @@ namespace GM
             c = _peek();
         }
 
-        std::string id = m_source.substr(m_start_pos, m_curt_pos - m_start_pos);
+        const std::string id = m_source.substr(m_start_pos, m_curt_pos - m_start_pos);
 
-        auto it = m_id_map.find(id);
+        const auto it = m_id_map.find(id);
         if (it != m_id_map.end())
             _add_token(m_id_map[id], id);
         else
@@ -204,15 +204,16 @@ namespace GM
 
     void GM_Scanner::_add_token(const GM::GM_TokenType& type)
     {
-        std::string word = m_source.substr(m_start_pos,
-                                           m_curt_pos - m_start_pos);
+        const std::string word = m_source.substr(m_start_pos,
+                                                 m_curt_pos - m_start_pos);
         _add_token(type, word);
     }
 
     void GM_Scanner::_add_token(const GM::GM_TokenType &type,
                                const std::string &word)
     {
-        m_tokens.push_back(new GM_Token(type, word, m_line));
+        const auto token = GM_GC::alloc_args<GM_Token>(type, word, m_line);
+        m_tokens.push_back(token);
     }
 
     char GM_Scanner::_advance()
@@ -228,7 +229,7 @@ namespace GM
         return m_source[m_curt_pos + offset];
     }
 
-    bool GM_Scanner::_is_end()
+    bool GM_Scanner::_is_end() const
     {
         return m_curt_pos >= m_source_len;
     }
