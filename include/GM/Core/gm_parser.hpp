@@ -39,7 +39,8 @@ namespace GM
         GM_AST_TREE* _STRING();
 
         bool _match(const GM_TokenType& type);
-        bool _check(const GM_TokenType& type);
+        bool _check(const GM_TokenType& type,
+                    const size_t& offset = 0);
         bool _is_end();
 
         GM_Token* _peek(const size_t& offset = 0);

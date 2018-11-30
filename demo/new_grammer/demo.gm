@@ -1,9 +1,9 @@
 // comments
 
-var a = 10          // int number
-var b = 12.5        // float number
-var c = "hello"     // string
-var d = false       // bool
+a = 10          // int number
+b = 12.5        // float number
+c = "hello"     // string
+d = false       // bool
 
 // flow control
 

@@ -24,7 +24,7 @@ namespace GM
 
     GM_AST_TREE* GM_Parser::_expr()
     {
-        if (_check(GM_VAR))
+        if (_check(GM_IDENTIFIER) && _check(GM_EQ, 1))
             return _assignment_expr();
 
         return _arithmetic_expr();
@@ -116,6 +116,9 @@ namespace GM
         if (_match(GM_NULL))
             return GM_GC::alloc_args<GM_AST_NULL_EXPR>("null");
         
+        if (_match(GM_IDENTIFIER))
+            return GM_GC::alloc_args<GM_AST_VAR_EXPR>(_peek(-1)->m_word);
+
         if (_match(GM_NUMBER))
             return GM_GC::alloc_args<GM_AST_NUMBER_LITERAL_EXPR>(_peek(-1)->m_word, true);
 
@@ -138,12 +141,6 @@ namespace GM
     GM_AST_TREE* GM_Parser::_assignment_expr()
     {
         auto assign = GM_GC::alloc_args<GM_AST_VAR_EXPR>("let");
-
-        // consume "var"
-        if (!_match(GM_VAR))
-        {
-            // error
-        }
 
         // variable identifier
         auto identifier = _IDENTIFIER();
@@ -197,10 +194,14 @@ namespace GM
         return false;
     }
 
-    bool GM_Parser::_check(const GM_TokenType& type)
+    bool GM_Parser::_check(const GM_TokenType& type,
+                           const size_t& offset)
     {
         if (_is_end()) return false;
-        return _peek()->m_type == type;
+        auto token = _peek(offset);
+        if (token == nullptr)
+            return false;
+        return token->m_type == type;
     }
 
     bool GM_Parser::_is_end()
@@ -210,6 +211,9 @@ namespace GM
 
     GM_Token* GM_Parser::_peek(const size_t& offset)
     {
+        if (m_curt_idx + offset >= m_tokens->size())
+            return nullptr;
+        
         return (*m_tokens)[m_curt_idx + offset];
     }
 
