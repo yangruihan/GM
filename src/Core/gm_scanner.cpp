@@ -72,6 +72,7 @@ namespace GM
 
             case '\n':
                 m_line++;
+                _add_token(GM_EOL);
                 break;
 
             case '(':

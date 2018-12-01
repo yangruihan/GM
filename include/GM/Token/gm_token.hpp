@@ -52,7 +52,8 @@ namespace GM
         GM_SUPER        = 35, // super
         GM_THIS         = 36, // this
 
-        GM_EOF          = 37, // end of file
+        GM_EOL          = 37, // end of line
+        GM_EOF          = 38, // end of file
         
     };
 

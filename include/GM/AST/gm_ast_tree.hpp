@@ -18,19 +18,24 @@ namespace GM
     {
     
     public:
-        explicit GM_AST_TREE (const std::string& token)
+        explicit GM_AST_TREE (const std::string& token,
+                              const size_t& child_count)
             : m_childs(nullptr),
               m_token(token),
               m_token_index(0),
               m_environment(0)
         {
-            m_childs = new std::vector<GM_AST_TREE*>();
+            if (child_count > 0)
+                m_childs = new std::vector<GM_AST_TREE*>();
         }
 
         ~GM_AST_TREE () override
         {
-            for (size_t i = 0, count = get_child_count(); i < count; i++)
-                GCFREE((*m_childs)[i]);
+            if (m_childs != nullptr)
+            {
+                for (size_t i = 0, count = get_child_count(); i < count; i++)
+                    GCFREE((*m_childs)[i]);
+            }
 
             delete m_childs;
 
@@ -139,8 +144,6 @@ namespace GM
         GM_Environment* get_environment() const { return m_environment; }
     
     protected:
-        virtual bool _check_childs_valid() const = 0;
-        
         /* --- environment --- */
         virtual GM_Environment* before_set_environment(GM_Environment* env)
         { return env; }

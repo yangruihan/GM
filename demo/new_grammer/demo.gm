@@ -5,27 +5,37 @@ b = 12.5        // float number
 c = "hello"     // string
 d = false       // bool
 
+// dynamic type
+a = c
+a = b / 2
+a = (5 + 3) * 1.5 - b * 2
+a = d
+
+//statments in one line
+a = 20; b = 30; c = 40
+(20 + 36 - 52) / 2; "hello world"; false
+
 // flow control
 
-if (a < 10 and d) {
-    ...
-} else {
-    ...
-}
-
-
-for (var i = 0; i < 10; i++) {
-
-}
-
-while (a < 10) {
-
-}
-
-// function
-fn max(a, b) {
-    if (a < b)
-        return b
-    else
-        return a
-}
+// if (a < 10 and d) {
+//     ...
+// } else {
+//     ...
+// }
+// 
+// 
+// for (var i = 0; i < 10; i++) {
+// 
+// }
+// 
+// while (a < 10) {
+// 
+// }
+// 
+// // function
+// fn max(a, b) {
+//     if (a < b)
+//         return b
+//     else
+//         return a
+// }

@@ -12,7 +12,8 @@ namespace GM
     {
     
     public:
-        explicit GM_AST_LITERAL_EXPR (const std::string& token): GM_AST_TREE(token) {}
+        explicit GM_AST_LITERAL_EXPR (const std::string& token)
+            : GM_AST_TREE(token, 0) {}
         ~GM_AST_LITERAL_EXPR () override = default;
 
     public:

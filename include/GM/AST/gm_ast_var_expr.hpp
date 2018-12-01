@@ -18,14 +18,15 @@ namespace GM
 
     public:
         explicit GM_AST_VAR_EXPR (const std::string& token);
-        ~GM_AST_VAR_EXPR () override;
+        ~GM_AST_VAR_EXPR () override = default;
 
     public:
         GM_AST_STR_FUNC(GM_AST_VAR_EXPR)
 
         static GM_VarNameValue* convert_var_name_value(GM_AST_TREE* tree);
 
-        size_t get_need_child_count() const override;
+        size_t get_need_child_count() const override
+        { return GM_AST_VARIADIC_PARAMS_FLAG; }
 
         static bool check_token_valid(const std::string& token);
 
@@ -36,8 +37,6 @@ namespace GM
         GM_Value* get_value() const;
 
     protected:
-        bool _check_childs_valid() const override;
-
         GM_Environment* before_set_environment(GM_Environment* env) override;
 
     };

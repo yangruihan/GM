@@ -11,13 +11,6 @@ namespace GM
                                                              m_is_float(is_float)
     {}
 
-    GM_AST_NUMBER_LITERAL_EXPR::~GM_AST_NUMBER_LITERAL_EXPR() = default;
-
-    size_t GM_AST_NUMBER_LITERAL_EXPR::get_need_child_count() const 
-    {
-        return 0;
-    }
-
     bool GM_AST_NUMBER_LITERAL_EXPR::check_token_valid(const std::string& token, bool& is_float)
     {
         const auto token_len = token.size();
@@ -44,20 +37,10 @@ namespace GM
 
     GM_Value* GM_AST_NUMBER_LITERAL_EXPR::eval()
     {
-        if (_check_childs_valid())
-        {
-            if (m_is_float)
-                return GM_Value::float_value(get_environment(), m_token);
-            else
-                return GM_Value::int_value(get_environment(), m_token);
-        }
-        
-        return nullptr;
-    }
-
-    bool GM_AST_NUMBER_LITERAL_EXPR::_check_childs_valid() const
-    {
-        return true;
+        if (m_is_float)
+            return GM_Value::float_value(get_environment(), m_token);
+        else
+            return GM_Value::int_value(get_environment(), m_token);
     }
 
 }

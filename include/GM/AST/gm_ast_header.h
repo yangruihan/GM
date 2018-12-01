@@ -10,3 +10,4 @@
 #include "gm_ast_list_expr.hpp"
 #include "gm_ast_dict_expr.hpp"
 #include "gm_ast_null_expr.hpp"
+#include "gm_ast_bool_literal_expr.hpp"

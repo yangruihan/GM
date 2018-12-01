@@ -6,11 +6,6 @@ namespace GM
 
     GM_Value* GM_AST_ADD_OPERATOR_EXPR::eval()
     {
-        if (!_check_childs_valid())
-        {
-            return nullptr;
-        }
-
         auto left_value = get_child(0)->eval();
         auto right_value = get_child(1)->eval();
 
@@ -44,27 +39,8 @@ namespace GM
         return nullptr;
     }
 
-    bool GM_AST_ADD_OPERATOR_EXPR::_check_childs_valid() const
-    {
-        if (m_childs == nullptr)
-            return false;
-
-        if (get_child_count() != 2)
-            return false;
-
-        if (get_child(0) == nullptr || get_child(1) == nullptr)
-            return false;
-
-        return true;
-    }
-
     GM_Value* GM_AST_SUB_OPERATOR_EXPR::eval()
     {
-        if (!_check_childs_valid())
-        {
-            return nullptr;
-        }
-
         auto left_value = get_child(0)->eval();
         auto right_value = get_child(1)->eval();
 
@@ -98,27 +74,8 @@ namespace GM
         return nullptr;
     }
 
-    bool GM_AST_SUB_OPERATOR_EXPR::_check_childs_valid() const
-    {
-        if (m_childs == nullptr)
-            return false;
-
-        if (get_child_count() != 2)
-            return false;
-
-        if (get_child(0) == nullptr || get_child(1) == nullptr)
-            return false;
-
-        return true;
-    }
-
     GM_Value* GM_AST_MUL_OPERATOR_EXPR::eval()
     {
-        if (!_check_childs_valid())
-        {
-            return nullptr;
-        }
-
         auto left_value = get_child(0)->eval();
         auto right_value = get_child(1)->eval();
 
@@ -152,27 +109,8 @@ namespace GM
         return nullptr;
     }
 
-    bool GM_AST_MUL_OPERATOR_EXPR::_check_childs_valid() const
-    {
-        if (m_childs == nullptr)
-            return false;
-
-        if (get_child_count() != 2)
-            return false;
-
-        if (get_child(0) == nullptr || get_child(1) == nullptr)
-            return false;
-
-        return true;
-    }
-
     GM_Value* GM_AST_DIV_OPERATOR_EXPR::eval()
     {
-        if (!_check_childs_valid())
-        {
-            return nullptr;
-        }
-
         auto left_value = get_child(0)->eval();
         auto right_value = get_child(1)->eval();
 
@@ -204,20 +142,6 @@ namespace GM
         }
 
         return nullptr;
-    }
-
-    bool GM_AST_DIV_OPERATOR_EXPR::_check_childs_valid() const
-    {
-        if (m_childs == nullptr)
-            return false;
-
-        if (get_child_count() != 2)
-            return false;
-
-        if (get_child(0) == nullptr || get_child(1) == nullptr)
-            return false;
-
-        return true;
     }
 
 }

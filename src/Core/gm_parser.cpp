@@ -19,7 +19,26 @@ namespace GM
         }
 
         m_tokens = const_cast<std::vector<GM_Token*>*>(tokens);
-        return _expr();
+        return _stmt();
+    }
+
+    GM_AST_TREE* GM_Parser::_stmt()
+    {
+        auto expr = _expr();
+        GM_AST_LIST_EXPR* list_expr;
+
+        while (_match(GM_EOL) || _match(GM_SEMICOLON))
+        {
+            if (list_expr == nullptr)
+            {
+                list_expr = GM_GC::alloc_args<GM_AST_LIST_EXPR>("list");
+                list_expr->add_child(expr);
+            }
+            auto right = _expr();
+            list_expr->add_child(right);
+        }
+
+        return list_expr == nullptr ? expr : list_expr;
     }
 
     GM_AST_TREE* GM_Parser::_expr()
@@ -108,10 +127,10 @@ namespace GM
     GM_AST_TREE* GM_Parser::_primary()
     {
         if (_match(GM_FALSE))
-            return nullptr;
+            return GM_GC::alloc_args<GM_AST_BOOL_LITERAL_EXPR>("false", false);
 
         if (_match(GM_TRUE))
-            return nullptr;
+            return GM_GC::alloc_args<GM_AST_BOOL_LITERAL_EXPR>("true", true);
 
         if (_match(GM_NULL))
             return GM_GC::alloc_args<GM_AST_NULL_EXPR>("null");

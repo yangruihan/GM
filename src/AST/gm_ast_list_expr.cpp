@@ -7,15 +7,8 @@ namespace GM
 {
 
     GM_AST_LIST_EXPR::GM_AST_LIST_EXPR(const std::string& token)
-                                        : GM_AST_TREE(token)
+        : GM_AST_TREE(token, GM_AST_VARIADIC_PARAMS_FLAG)
     {}
-    
-    GM_AST_LIST_EXPR::~GM_AST_LIST_EXPR() = default;
-
-    size_t GM_AST_LIST_EXPR::get_need_child_count() const
-    {
-        return GM_AST_VARIADIC_PARAMS_FLAG;
-    }
 
     bool GM_AST_LIST_EXPR::check_token_valid(const std::string& token)
     {
@@ -56,8 +49,4 @@ namespace GM
         return GM_Environment::create(env);
     }
 
-    bool GM_AST_LIST_EXPR::_check_childs_valid() const
-    {
-        return true;
-    }
 }

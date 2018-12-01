@@ -1,3 +1,4 @@
+stmt            = expr ( ( ";" | EOL ) expr )* ;
 expr            = arithmetic_expr | assignment_expr ;
 
 assignment_expr = IDENTIFIER "=" arithmetic_expr ;

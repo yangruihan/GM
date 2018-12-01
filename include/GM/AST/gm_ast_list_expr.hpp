@@ -12,12 +12,13 @@ namespace GM
 
     public:
         explicit GM_AST_LIST_EXPR (const std::string& token);
-        ~GM_AST_LIST_EXPR () override;
+        ~GM_AST_LIST_EXPR () override = default;
 
     public:
         GM_AST_STR_FUNC(GM_AST_LIST_EXPR)
 
-        size_t get_need_child_count() const override;
+        size_t get_need_child_count() const override 
+        { return GM_AST_VARIADIC_PARAMS_FLAG; }
 
         static bool check_token_valid(const std::string& token);
 
@@ -27,8 +28,6 @@ namespace GM
 
     protected:
         GM_Environment* before_set_environment(GM_Environment* env) override;
-
-        bool _check_childs_valid() const override;
 
     };
 

@@ -11,7 +11,8 @@ namespace GM
     {
 
     public:
-        explicit GM_AST_BINARY_EXPR (const std::string& token): GM_AST_TREE(token) {}
+        explicit GM_AST_BINARY_EXPR (const std::string& token)
+            : GM_AST_TREE(token, 2) {}
         ~GM_AST_BINARY_EXPR () override = default;
 
     public:

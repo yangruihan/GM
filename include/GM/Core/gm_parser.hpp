@@ -21,6 +21,7 @@ namespace GM
         GM_AST_TREE* parse(const std::vector<GM_Token*>* tokens);
 
     private:
+        GM_AST_TREE* _stmt();
         GM_AST_TREE* _expr();
         
         GM_AST_TREE* _assignment_expr();

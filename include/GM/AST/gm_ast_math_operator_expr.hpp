@@ -12,7 +12,7 @@ namespace GM
 
     public:
         explicit GM_AST_ADD_OPERATOR_EXPR (const std::string& token)
-                                : GM_AST_BINARY_EXPR(token) {}
+            : GM_AST_BINARY_EXPR(token) {}
         ~GM_AST_ADD_OPERATOR_EXPR () override = default;
 
     public:
@@ -27,8 +27,6 @@ namespace GM
 
         GM_Value* eval() override;
 
-    protected:
-        bool _check_childs_valid() const override;
     };
 
     KEEP_ENV
@@ -36,7 +34,8 @@ namespace GM
     {
 
     public:
-        GM_AST_SUB_OPERATOR_EXPR (const std::string& token): GM_AST_BINARY_EXPR(token) {}
+        GM_AST_SUB_OPERATOR_EXPR (const std::string& token)
+            : GM_AST_BINARY_EXPR(token) {}
         virtual ~GM_AST_SUB_OPERATOR_EXPR () override = default;
 
     public:
@@ -51,9 +50,6 @@ namespace GM
 
         GM_Value* eval() override;
 
-    protected:
-        bool _check_childs_valid() const override;
-
     };
 
     KEEP_ENV
@@ -61,7 +57,8 @@ namespace GM
     {
 
     public:
-        GM_AST_MUL_OPERATOR_EXPR (const std::string& token): GM_AST_BINARY_EXPR(token) {}
+        GM_AST_MUL_OPERATOR_EXPR (const std::string& token)
+            : GM_AST_BINARY_EXPR(token) {}
         virtual ~GM_AST_MUL_OPERATOR_EXPR () override = default;
 
     public:
@@ -76,9 +73,6 @@ namespace GM
 
         GM_Value* eval() override;
 
-    protected:
-        bool _check_childs_valid() const override;
-
     };
 
     KEEP_ENV
@@ -86,7 +80,8 @@ namespace GM
     {
 
     public:
-        GM_AST_DIV_OPERATOR_EXPR (const std::string& token): GM_AST_BINARY_EXPR(token) {}
+        GM_AST_DIV_OPERATOR_EXPR (const std::string& token)
+            : GM_AST_BINARY_EXPR(token) {}
         virtual ~GM_AST_DIV_OPERATOR_EXPR () override = default;
 
     public:
@@ -101,8 +96,5 @@ namespace GM
 
         GM_Value* eval() override;
 
-    protected:
-        bool _check_childs_valid() const override;
-        
     };
 }
