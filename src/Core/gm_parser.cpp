@@ -22,20 +22,35 @@ namespace GM
         return _stmt();
     }
 
+    GM_AST_TREE* GM_Parser::parse(const std::vector<GM_Token*>& tokens)
+    {
+        return parse(&tokens);
+    }
+
     GM_AST_TREE* GM_Parser::_stmt()
     {
+        while (_match(GM_EOL) || _match(GM_SEMICOLON));
+
+        if (_is_end())
+            return GM_GC::alloc_args<GM_AST_NULL_EXPR>("null");
+
         auto expr = _expr();
-        GM_AST_LIST_EXPR* list_expr;
+        GM_AST_LIST_EXPR* list_expr = nullptr;
 
         while (_match(GM_EOL) || _match(GM_SEMICOLON))
         {
+            while (_match(GM_EOL) || _match(GM_SEMICOLON));
+
+            if (_match(GM_EOF))
+                break;
+
             if (list_expr == nullptr)
             {
                 list_expr = GM_GC::alloc_args<GM_AST_LIST_EXPR>("list");
                 list_expr->add_child(expr);
             }
-            auto right = _expr();
-            list_expr->add_child(right);
+            auto next = _expr();
+            list_expr->add_child(next);
         }
 
         return list_expr == nullptr ? expr : list_expr;

@@ -1,4 +1,6 @@
-stmt            = expr ( ( ";" | EOL ) expr )* ;
+stmt            = separate_stmt* | expr ( separate_stmt+ expr )* ;
+
+separate_stmt   = ";" | EOL ;
 expr            = arithmetic_expr | assignment_expr ;
 
 assignment_expr = IDENTIFIER "=" arithmetic_expr ;

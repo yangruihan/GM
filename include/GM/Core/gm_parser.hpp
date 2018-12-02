@@ -19,6 +19,7 @@ namespace GM
         ~GM_Parser() override = default;
 
         GM_AST_TREE* parse(const std::vector<GM_Token*>* tokens);
+        GM_AST_TREE* parse(const std::vector<GM_Token*>& tokens);
 
     private:
         GM_AST_TREE* _stmt();

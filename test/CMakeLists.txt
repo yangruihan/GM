@@ -55,6 +55,7 @@ if (WIN32 OR MSVC)
         AST
         Type
         Type_Value
+        Token
         debug ${GMOCKD_LIB} optimized ${GMOCK_LIB}
         debug ${GTESTD_LIB} optimized ${GTEST_LIB}
     )
@@ -66,6 +67,7 @@ else()
         AST
         Type
         Type_Value
+        Token
         debug ${GMOCKD_LIB} optimized ${GMOCK_LIB}
         debug ${GTESTD_LIB} optimized ${GTEST_LIB}
         pthread
